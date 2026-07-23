@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kho Bài Học Online</title>
+    <style>
+        /* CSS Giao diện đơn giản, hiện đại */
+        :root {
+            --primary-color: #2b6cb0;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 10px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+        }
+
+        header h1 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .category-card.english { border-color: #3182ce; }
+        .category-card.chinese { border-color: #e53e3e; }
+        .category-card.vn-for-zh { border-color: #38a169; }
+
+        .category-card h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .lesson-list li {
+            margin-bottom: 10px;
+        }
+
+        .lesson-list a {
+            display: block;
+            padding: 10px 12px;
+            background-color: #edf2f7;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .lesson-list a:hover {
+            background-color: var(--primary-color);
+            color: white;
+            padding-left: 16px;
+        }
+
+        .empty-notice {
+            font-style: italic;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📚 Kho Bài Học Tự Học</h1>
+        <p>Tổng hợp các bài học Tiếng Anh, Tiếng Trung và Tiếng Việt cho người Trung Quốc</p>
+    </header>
+
+    <main class="container">
+
+        <!-- MỤC 1: ENGLISH -->
+        <section class="category-card english">
+            <h2>🇬🇧 English Lessons</h2>
+            <ul class="lesson-list">
+                <!-- Thêm bài học ở đây -->
+                <li><a href="english/bai-1.html">Bài 1: Vocabulary & Grammar</a></li>
+                <li><a href="english/bai-2.html">Bài 2: Daily Conversations</a></li>
+                <!-- <li><a href="english/bai-3.html">Bài 3: ...</a></li> -->
+            </ul>
+        </section>
+
+        <!-- MỤC 2: CHINESE -->
+        <section class="category-card chinese">
+            <h2>🇨🇳 Chinese Lessons (中文)</h2>
+            <ul class="lesson-list">
+                <!-- Thêm bài học ở đây -->
+                <li><a href="chinese/bai-1.html">Bài 1: Từ vựng & Hán tự</a></li>
+                <!-- <li><a href="chinese/bai-2.html">Bài 2: ...</a></li> -->
+            </ul>
+        </section>
+
+        <!-- MỤC 3: VIETNAMESE FOR CHINESE -->
+        <section class="category-card vn-for-zh">
+            <h2>🇻🇳 Vietnamese for Chinese (越南语)</h2>
+            <ul class="lesson-list">
+                <!-- Thêm bài học ở đây -->
+                <li><a href="vn-for-zh/bai-1.html">第一课：基础发音 (Phát âm cơ bản)</a></li>
+                <!-- <li><a href="vn-for-zh/bai-2.html">第二课：...</a></li> -->
+            </ul>
+        </section>
+
+    </main>
+
+</body>
+</html>
