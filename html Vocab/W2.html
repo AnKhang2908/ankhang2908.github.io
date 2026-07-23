@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC Part 2 Q&R Master - Game Học Từ Vựng Phản Xạ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #070a13 0%, #0f0e21 100%);
+        }
+        /* Card Flip Style */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Shake effect for wrong answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        /* Audio Waves Animation */
+        .wave-bar {
+            animation: wave 1.2s ease-in-out infinite;
+        }
+        @keyframes wave {
+            0%, 100% { height: 8px; }
+            50% { height: 28px; }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-full text-slate-100 flex flex-col">
+
+    <header class="border-b border-white/10 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid fa-headphones text-lg text-white animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400">TOEIC PART 2</h1>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Vocabulary Master Arena</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <div class="flex bg-slate-900/80 p-1 rounded-xl border border-white/5 gap-1 text-xs sm:text-sm overflow-x-auto max-w-full">
+                <button onclick="switchTab('learn')" id="btn-tab-learn" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all bg-purple-600 text-white shadow-md shrink-0">
+                    <i class="fa-solid fa-book-open mr-1"></i>Flashcard (25 từ)
+                </button>
+                <button onclick="switchTab('match')" id="btn-tab-match" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-shuffle mr-1"></i>Ghép Cặp
+                </button>
+                <button onclick="switchTab('quiz')" id="btn-tab-quiz" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-circle-play mr-1"></i>Luyện Thi Q&R
+                </button>
+                <button onclick="switchTab('speed')" id="btn-tab-speed" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-bolt text-amber-400 mr-1"></i>Phản Xạ Bẫy
+                </button>
+                <button onclick="switchTab('shooter')" id="btn-tab-shooter" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-crosshairs text-rose-500 mr-1"></i>Chiến Thần Pháo Thủ
+                </button>
+            </div>
+
+            <!-- Score Badge -->
+            <div class="flex items-center gap-2">
+                <div class="bg-purple-500/10 border border-purple-500/30 px-3 py-1 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire text-orange-500 text-xs"></i>
+                    <span class="text-[11px] font-bold text-purple-300">Streak: <span id="streak-count">0</span></span>
+                </div>
+                <div class="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+                    <span class="text-[11px] font-bold text-emerald-300">XP: <span id="total-xp">0</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-4 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Sidebar: Vocab List tracker -->
+        <section class="lg:w-80 flex flex-col gap-4 bg-slate-900/40 border border-white/5 rounded-2xl p-4 h-[fit-content]">
+            <div class="flex justify-between items-center border-b border-white/10 pb-2.5">
+                <h2 class="font-bold text-sm text-slate-200">
+                    <i class="fa-solid fa-list-check text-purple-400 mr-2"></i>Sổ Tay Từ Vựng (<span id="mastered-count">0</span>/25)
+                </h2>
+                <button onclick="confirmResetStats()" class="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1 transition">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+            
+            <!-- Search & Filter -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-500"></i>
+                <input type="text" id="vocab-search" placeholder="Tìm từ vựng..." class="w-full pl-9 pr-4 py-1.5 bg-slate-950/60 border border-white/10 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500" onkeyup="filterVocabList()">
+            </div>
+
+            <!-- List elements container -->
+            <div id="vocab-list-items" class="max-h-[300px] lg:max-h-[480px] overflow-y-auto space-y-2 pr-1">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Dynamic Game Content Arena -->
+        <section id="game-arena-card" class="flex-grow flex flex-col bg-slate-900/20 border border-white/5 rounded-3xl p-5 md:p-6 min-h-[580px] relative overflow-hidden shadow-2xl justify-between">
+            
+            <!-- TAB 1: FLASHCARD MODE -->
+            <div id="tab-learn" class="tab-pane flex flex-col items-center justify-between h-full gap-6">
+                <div class="text-center w-full">
+                    <span class="px-3 py-1 bg-purple-500/10 text-purple-300 text-xs font-semibold rounded-full border border-purple-500/20">Chế độ Học Flashcard</span>
+                    <h3 class="text-xs text-slate-400 mt-2">Nhấp vào thẻ để xem nghĩa và bối cảnh hỏi đáp trong đề thi TOEIC Part 2 thực tế.</h3>
+                </div>
+
+                <!-- 3D Flashcard Container -->
+                <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" onclick="toggleCardFlip()">
+                    <div id="flashcard" class="w-full h-full preserve-3d transition-transform duration-500 relative rounded-2xl shadow-xl shadow-slate-950/50">
+                        
+                        <!-- Front Face (English) -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden bg-gradient-to-br from-purple-950/80 to-slate-900 border-2 border-purple-500/30 rounded-2xl flex flex-col justify-between p-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold text-purple-400 tracking-wider" id="card-index">CARD 1/25</span>
+                                <button onclick="speakCurrentWord(event)" class="w-9 h-9 rounded-full bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white transition flex items-center justify-center" title="Phát âm">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <h4 class="text-2xl font-extrabold tracking-tight text-white mb-2" id="card-word">response</h4>
+                                <span class="text-xs bg-slate-800/60 text-slate-300 px-2.5 py-0.5 rounded-full border border-white/5" id="card-type">n</span>
+                            </div>
+                            <div class="text-center text-[11px] text-slate-400 italic">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i> Bấm để lật xem nghĩa & Ví dụ Hỏi - Đáp
+                            </div>
+                        </div>
+
+                        <!-- Back Face (Vietnamese) -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-indigo-950/80 to-slate-900 border-2 border-indigo-500/30 rounded-2xl flex flex-col justify-between p-6">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold text-indigo-400">NGHĨA TIẾNG VIỆT & NGỮ CẢNH Q&R</span>
+                                <span class="text-xs text-slate-400" id="card-word-ref">response</span>
+                            </div>
+                            <div class="my-2 text-center">
+                                <h4 class="text-xl font-bold text-indigo-300" id="card-vietnamese">sự phản hồi, câu trả lời</h4>
+                                <p class="text-[11px] text-slate-400 mt-1" id="card-definition">Sự hồi đáp chính thức từ khách hàng hoặc đối tác.</p>
+                            </div>
+                            <div class="bg-slate-950/60 p-3 rounded-lg border border-white/5 text-left">
+                                <span class="text-[9px] uppercase font-bold text-purple-400 block mb-1">Hỏi-Đáp TOEIC Part 2:</span>
+                                <p class="text-xs text-slate-200 font-semibold" id="card-example-q">Q: When can we expect their response?</p>
+                                <p class="text-xs text-emerald-400 font-medium mt-1" id="card-example-a">A: By tomorrow morning, hopefully.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Learning Progress Controls -->
+                <div class="flex flex-col gap-4 w-full max-w-md">
+                    <div class="flex justify-between gap-3">
+                        <button onclick="prevCard()" class="flex-1 bg-slate-800 hover:bg-slate-700 active:scale-95 transition py-2.5 rounded-xl text-xs font-semibold border border-white/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-chevron-left"></i> Trước đó
+                        </button>
+                        <button onclick="markAsLearned()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                            <i class="fa-solid fa-check"></i> Đã thuộc từ này
+                        </button>
+                        <button onclick="nextCard()" class="flex-1 bg-slate-800 hover:bg-slate-700 active:scale-95 transition py-2.5 rounded-xl text-xs font-semibold border border-white/10 flex items-center justify-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MATCH-UP GAME MODE -->
+            <div id="tab-match" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full flex flex-col sm:flex-row justify-between items-center border-b border-white/5 pb-3 gap-2">
+                    <div class="text-left">
+                        <span class="px-3 py-1 bg-amber-500/10 text-amber-300 text-xs font-semibold rounded-full border border-amber-500/20">Game Ghép Cặp Phản Xạ</span>
+                        <h3 class="text-[11px] text-slate-400 mt-1">Ghép từ tiếng Anh với nghĩa tiếng Việt tương ứng thật nhanh!</h3>
+                    </div>
+                    <!-- Game Timer & Controls -->
+                    <div class="flex items-center gap-3">
+                        <div class="bg-slate-950/50 px-3 py-1 rounded-lg border border-white/10 flex items-center gap-2">
+                            <i class="fa-solid fa-stopwatch text-rose-400"></i>
+                            <span class="text-xs font-mono font-bold" id="match-timer">00:00</span>
+                        </div>
+                        <button onclick="startMatchGame()" class="bg-purple-600 hover:bg-purple-500 active:scale-95 text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-lg shadow-purple-600/20">
+                            Chơi ván mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Match-Up Cards Arena Grid -->
+                <div id="match-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 my-auto py-2">
+                    <!-- Dynamic populated with 8 cards (4 Eng, 4 Vi) -->
+                </div>
+
+                <!-- Score Board for game -->
+                <div class="flex justify-between items-center bg-slate-950/40 p-3 rounded-xl border border-white/5 text-xs text-slate-400">
+                    <div>Combo hiện tại: <span id="match-combo" class="text-amber-400 font-bold">0</span> 🔥</div>
+                    <div>Thẻ hoàn thành: <span id="match-score" class="text-emerald-400 font-bold">0/4</span></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: TOEIC Q&R SIMULATOR MODE -->
+            <div id="tab-quiz" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full">
+                    <span class="px-3 py-1 bg-emerald-500/10 text-emerald-300 text-xs font-semibold rounded-full border border-emerald-500/20">Phòng Luyện Thi Phản Xạ Nghe</span>
+                    <h3 class="text-xs text-slate-400 mt-2">Nghe câu hỏi và lựa chọn phản hồi chính xác nhất. Chú ý các bẫy bôi đen hay gặp!</h3>
+                </div>
+
+                <!-- Quiz Challenge Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center my-auto">
+                    
+                    <!-- Sound Deck Wave representation -->
+                    <div class="md:col-span-5 h-44 md:h-60 bg-slate-950/60 border border-white/10 rounded-xl overflow-hidden relative flex flex-col justify-center items-center p-4" id="quiz-scene-container">
+                        <div class="flex items-end gap-1.5 h-16" id="audio-wave-anim">
+                            <span class="w-2.5 bg-purple-500 rounded-full wave-bar" style="animation-delay: 0.1s; height: 10px;"></span>
+                            <span class="w-2.5 bg-indigo-500 rounded-full wave-bar" style="animation-delay: 0.3s; height: 18px;"></span>
+                            <span class="w-2.5 bg-pink-500 rounded-full wave-bar" style="animation-delay: 0.5s; height: 25px;"></span>
+                            <span class="w-2.5 bg-purple-600 rounded-full wave-bar" style="animation-delay: 0.2s; height: 15px;"></span>
+                            <span class="w-2.5 bg-emerald-500 rounded-full wave-bar" style="animation-delay: 0.4s; height: 28px;"></span>
+                        </div>
+                        <p class="text-[10px] text-purple-400 font-extrabold uppercase tracking-widest mt-4">TOEIC PART 2 AUDIO PLAYER</p>
+                    </div>
+
+                    <!-- Question & Options Block -->
+                    <div class="md:col-span-7 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-semibold text-purple-400" id="quiz-question-index">CÂU HỎI 1/5</span>
+                            <button onclick="speakQuizAllOptions()" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-white/10 text-slate-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-volume-high"></i> Đọc Toàn Bộ (A-B-C)
+                            </button>
+                        </div>
+
+                        <!-- Audio Playback controls -->
+                        <div class="bg-purple-600/10 border border-purple-500/20 p-3 rounded-xl flex items-center gap-3">
+                            <button onclick="playQuizTargetAudio()" class="w-10 h-10 rounded-full bg-purple-600 hover:bg-purple-500 text-white flex items-center justify-center transition shadow-md shadow-purple-600/20 shrink-0">
+                                <i class="fa-solid fa-play text-md"></i>
+                            </button>
+                            <div class="text-xs">
+                                <span class="font-bold text-slate-200 block" id="quiz-spoken-question-preview">Bấm để nghe câu hỏi chính</span>
+                                <span class="text-slate-400 text-[10px]" id="quiz-tip-message">Cảnh giác bẫy câu hỏi Wh- trả lời bằng Yes/No.</span>
+                            </div>
+                        </div>
+
+                        <!-- Option Buttons -->
+                        <div class="flex flex-col gap-2" id="quiz-options-container">
+                            <!-- Dynamic Options A, B, C -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quiz Feedback panel -->
+                <div id="quiz-feedback-panel" class="hidden p-4 bg-slate-950/80 rounded-2xl border border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div class="text-left text-xs space-y-1">
+                        <span id="quiz-feedback-status" class="font-extrabold block text-sm">Chính xác!</span>
+                        <div id="quiz-feedback-desc" class="text-slate-300"></div>
+                    </div>
+                    <button onclick="nextQuizQuestion()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition shrink-0 shadow-lg shadow-emerald-500/20">
+                        Câu tiếp theo <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 4: SPEED REFLEX TRUE/FALSE -->
+            <div id="tab-speed" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full flex flex-col sm:flex-row justify-between items-center border-b border-white/5 pb-2 gap-2">
+                    <div class="text-left">
+                        <span class="px-3 py-0.5 bg-rose-500/10 text-rose-300 text-[10px] font-bold rounded-full border border-rose-500/20">PHẢN XẠ NHANH ĐÁP ÁN BẪY</span>
+                        <h3 class="text-[11px] text-slate-400 mt-1">Đáp án dưới đây là Hợp lý (TRUE) hay Bất hợp lý / Bẫy (FALSE)?</h3>
+                    </div>
+                    
+                    <!-- Stats bar -->
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-1 bg-slate-950/60 px-2 py-1 rounded border border-white/5">
+                            <span class="text-[10px] text-slate-400">Combo:</span>
+                            <span class="text-xs font-bold text-amber-400 font-mono" id="speed-combo">0</span>
+                        </div>
+                        <div class="flex items-center gap-1 bg-slate-950/60 px-2 py-1 rounded border border-white/5">
+                            <span class="text-[10px] text-slate-400 font-bold">MẠNG:</span>
+                            <span class="text-rose-400 text-xs" id="speed-lives">❤️ ❤️ ❤️</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Active Panel -->
+                <div id="speed-game-active" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center my-auto">
+                    
+                    <!-- Graphic Interface -->
+                    <div class="md:col-span-5 h-40 md:h-56 bg-slate-950/60 border border-white/10 rounded-xl overflow-hidden relative flex flex-col justify-center items-center p-2" id="speed-scene-container">
+                        <i class="fa-solid fa-bolt text-5xl text-amber-400 animate-bounce"></i>
+                        <span class="text-[10px] tracking-widest uppercase font-extrabold text-slate-400 mt-3">Reflex Speed Match</span>
+                    </div>
+
+                    <!-- Prompt and Countdown -->
+                    <div class="md:col-span-7 flex flex-col gap-4">
+                        <!-- Progress Timer Bar -->
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-white/5 relative">
+                            <div id="speed-timer-bar" class="bg-gradient-to-r from-rose-500 via-purple-500 to-indigo-500 h-full w-full transition-all duration-100"></div>
+                        </div>
+
+                        <div class="bg-purple-950/20 border border-purple-500/20 p-3.5 rounded-xl text-center flex flex-col gap-2 relative">
+                            <button onclick="speakSpeedStatement()" class="absolute right-2 top-2 w-7 h-7 rounded-full bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white transition flex items-center justify-center">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                            <span class="text-[10px] text-purple-400 font-extrabold uppercase tracking-wide">Cặp Câu Hỏi & Câu Trả Lời</span>
+                            <p class="text-xs font-bold text-slate-400 leading-snug">Question:</p>
+                            <p class="text-sm font-extrabold text-white" id="speed-question-text">When are they going to place the order?</p>
+                            <div class="border-t border-white/5 my-1"></div>
+                            <p class="text-xs font-bold text-slate-400 leading-snug">Response:</p>
+                            <p class="text-sm font-extrabold text-amber-400" id="speed-response-text">The order doesn't need replacing.</p>
+                            <span class="text-[10px] text-rose-400 mt-1 hidden" id="speed-trap-explanation"></span>
+                        </div>
+
+                        <!-- Big Decision Buttons -->
+                        <div class="grid grid-cols-2 gap-3.5">
+                            <button onclick="handleSpeedDecision(true)" class="bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 py-3 rounded-xl font-extrabold text-xs text-white shadow-lg shadow-emerald-600/20 transition transform active:scale-95 flex flex-col items-center gap-0.5">
+                                <i class="fa-solid fa-circle-check text-base"></i>
+                                <span>HỢP LÝ (TRUE)</span>
+                            </button>
+                            <button onclick="handleSpeedDecision(false)" class="bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 py-3 rounded-xl font-extrabold text-xs text-white shadow-lg shadow-rose-600/20 transition transform active:scale-95 flex flex-col items-center gap-0.5">
+                                <i class="fa-solid fa-circle-xmark text-base"></i>
+                                <span>BẤT HỢP LÝ / BẪY (FALSE)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Over/Start Layout -->
+                <div id="speed-game-over" class="hidden flex-col items-center justify-center py-6 text-center gap-3 my-auto">
+                    <div class="w-14 h-14 bg-rose-500/10 border-2 border-rose-500/20 text-rose-400 text-xl rounded-2xl flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-skull-crossbones"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white">Kết thúc lượt chơi phản xạ!</h4>
+                    <p class="text-xs text-slate-400 max-w-xs leading-relaxed">Bạn đã hết lượt chơi hoặc đạt được cột mốc tối đa. Hãy xem lại thành tích của bạn bên dưới.</p>
+                    <div class="bg-slate-950/50 p-3 rounded-lg border border-white/5 text-xs text-left space-y-1.5 min-w-[200px]">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Điểm tối đa:</span>
+                            <span class="font-bold text-amber-400" id="speed-summary-score">0 XP</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Chuỗi Combo:</span>
+                            <span class="font-bold text-purple-400" id="speed-summary-combo">0</span>
+                        </div>
+                    </div>
+                    <button onclick="startSpeedGame()" class="mt-2 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-purple-600/20">
+                        Chơi lại ngay
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 5: SHOOTER ARCADE GAME MODE -->
+            <div id="tab-shooter" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full flex flex-col sm:flex-row justify-between items-center border-b border-white/5 pb-2.5 gap-2">
+                    <div class="text-left">
+                        <span class="px-3 py-1 bg-rose-500/10 text-rose-300 text-[10px] font-bold rounded-full border border-rose-500/20 animate-pulse">
+                            <i class="fa-solid fa-crosshairs mr-1"></i>ĐẤU TRƯỜNG PHÁO THỦ TỪ VỰNG
+                        </span>
+                        <h3 class="text-[11px] text-slate-400 mt-1">Chọn nghĩa Tiếng Việt đúng của từ vựng mục tiêu trước khi hết 15 giây!</h3>
+                    </div>
+                    
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-1 bg-slate-950/60 px-2.5 py-1 rounded-lg border border-white/5">
+                            <span class="text-[10px] text-slate-400">ĐIỂM:</span>
+                            <span class="text-xs font-bold text-emerald-400 font-mono" id="shooter-score-hud">0</span>
+                        </div>
+                        <div class="flex items-center gap-1 bg-slate-950/60 px-2.5 py-1 rounded-lg border border-white/5">
+                            <span class="text-[10px] text-slate-400">GIÁP:</span>
+                            <span class="text-rose-400 text-xs font-bold" id="shooter-lives-hud">🛡️ 🛡️ 🛡️</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Battle Space Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch my-auto">
+                    <!-- Space Canvas Arena -->
+                    <div class="lg:col-span-8 bg-slate-950/90 border border-white/10 rounded-2xl relative overflow-hidden flex flex-col justify-center items-center p-1" style="min-height: 380px;">
+                        <canvas id="shooter-canvas" class="w-full h-full block bg-slate-950 rounded-xl cursor-crosshair"></canvas>
+                    </div>
+
+                    <!-- Side HUD Options Detail -->
+                    <div class="lg:col-span-4 flex flex-col gap-4 justify-between bg-slate-950/50 p-4 rounded-2xl border border-white/5">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] text-purple-400 font-extrabold tracking-widest uppercase">Từ Vựng Mục Tiêu</span>
+                                <button onclick="speakShooterQuestion()" class="w-8 h-8 rounded-full bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white flex items-center justify-center transition" title="Nghe phát âm từ vựng">
+                                    <i class="fa-solid fa-volume-high text-xs"></i>
+                                </button>
+                            </div>
+                            <div class="bg-purple-950/20 border border-purple-500/10 p-3 rounded-xl">
+                                <p id="shooter-question-hud" class="text-xs sm:text-sm text-white leading-relaxed">Đang tải trận chiến...</p>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-white/10 my-1"></div>
+
+                        <!-- Options reference listing -->
+                        <div class="space-y-2">
+                            <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Chọn nghĩa tiếng Việt chính xác (Bắn thiên thạch):</span>
+                            <div id="shooter-options-hud" class="space-y-2 text-xs">
+                                <!-- Dynamic Options listing -->
+                            </div>
+                        </div>
+
+                        <button onclick="startShooterGame()" class="w-full bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 py-3 rounded-xl text-xs font-extrabold text-white transition active:scale-95 shadow-lg shadow-rose-600/20">
+                            <i class="fa-solid fa-sync mr-1"></i> Khởi Động Lại Trận Đấu
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Custom Modal Dialog System -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-950/85 z-50 flex items-center justify-center hidden p-4 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-white/10 p-5 rounded-2xl max-w-sm w-full text-center shadow-2xl relative">
+            <div id="modal-icon" class="w-11 h-11 rounded-full mx-auto mb-3 flex items-center justify-center text-lg bg-purple-500/10 text-purple-400">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="modal-title" class="text-base font-bold text-white mb-1.5">Thông báo</h3>
+            <p id="modal-message" class="text-xs text-slate-400 mb-5 leading-relaxed whitespace-pre-line"></p>
+            <div class="flex gap-2.5 justify-center" id="modal-buttons-container">
+                <!-- Buttons will be dynamically updated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Screen overlay -->
+    <div id="celebration-screen" class="fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center hidden p-4">
+        <div class="max-w-sm w-full text-center bg-slate-900 border border-white/10 p-8 rounded-3xl relative overflow-hidden shadow-2xl">
+            <!-- Background glow -->
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
+            
+            <div class="w-16 h-16 bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 text-2xl rounded-2xl flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            
+            <h3 class="text-2xl font-black text-white mb-2">XUẤT SẮC!</h3>
+            <p class="text-xs text-slate-400 mb-6">Bạn vừa hoàn thành xuất sắc thử thách từ vựng TOEIC Part 2 ngày hôm nay!</p>
+            
+            <div class="bg-slate-950/60 border border-white/5 p-4 rounded-xl mb-6 text-left space-y-2 text-xs">
+                <div class="flex justify-between">
+                    <span class="text-slate-400">XP Tích Lũy:</span>
+                    <span class="font-bold text-emerald-400" id="final-xp">+350 XP</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Từ Đã Thuộc:</span>
+                    <span class="font-bold text-purple-400" id="final-mastered">25 / 25 từ</span>
+                </div>
+            </div>
+            
+            <button onclick="closeCelebration()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 py-3 rounded-xl font-bold text-sm text-white transition shadow-lg shadow-purple-600/20 active:scale-95">
+                Tiếp Tục Ôn Luyện
+            </button>
+        </div>
+    </div>
+
+    <!-- Sound Synthesizer and Game Data Core -->
+    <script>
+        // Init Web Audio context
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Sound effect generator
+        function playSynthSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                const now = audioCtx.currentTime;
+                
+                if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'fail') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now); // A3
+                    osc.frequency.setValueAtTime(147, now + 0.1); // D3
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.08);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'laser') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(880, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.12);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'explosion') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'fanfare') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.12); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.24); // G5
+                    osc.frequency.setValueAtTime(1046.50, now + 0.36); // C6
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    osc.start(now);
+                    osc.stop(now + 0.8);
+                }
+            } catch (e) {
+                console.log("Audio API issue:", e);
+            }
+        }
+
+        // Vocabulary Database (25 Words targeted from user specification)
+        const toeicVocab = [
+            { id: 1, word: "Response", type: "n", vietnamese: "sự phản hồi, câu trả lời", hint: "Sự hồi đáp chính thức từ đối tác hoặc khách hàng.", example_q: "When can we expect their response?", example_a: "By tomorrow morning, hopefully." },
+            { id: 2, word: "Copy machine", type: "n", vietnamese: "máy photocopy", hint: "Thiết bị sao chép văn bản giấy trong môi trường công sở.", example_q: "Is the copy machine working now?", example_a: "Yes, it has just been repaired." },
+            { id: 3, word: "Printing press", type: "n", vietnamese: "máy in hoặc nhà in", hint: "Máy in công nghiệp quy mô lớn hoặc xưởng chuyên in ấn sách báo.", example_q: "What caused the printing press to stop?", example_a: "There was an electrical problem." },
+            { id: 4, word: "Electrical problem", type: "n.phr", vietnamese: "sự cố về điện", hint: "Lỗi hệ thống điện hoặc trục trặc đường truyền năng lượng.", example_q: "Why was the office closed early?", example_a: "Due to an electrical problem." },
+            { id: 5, word: "Temporarily", type: "adv", vietnamese: "một cách tạm thời", hint: "Hành động chỉ diễn ra ngắn hạn, không cố định lâu dài.", example_q: "Why are the elevators shut down?", example_a: "They are temporarily out of service." },
+            { id: 6, word: "Pause", type: "v", vietnamese: "tạm dừng", hint: "Tạm thời gián đoạn hoạt động của thiết bị hoặc phiên thảo luận.", example_q: "Should we pause the meeting for lunch?", example_a: "That sounds like a great idea." },
+            { id: 7, word: "Discount", type: "n", vietnamese: "sự chiết khấu, giảm giá", hint: "Mức giảm giá trực tiếp trên hóa đơn mua sắm hàng loạt.", example_q: "Do you offer a discount for bulk orders?", example_a: "Yes, up to fifteen percent." },
+            { id: 8, word: "Offer", type: "v/n", vietnamese: "đề nghị, ưu đãi", hint: "Đưa ra lời chào hàng kinh doanh hoặc chính sách giảm giá.", example_q: "Are we going to accept their offer?", example_a: "We need to discuss it further." },
+            { id: 9, word: "Trade account", type: "n.phr", vietnamese: "tài khoản giao dịch", hint: "Tài khoản thanh toán trả chậm đặc thù cho khách hàng doanh nghiệp.", example_q: "How can I set up a trade account?", example_a: "Please fill out this registration form." },
+            { id: 10, word: "Amount", type: "n", vietnamese: "khoản tiền, số tiền", hint: "Tổng giá trị tài chính hiển thị trên hóa đơn yêu cầu thanh toán.", example_q: "What is the total amount on the invoice?", example_a: "It's exactly three hundred dollars." },
+            { id: 11, word: "Valid", type: "adj", vietnamese: "có hiệu lực", hint: "Còn thời gian sử dụng hoặc được quy chuẩn pháp lý công nhận.", example_q: "Is this promotional code still valid?", example_a: "No, it expired yesterday." },
+            { id: 12, word: "Position", type: "n", vietnamese: "vị trí công việc", hint: "Chức vụ hoặc vị trí tuyển dụng nhân sự trong tổ chức.", example_q: "Who applied for the managerial position?", example_a: "Several external candidates did." },
+            { id: 13, word: "Vacant", type: "adj", vietnamese: "trống (vị trí tuyển dụng)", hint: "Vị trí, ghế ngồi hoặc phòng ban hiện tại đang trống chưa có người đảm nhận.", example_q: "How long has this seat been vacant?", example_a: "Since Ms. Green retired last month." },
+            { id: 14, word: "Role", type: "n", vietnamese: "vai trò, vị trí công tác", hint: "Trách nhiệm cụ thể của nhân sự trong dự án liên doanh.", example_q: "What will your role be in the merger?", example_a: "I'll coordinate the training sessions." },
+            { id: 15, word: "Advertised", type: "v-ed/adj", vietnamese: "được quảng cáo, đăng tuyển", hint: "Thông tin đã được công bố rộng rãi trên báo chí truyền thông.", example_q: "Where was this vacant position advertised?", example_a: "In all major newspapers." },
+            { id: 16, word: "Place the order", type: "v.phr", vietnamese: "đặt hàng", hint: "Tiến hành gửi đơn mua vật tư hoặc đặt sản xuất thiết bị.", example_q: "When should we place the order for papers?", example_a: "Right after the manager signs off." },
+            { id: 17, word: "Replacing", type: "v-ing", vietnamese: "việc thay thế", hint: "Quá trình lắp ráp thay thế công cụ cũ bằng linh kiện mới tinh.", example_q: "Who is replacing the personnel director?", example_a: "We are still conducting interviews." },
+            { id: 18, word: "Right away", type: "adv.phr", vietnamese: "ngay lập tức", hint: "Hành động khẩn trương cần làm ngay không trì hoãn.", example_q: "Do we need to ship these files right away?", example_a: "Yes, they are highly urgent." },
+            { id: 19, word: "File", type: "n", vietnamese: "hồ sơ, tài liệu", hint: "Cặp lưu trữ văn bản tài liệu cứng hoặc tệp tin lưu trên máy chủ.", example_q: "Have you seen the marketing file?", example_a: "It's on the third shelf." },
+            { id: 20, word: "Versatile", type: "adj", vietnamese: "linh hoạt, đa năng", hint: "Thiết bị có khả năng xử lý nhiều công việc khác nhau rất hiệu quả.", example_q: "Why did you buy this versatile software?", example_a: "It handles both billing and scheduling." },
+            { id: 21, word: "Survey", type: "n", vietnamese: "cuộc khảo sát", hint: "Cuộc thăm dò lấy phản hồi ý kiến đánh giá từ người dùng.", example_q: "When will the customer survey be completed?", example_a: "By the end of this fiscal quarter." },
+            { id: 22, word: "Recommended", type: "v-ed", vietnamese: "được giới thiệu, gợi ý", hint: "Được đề cử sử dụng bởi những người đi trước.", example_q: "Who recommended this catering service?", example_a: "Our receptionist suggested them." },
+            { id: 23, word: "Founded", type: "v-ed", vietnamese: "được thành lập", hint: "Mốc thời gian ra đời của tập đoàn hoặc chi nhánh liên kết.", example_q: "When was this subsidiary founded?", example_a: "Almost twenty years ago." },
+            { id: 24, word: "Merger", type: "n", vietnamese: "sự sáp nhập", hint: "Sự sáp nhập hợp nhất giữa hai doanh nghiệp lớn thành một tập đoàn.", example_q: "How will the merger affect our team?", example_a: "There won't be any immediate changes." },
+            { id: 25, word: "Total package cost", type: "n.phr", vietnamese: "tổng chi phí trọn gói", hint: "Chi phí thanh toán tổng cộng bao gói đầy đủ tất cả dịch vụ đi kèm.", example_q: "Does the estimate include the total package cost?", example_a: "Yes, taxes and shipping are covered." }
+        ];
+
+        // Global State variables
+        let userXP = 0;
+        let streak = 0;
+        let masteredIds = [];
+        let currentCardIndex = 0;
+        let isCardFlipped = false;
+    </script>
+
+    <!-- Custom Modal and Stats Reset System -->
+    <script>
+        function customModal(title, message, buttons = [], iconClass = "fa-solid fa-circle-info", iconColor = "text-purple-400 bg-purple-500/10") {
+            const modal = document.getElementById('custom-modal');
+            const titleEl = document.getElementById('modal-title');
+            const msgEl = document.getElementById('modal-message');
+            const iconContainer = document.getElementById('modal-icon');
+            const btnContainer = document.getElementById('modal-buttons-container');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+            iconContainer.className = `w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center text-xl ${iconColor}`;
+            iconContainer.innerHTML = `<i class="${iconClass}"></i>`;
+
+            btnContainer.innerHTML = '';
+            if (buttons.length === 0) {
+                buttons = [{
+                    text: "Đã hiểu",
+                    style: "bg-purple-600 hover:bg-purple-500 text-white",
+                    action: () => closeModal()
+                }];
+            }
+
+            buttons.forEach(btn => {
+                const btnEl = document.createElement('button');
+                btnEl.innerText = btn.text;
+                btnEl.className = `px-4 py-2 rounded-xl text-xs font-semibold transition active:scale-95 ${btn.style || 'bg-slate-800 hover:bg-slate-700 text-slate-200'}`;
+                btnEl.onclick = () => {
+                    if (btn.action) btn.action();
+                    closeModal();
+                };
+                btnContainer.appendChild(btnEl);
+            });
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function confirmResetStats() {
+            playSynthSound('click');
+            customModal(
+                "Xác nhận đặt lại?",
+                "Bạn có chắc chắn muốn thiết lập lại toàn bộ tiến độ học từ vựng TOEIC Part 2 từ đầu không?",
+                [
+                    {
+                        text: "Xác nhận đặt lại",
+                        style: "bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/20",
+                        action: () => {
+                            masteredIds = [];
+                            userXP = 0;
+                            streak = 0;
+                            updateStats();
+                            playSynthSound('fail');
+                            customModal("Đã đặt lại", "Tất cả thành tích đã được xóa thành công.", [], "fa-solid fa-rotate-left", "text-rose-400 bg-rose-500/10");
+                        }
+                    },
+                    {
+                        text: "Hủy bỏ",
+                        style: "bg-slate-800 hover:bg-slate-700 text-slate-300"
+                    }
+                ],
+                "fa-solid fa-triangle-exclamation",
+                "text-amber-400 bg-amber-500/10"
+            );
+        }
+
+        // Window load initial boots
+        window.onload = function() {
+            loadStats();
+            buildVocabSidebarList();
+            renderCard();
+        };
+    </script>
+
+    <!-- Navigation and Sidebar Operations -->
+    <script>
+        function switchTab(tabId) {
+            playSynthSound('click');
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0";
+            });
+            
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('btn-tab-' + tabId).className = "tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all bg-purple-600 text-white shadow-md shrink-0";
+            
+            // Clear running loops
+            clearInterval(speedTimerInterval);
+            cancelAnimationFrame(shooterAnimFrame);
+            clearInterval(shooterTimerInterval);
+
+            if (tabId === 'match') {
+                startMatchGame();
+            } else if (tabId === 'quiz') {
+                initQuizChallenge();
+            } else if (tabId === 'speed') {
+                startSpeedGame();
+            } else if (tabId === 'shooter') {
+                startShooterGame();
+            }
+        }
+
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.88;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakCurrentWord(event) {
+            if (event) event.stopPropagation();
+            const word = toeicVocab[currentCardIndex].word;
+            speakWord(word);
+        }
+
+        function buildVocabSidebarList() {
+            const container = document.getElementById('vocab-list-items');
+            container.innerHTML = '';
+            
+            toeicVocab.forEach(item => {
+                const isMastered = masteredIds.includes(item.id);
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `p-2 rounded-xl border transition-all duration-300 flex items-center justify-between gap-2 ${
+                    isMastered 
+                        ? 'bg-emerald-950/20 border-emerald-500/20 text-slate-300' 
+                        : 'bg-slate-950/30 border-white/5 hover:border-white/10 text-slate-400'
+                }`;
+                
+                itemDiv.innerHTML = `
+                    <div class="overflow-hidden">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-bold text-xs text-slate-200">${item.word}</span>
+                            <span class="text-[9px] text-purple-400 font-mono">(${item.type})</span>
+                        </div>
+                        <p class="text-[10px] truncate max-w-[180px]">${item.vietnamese}</p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="speakWord('${item.word}')" class="text-xs hover:text-purple-400 p-1 rounded transition" title="Nghe phát âm">
+                            <i class="fa-solid fa-volume-low"></i>
+                        </button>
+                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
+                            isMastered ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'
+                        }">
+                            <i class="fa-solid ${isMastered ? 'fa-check' : 'fa-minus'}"></i>
+                        </span>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+            
+            document.getElementById('mastered-count').innerText = masteredIds.length;
+        }
+
+        function filterVocabList() {
+            const query = document.getElementById('vocab-search').value.toLowerCase();
+            const items = document.getElementById('vocab-list-items').children;
+            
+            toeicVocab.forEach((item, index) => {
+                if (item.word.toLowerCase().includes(query) || item.vietnamese.toLowerCase().includes(query)) {
+                    items[index].classList.remove('hidden');
+                } else {
+                    items[index].classList.add('hidden');
+                }
+            });
+        }
+    </script>
+
+    <!-- Flashcard Learning Subsystem -->
+    <script>
+        function renderCard() {
+            const item = toeicVocab[currentCardIndex];
+            
+            const cardEl = document.getElementById('flashcard');
+            cardEl.classList.remove('rotate-y-180');
+            isCardFlipped = false;
+            
+            document.getElementById('card-index').innerText = `CARD ${currentCardIndex + 1}/${toeicVocab.length}`;
+            document.getElementById('card-word').innerText = item.word;
+            document.getElementById('card-type').innerText = item.type;
+            
+            document.getElementById('card-word-ref').innerText = item.word;
+            document.getElementById('card-vietnamese').innerText = item.vietnamese;
+            document.getElementById('card-definition').innerText = item.hint;
+            document.getElementById('card-example-q').innerText = `Q: ${item.example_q}`;
+            document.getElementById('card-example-a').innerText = `A: ${item.example_a}`;
+        }
+
+        function toggleCardFlip() {
+            const cardEl = document.getElementById('flashcard');
+            isCardFlipped = !isCardFlipped;
+            playSynthSound('click');
+            if (isCardFlipped) {
+                cardEl.classList.add('rotate-y-180');
+            } else {
+                cardEl.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % toeicVocab.length;
+            renderCard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + toeicVocab.length) % toeicVocab.length;
+            renderCard();
+        }
+
+        function markAsLearned() {
+            const currentItem = toeicVocab[currentCardIndex];
+            if (!masteredIds.includes(currentItem.id)) {
+                masteredIds.push(currentItem.id);
+                streak++;
+                userXP += 15;
+                updateStats();
+                playSynthSound('success');
+                
+                if (masteredIds.length === toeicVocab.length) {
+                    showFinalCelebration();
+                }
+            }
+            nextCard();
+        }
+
+        function updateStats() {
+            document.getElementById('streak-count').innerText = streak;
+            document.getElementById('total-xp').innerText = userXP;
+            buildVocabSidebarList();
+            
+            localStorage.setItem('toeic_mastered_ids_p2', JSON.stringify(masteredIds));
+            localStorage.setItem('toeic_user_xp_p2', userXP);
+            localStorage.setItem('toeic_streak_p2', streak);
+        }
+
+        function loadStats() {
+            const savedIds = localStorage.getItem('toeic_mastered_ids_p2');
+            const savedXP = localStorage.getItem('toeic_user_xp_p2');
+            const savedStreak = localStorage.getItem('toeic_streak_p2');
+            
+            if (savedIds) masteredIds = JSON.parse(savedIds);
+            if (savedXP) userXP = parseInt(savedXP);
+            if (savedStreak) streak = parseInt(savedStreak);
+            
+            updateStats();
+        }
+
+        function showFinalCelebration() {
+            document.getElementById('final-xp').innerText = `+${userXP} XP`;
+            document.getElementById('final-mastered').innerText = `${masteredIds.length} / ${toeicVocab.length} từ`;
+            document.getElementById('celebration-screen').classList.remove('hidden');
+            playSynthSound('fanfare');
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration-screen').classList.add('hidden');
+        }
+    </script>
+
+    <!-- Match-Up Reflex Subgame -->
+    <script>
+        let matchSelectedCard = null;
+        let matchCardsData = [];
+        let matchTimerInterval = null;
+        let matchTimeElapsed = 0;
+        let matchCompletedCount = 0;
+        let matchCombo = 0;
+
+        function startMatchGame() {
+            clearInterval(matchTimerInterval);
+            matchTimeElapsed = 0;
+            matchCompletedCount = 0;
+            matchCombo = 0;
+            matchSelectedCard = null;
+            
+            document.getElementById('match-timer').innerText = "00:00";
+            document.getElementById('match-combo').innerText = "0";
+            document.getElementById('match-score').innerText = "0/4";
+
+            const shuffled = [...toeicVocab].sort(() => 0.5 - Math.random());
+            const selectedItems = shuffled.slice(0, 4);
+
+            matchCardsData = [];
+            selectedItems.forEach(item => {
+                matchCardsData.push({ id: item.id, type: 'ENG', text: item.word, partnerId: item.id });
+                matchCardsData.push({ id: item.id + '_vi', type: 'VI', text: item.vietnamese, partnerId: item.id });
+            });
+
+            matchCardsData.sort(() => 0.5 - Math.random());
+
+            const grid = document.getElementById('match-grid');
+            grid.innerHTML = '';
+
+            matchCardsData.forEach((card, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.id = `match-card-${index}`;
+                cardDiv.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200 hover:scale-[1.02] active:scale-[0.98]";
+                cardDiv.innerHTML = card.text;
+                cardDiv.onclick = () => selectMatchCard(index);
+                grid.appendChild(cardDiv);
+            });
+
+            matchTimerInterval = setInterval(() => {
+                matchTimeElapsed++;
+                const mins = String(Math.floor(matchTimeElapsed / 60)).padStart(2, '0');
+                const secs = String(matchTimeElapsed % 60).padStart(2, '0');
+                document.getElementById('match-timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function selectMatchCard(index) {
+            playSynthSound('click');
+            const cardEl = document.getElementById(`match-card-${index}`);
+            const cardObj = matchCardsData[index];
+
+            if (cardEl.classList.contains('bg-emerald-500/20')) return;
+
+            if (!matchSelectedCard) {
+                matchSelectedCard = { index, obj: cardObj };
+                cardEl.className = "p-3 bg-purple-600/30 border-2 border-purple-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-white scale-[1.02]";
+                return;
+            }
+
+            if (matchSelectedCard.index === index) {
+                cardEl.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200";
+                matchSelectedCard = null;
+                return;
+            }
+
+            const partnerEl = document.getElementById(`match-card-${matchSelectedCard.index}`);
+            
+            if (matchSelectedCard.obj.partnerId === cardObj.partnerId && matchSelectedCard.obj.type !== cardObj.type) {
+                playSynthSound('success');
+                cardEl.className = "p-3 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-300 select-none h-20 text-xs sm:text-sm font-bold text-emerald-400 scale-[1.05]";
+                partnerEl.className = "p-3 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-300 select-none h-20 text-xs sm:text-sm font-bold text-emerald-400 scale-[1.05]";
+                
+                setTimeout(() => {
+                    cardEl.className = "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-center select-none h-20 text-xs sm:text-sm font-semibold text-emerald-400 opacity-40 transition-all pointer-events-none";
+                    partnerEl.className = "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-center select-none h-20 text-xs sm:text-sm font-semibold text-emerald-400 opacity-40 transition-all pointer-events-none";
+                }, 400);
+
+                matchCompletedCount++;
+                matchCombo++;
+                userXP += 10 + (matchCombo * 2);
+                streak++;
+                updateStats();
+
+                document.getElementById('match-combo').innerText = `${matchCombo}`;
+                document.getElementById('match-score').innerText = `${matchCompletedCount}/4`;
+
+                if (matchCompletedCount === 4) {
+                    clearInterval(matchTimerInterval);
+                    setTimeout(() => {
+                        playSynthSound('fanfare');
+                        customModal(
+                            "Chiên thắng ghép cặp!", 
+                            `Bạn đã hoàn thành ghép cặp trong ${matchTimeElapsed} giây với chuỗi combo tối đa x${matchCombo}! Nhận được +${50 + matchCombo * 5} XP bonus.`,
+                            [{
+                                text: "Chơi ván mới",
+                                style: "bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-600/20",
+                                action: () => startMatchGame()
+                            }],
+                            "fa-solid fa-trophy",
+                            "text-amber-400 bg-amber-500/10"
+                        );
+                        userXP += 50;
+                        updateStats();
+                    }, 500);
+                }
+            } else {
+                playSynthSound('fail');
+                cardEl.className = "p-3 bg-rose-500/20 border-2 border-rose-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-bold text-rose-400";
+                partnerEl.className = "p-3 bg-rose-500/20 border-2 border-rose-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-bold text-rose-400";
+                
+                matchCombo = 0;
+                document.getElementById('match-combo').innerText = "0";
+
+                setTimeout(() => {
+                    cardEl.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200";
+                    partnerEl.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200";
+                }, 500);
+            }
+
+            matchSelectedCard = null;
+        }
+    </script>
+
+    <!-- Quiz Simulator Subgame -->
+    <script>
+        let quizQuestions = [
+            {
+                index: 1,
+                question: "When can we expect their response?",
+                correctOption: "B",
+                options: {
+                    A: "Yes, they responded very quickly.",
+                    B: "By tomorrow morning, hopefully.",
+                    C: "The cost is quite reasonable."
+                },
+                trap_desc: "Bẫy trong câu hỏi này:\n- Đáp án A dùng bẫy 'Yes/No' cho câu hỏi WH- 'When' cực kỳ phổ biến.\n- Đáp án C không khớp thông tin thời gian mà câu hỏi yêu cầu."
+            },
+            {
+                index: 2,
+                question: "Is the copy machine working now?",
+                correctOption: "A",
+                options: {
+                    A: "Yes, it has just been repaired.",
+                    B: "I'll make ten copies of the file.",
+                    C: "A versatile software system."
+                },
+                trap_desc: "Bẫy trong câu hỏi này:\n- Đáp án B lặp lại từ 'copies' từ khóa 'copy machine' để đánh lừa người nghe không hiểu nghĩa toàn diện câu."
+            },
+            {
+                index: 3,
+                question: "Why was the office closed early yesterday?",
+                correctOption: "C",
+                options: {
+                    A: "Yes, it closed at five.",
+                    B: "We are temporarily out of paper.",
+                    C: "Due to an electrical problem."
+                },
+                trap_desc: "Bẫy trong câu hỏi này:\n- Đáp án A tiếp tục bẫy Yes/No cho câu hỏi 'Why'.\n- Đáp án C trả lời trực diện nguyên nhân 'Due to...' (Bởi vì sự cố điện)."
+            },
+            {
+                index: 4,
+                question: "Where was this vacant position advertised?",
+                correctOption: "C",
+                options: {
+                    A: "Several people advised me to apply.",
+                    B: "Yes, I am looking for a vacant role.",
+                    C: "In all major local newspapers."
+                },
+                trap_desc: "Bẫy trong câu hỏi này:\n- Đáp án A là bẫy đồng âm ('advised' phát âm gần giống với 'advertised').\n- Đáp án B lặp lại từ khóa 'vacant' kết hợp bẫy Yes/No."
+            },
+            {
+                index: 5,
+                question: "Who recommended this catering service to you?",
+                correctOption: "A",
+                options: {
+                    A: "Our receptionist suggested them.",
+                    B: "No, I didn't recommend the total cost.",
+                    C: "Yes, they founded it last year."
+                },
+                trap_desc: "Bẫy trong câu hỏi này:\n- Đáp án A trả lời bằng chức danh người chỉ điểm ('Our receptionist').\n- Đáp án B và C tiếp tục cố gắng bẫy bằng Yes/No vô lí."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let selectedQuizOption = null;
+
+        function initQuizChallenge() {
+            currentQuizIndex = 0;
+            selectedQuizOption = null;
+            document.getElementById('quiz-feedback-panel').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const quiz = quizQuestions[currentQuizIndex];
+            selectedQuizOption = null;
+            document.getElementById('quiz-feedback-panel').classList.add('hidden');
+            
+            document.getElementById('quiz-question-index').innerText = `THỬ THÁCH PHÒNG THI ${currentQuizIndex + 1}/${quizQuestions.length}`;
+            document.getElementById('quiz-spoken-question-preview').innerText = "Câu hỏi Part 2:";
+            document.getElementById('quiz-tip-message').innerText = quiz.question;
+
+            triggerAudioWaveActive();
+
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            Object.keys(quiz.options).forEach(key => {
+                const button = document.createElement('button');
+                button.id = `quiz-opt-${key}`;
+                button.onclick = () => selectQuizOption(key);
+                button.className = "w-full text-left p-3 rounded-xl bg-slate-950/40 hover:bg-slate-900 border border-white/5 hover:border-white/10 flex items-center justify-between text-xs sm:text-sm font-medium transition duration-200 text-slate-300";
+                button.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center font-bold font-mono text-xs">${key}</span>
+                        <span class="option-text">${quiz.options[key]}</span>
+                    </div>
+                `;
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function triggerAudioWaveActive() {
+            const bars = document.querySelectorAll('.wave-bar');
+            bars.forEach(bar => {
+                bar.style.animationPlayState = 'running';
+            });
+            setTimeout(() => {
+                bars.forEach(bar => {
+                    bar.style.animationPlayState = 'paused';
+                });
+            }, 3000);
+        }
+
+        function playQuizTargetAudio() {
+            const quiz = quizQuestions[currentQuizIndex];
+            speakWord(quiz.question);
+            triggerAudioWaveActive();
+        }
+
+        function speakQuizAllOptions() {
+            const quiz = quizQuestions[currentQuizIndex];
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let index = 0;
+                const keys = ['A', 'B', 'C'];
+                triggerAudioWaveActive();
+                
+                function speakNext() {
+                    if (index >= keys.length) return;
+                    const key = keys[index];
+                    const utterance = new SpeechSynthesisUtterance(`Option ${key}. ${quiz.options[key]}`);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.85;
+                    utterance.onend = () => {
+                        index++;
+                        setTimeout(speakNext, 800);
+                    };
+                    window.speechSynthesis.speak(utterance);
+                }
+                speakNext();
+            }
+        }
+
+        function selectQuizOption(key) {
+            if (selectedQuizOption !== null) return;
+            
+            selectedQuizOption = key;
+            const quiz = quizQuestions[currentQuizIndex];
+            const isCorrect = key === quiz.correctOption;
+
+            const selectedBtn = document.getElementById(`quiz-opt-${key}`);
+            
+            if (isCorrect) {
+                playSynthSound('success');
+                selectedBtn.className = "w-full text-left p-3 rounded-xl bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-between text-xs sm:text-sm font-bold transition duration-200 text-emerald-400";
+                
+                streak++;
+                userXP += 30;
+                updateStats();
+                
+                document.getElementById('quiz-feedback-status').className = "font-extrabold block text-sm text-emerald-400";
+                document.getElementById('quiz-feedback-status').innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> HOÀN TOÀN CHÍNH XÁC! (+30 XP)`;
+            } else {
+                playSynthSound('fail');
+                selectedBtn.className = "w-full text-left p-3 rounded-xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-between text-xs sm:text-sm font-bold transition duration-200 text-rose-400";
+                
+                const correctBtn = document.getElementById(`quiz-opt-${quiz.correctOption}`);
+                correctBtn.className = "w-full text-left p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/50 flex items-center justify-between text-xs sm:text-sm font-medium transition duration-200 text-emerald-300";
+                
+                streak = 0;
+                updateStats();
+
+                document.getElementById('quiz-feedback-status').className = "font-extrabold block text-sm text-rose-400";
+                document.getElementById('quiz-feedback-status').innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> BỊ SẬP BẪY RỒI!`;
+            }
+
+            document.getElementById('quiz-feedback-desc').innerHTML = `
+                <p class="text-xs font-semibold text-slate-200 mb-1">Đáp án đúng: ${quiz.correctOption}. ${quiz.options[quiz.correctOption]}</p>
+                <p class="text-[10px] text-slate-400 leading-relaxed whitespace-pre-line">${quiz.trap_desc}</p>
+            `;
+            document.getElementById('quiz-feedback-panel').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                playSynthSound('fanfare');
+                customModal(
+                    "Thử thách hoàn tất!",
+                    `Chúc mừng bạn đã xuất sắc vượt qua toàn bộ 5/5 câu hỏi mô phỏng bẫy TOEIC Part 2 thực tế! Nhận thêm +100 XP điểm thưởng.`,
+                    [{
+                        text: "Luyện ván mới",
+                        style: "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20",
+                        action: () => initQuizChallenge()
+                    }],
+                    "fa-solid fa-medal",
+                    "text-yellow-400 bg-yellow-500/10"
+                );
+                userXP += 100;
+                updateStats();
+            }
+        }
+    </script>
+
+    <!-- Speed Reflex Subgame -->
+    <script>
+        const speedStatements = [
+            { question: "When are they going to place the order?", response: "I'll do it right away.", isTrue: true, desc: "Hợp lý! Câu hỏi 'Khi nào' được trả lời bằng hành động 'Tôi sẽ đặt hàng ngay lập tức (right away)'." },
+            { question: "When are they going to place the order?", response: "The order doesn't need replacing.", isTrue: false, desc: "Bẫy đồng âm! 'place/replacing' dễ đánh lừa âm thanh người nghe nhưng nghĩa lại không liên quan." },
+            { question: "Where is that marketing file I gave you?", response: "It's on the third shelf.", isTrue: true, desc: "Hợp lý! Trả lời đúng địa điểm 'trên chiếc kệ thứ ba'." },
+            { question: "Where is that marketing file I gave you?", response: "I bought this versatile software.", isTrue: false, desc: "Bất hợp lý! Câu trả lời không giải quyết được vật 'ở đâu' mà nói lan man sang phần mềm." },
+            { question: "How can I set up a trade account?", response: "Please fill out this registration form.", isTrue: true, desc: "Hợp lý! Hướng dẫn đăng ký tài khoản giao dịch cho doanh nghiệp bằng cách điền biểu mẫu." },
+            { question: "How can I set up a trade account?", response: "There is no amount to pay.", isTrue: false, desc: "Bẫy đồng âm / lặp gốc từ! 'account' bị bẫy bởi từ 'amount' nghe khá tương đương." },
+            { question: "Why is the elevator shut down today?", response: "They are temporarily out of service.", isTrue: true, desc: "Hợp lý! Trình bày lí do thang máy đang tạm thời ngưng hoạt động." },
+            { question: "Why is the elevator shut down today?", response: "Yes, we paused it for lunch.", isTrue: false, desc: "Bẫy Yes/No! Câu hỏi 'Why' không bao giờ được trả lời bằng từ Yes/No đứng đầu." }
+        ];
+
+        let speedTimerInterval = null;
+        let speedTimeLeft = 100;
+        let speedCurrentIndex = 0;
+        let speedLives = 3;
+        let speedScore = 0;
+        let speedLocalCombo = 0;
+        let activeSpeedItem = null;
+
+        function startSpeedGame() {
+            clearInterval(speedTimerInterval);
+            speedLives = 3;
+            speedScore = 0;
+            speedLocalCombo = 0;
+            speedCurrentIndex = 0;
+
+            document.getElementById('speed-game-active').classList.remove('hidden');
+            document.getElementById('speed-game-over').classList.add('hidden');
+
+            updateSpeedUI();
+            nextSpeedQuestion();
+        }
+
+        function updateSpeedUI() {
+            let livesStr = "";
+            for (let i = 0; i < 3; i++) {
+                livesStr += i < speedLives ? "❤️ " : "🖤 ";
+            }
+            document.getElementById('speed-lives').innerText = livesStr;
+            document.getElementById('speed-combo').innerText = speedLocalCombo;
+        }
+
+        function nextSpeedQuestion() {
+            if (speedLives <= 0) {
+                endSpeedGame();
+                return;
+            }
+
+            updateSpeedUI();
+
+            const randomIndex = Math.floor(Math.random() * speedStatements.length);
+            activeSpeedItem = speedStatements[randomIndex];
+
+            document.getElementById('speed-question-text').innerText = activeSpeedItem.question;
+            document.getElementById('speed-response-text').innerText = activeSpeedItem.response;
+
+            speakWord(activeSpeedItem.question);
+
+            speedTimeLeft = 100;
+            const timerBar = document.getElementById('speed-timer-bar');
+            timerBar.style.width = "100%";
+
+            clearInterval(speedTimerInterval);
+            const stepPercent = 100 / 80; 
+            
+            speedTimerInterval = setInterval(() => {
+                speedTimeLeft -= stepPercent;
+                if (speedTimeLeft <= 0) {
+                    speedTimeLeft = 0;
+                    timerBar.style.width = "0%";
+                    clearInterval(speedTimerInterval);
+                    handleTimeout();
+                } else {
+                    timerBar.style.width = speedTimeLeft + "%";
+                }
+            }, 100);
+        }
+
+        function speakSpeedStatement() {
+            if (activeSpeedItem) {
+                speakWord(`${activeSpeedItem.question} ... ${activeSpeedItem.response}`);
+            }
+        }
+
+        function handleTimeout() {
+            playSynthSound('fail');
+            triggerArenaShake();
+            speedLives--;
+            speedLocalCombo = 0;
+            
+            customModal(
+                "HẾT GIỜ!",
+                "Bạn đã quá thời gian suy nghĩ 8 giây! Mất 1 mạng.",
+                [{
+                    text: "Câu tiếp theo",
+                    style: "bg-purple-600 text-white",
+                    action: () => nextSpeedQuestion()
+                }],
+                "fa-solid fa-clock",
+                "text-rose-400 bg-rose-500/10"
+            );
+        }
+
+        function triggerArenaShake() {
+            const card = document.getElementById('game-arena-card');
+            card.classList.add('animate-shake');
+            setTimeout(() => {
+                card.classList.remove('animate-shake');
+            }, 500);
+        }
+
+        function handleSpeedDecision(userDecision) {
+            clearInterval(speedTimerInterval);
+            
+            const isCorrect = userDecision === activeSpeedItem.isTrue;
+
+            if (isCorrect) {
+                playSynthSound('success');
+                speedLocalCombo++;
+                const bonus = Math.floor(speedTimeLeft / 10);
+                const pointsGained = 20 + bonus + (speedLocalCombo * 2);
+                speedScore += pointsGained;
+                userXP += pointsGained;
+                streak++;
+                updateStats();
+
+                customModal(
+                    "CHÍNH XÁC!",
+                    `Nhận +${pointsGained} XP! Combo hiện tại x${speedLocalCombo}.\n\nGiải thích:\n${activeSpeedItem.desc}`,
+                    [{
+                        text: "Câu tiếp theo",
+                        style: "bg-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/20",
+                        action: () => nextSpeedQuestion()
+                    }],
+                    "fa-solid fa-square-check",
+                    "text-emerald-400 bg-emerald-500/10"
+                );
+            } else {
+                playSynthSound('fail');
+                triggerArenaShake();
+                speedLives--;
+                speedLocalCombo = 0;
+                streak = 0;
+                updateStats();
+
+                customModal(
+                    "SAI MẤT RỒI!",
+                    `Nhận định này phải là: ${activeSpeedItem.isTrue ? "HỢP LÝ (TRUE)" : "BẤT HỢP LÝ/BẪY (FALSE)"}.\n\nGiải thích bẫy:\n${activeSpeedItem.desc}`,
+                    [{
+                        text: "Tiếp tục",
+                        style: "bg-rose-600 text-white font-bold",
+                        action: () => nextSpeedQuestion()
+                    }],
+                    "fa-solid fa-triangle-exclamation",
+                    "text-rose-400 bg-rose-500/10"
+                );
+            }
+        }
+
+        function endSpeedGame() {
+            clearInterval(speedTimerInterval);
+            playSynthSound('fanfare');
+
+            document.getElementById('speed-game-active').classList.add('hidden');
+            document.getElementById('speed-game-over').classList.remove('hidden');
+
+            document.getElementById('speed-summary-score').innerText = `+${speedScore} XP`;
+            document.getElementById('speed-summary-combo').innerText = `x${speedLocalCombo}`;
+
+            customModal(
+                "KẾT THÚC PHIÊN PHẢN XẠ!",
+                `Trận đấu kết thúc! Bạn giành được +${speedScore} XP và rèn luyện phản xạ phát hiện bẫy rất tốt hôm nay!`,
+                [{
+                    text: "Đóng",
+                    style: "bg-purple-600 text-white font-bold",
+                    action: () => closeModal()
+                }],
+                "fa-solid fa-ranking-star",
+                "text-amber-400 bg-amber-500/10"
+            );
+        }
+    </script>
+
+    <!-- Arcade Space Shooter Canvas Engine -->
+    <script>
+        let shooterAnimFrame = null;
+        let shooterCanvas = null;
+        let shooterCtx = null;
+        
+        let shooterScore = 0;
+        let shooterLives = 3;
+        let isShooterTransitioning = false;
+        let shooterTransitionTimer = 0;
+
+        let shooterTimerVal = 15; // Strictly 15s limit for vocabulary matching
+        let shooterTimerInterval = null;
+        let shooterActiveVocab = null;
+        let shooterActiveOptions = {}; 
+
+        let spaceship = {
+            x: 200,
+            y: 320,
+            width: 36,
+            height: 28,
+            targetX: 200
+        };
+
+        let bullets = [];
+        let meteors = [];
+        let particles = [];
+        let stars = [];
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < 40; i++) {
+                stars.push({
+                    x: Math.random() * shooterCanvas.width,
+                    y: Math.random() * shooterCanvas.height,
+                    size: Math.random() * 1.5 + 0.5,
+                    speed: Math.random() * 1.5 + 0.5
+                });
+            }
+        }
+
+        function setupShooterCanvas() {
+            shooterCanvas = document.getElementById('shooter-canvas');
+            shooterCtx = shooterCanvas.getContext('2d');
+            
+            const rect = shooterCanvas.getBoundingClientRect();
+            shooterCanvas.width = rect.width || 500;
+            shooterCanvas.height = 360; 
+
+            spaceship.x = shooterCanvas.width / 2;
+            spaceship.y = shooterCanvas.height - 40;
+            spaceship.targetX = spaceship.x;
+
+            initStars();
+
+            // Reset touch & click listener bindings
+            shooterCanvas.removeEventListener('mousemove', handleShooterMouseMove);
+            shooterCanvas.removeEventListener('touchmove', handleShooterTouchMove);
+            shooterCanvas.removeEventListener('click', handleShooterClick);
+            shooterCanvas.removeEventListener('touchstart', handleShooterTouchStart);
+
+            shooterCanvas.addEventListener('mousemove', handleShooterMouseMove);
+            shooterCanvas.addEventListener('touchmove', handleShooterTouchMove, { passive: false });
+            shooterCanvas.addEventListener('click', handleShooterClick);
+            shooterCanvas.addEventListener('touchstart', handleShooterTouchStart);
+        }
+
+        function handleShooterMouseMove(e) {
+            const rect = shooterCanvas.getBoundingClientRect();
+            const clientX = e.clientX - rect.left;
+            spaceship.targetX = (clientX / rect.width) * shooterCanvas.width;
+        }
+
+        function handleShooterTouchMove(e) {
+            e.preventDefault(); 
+            if (e.touches && e.touches[0]) {
+                const rect = shooterCanvas.getBoundingClientRect();
+                const clientX = e.touches[0].clientX - rect.left;
+                spaceship.targetX = (clientX / rect.width) * shooterCanvas.width;
+            }
+        }
+
+        function handleShooterTouchStart(e) {
+            if (e.touches && e.touches[0]) {
+                const rect = shooterCanvas.getBoundingClientRect();
+                const clientX = e.touches[0].clientX - rect.left;
+                spaceship.targetX = (clientX / rect.width) * shooterCanvas.width;
+                fireBullet();
+            }
+        }
+
+        function handleShooterClick() {
+            fireBullet();
+        }
+
+        function fireBullet() {
+            if (isShooterTransitioning || shooterLives <= 0) return;
+            playSynthSound('laser');
+            bullets.push({
+                x: spaceship.x,
+                y: spaceship.y - 15,
+                radius: 3,
+                speed: 7
+            });
+        }
+
+        function spawnMeteorsForCurrentQuestion() {
+            meteors = [];
+            bullets = [];
+            
+            const letters = ['A', 'B', 'C'];
+            const stepX = shooterCanvas.width / 4;
+
+            letters.forEach((letter, idx) => {
+                meteors.push({
+                    x: stepX * (idx + 1),
+                    y: 70 + (Math.random() * 40 - 20),
+                    radius: 22,
+                    letter: letter,
+                    vx: (Math.random() * 0.8 - 0.4),
+                    vy: (Math.random() * 0.3 - 0.15),
+                    color: idx === 0 ? '#c084fc' : (idx === 1 ? '#818cf8' : '#f43f5e') 
+                });
+            });
+        }
+
+        function startShooterGame() {
+            shooterScore = 0;
+            shooterLives = 3;
+            isShooterTransitioning = false;
+            particles = [];
+            
+            setupShooterCanvas();
+            loadShooterQuestion();
+
+            document.getElementById('shooter-score-hud').innerText = shooterScore;
+            
+            cancelAnimationFrame(shooterAnimFrame);
+            shooterGameLoop();
+        }
+
+        function loadShooterQuestion() {
+            isShooterTransitioning = false;
+            
+            clearInterval(shooterTimerInterval);
+            shooterTimerVal = 15; // Set vocabulary 15 seconds limit
+
+            const correctVocab = toeicVocab[Math.floor(Math.random() * toeicVocab.length)];
+            shooterActiveVocab = correctVocab;
+            
+            const pool = toeicVocab.filter(v => v.id !== correctVocab.id);
+            const shuffledPool = pool.sort(() => 0.5 - Math.random());
+            const incorrect1 = shuffledPool[0];
+            const incorrect2 = shuffledPool[1];
+            
+            const optionsList = [
+                { text: correctVocab.vietnamese, isCorrect: true },
+                { text: incorrect1.vietnamese, isCorrect: false },
+                { text: incorrect2.vietnamese, isCorrect: false }
+            ].sort(() => 0.5 - Math.random());
+            
+            shooterActiveOptions = {
+                A: optionsList[0],
+                B: optionsList[1],
+                C: optionsList[2]
+            };
+
+            document.getElementById('shooter-question-hud').innerHTML = `
+                <span class="text-[10px] text-purple-400 font-extrabold block mb-1">TỪ VỰNG TIẾNG ANH:</span>
+                <span class="text-xl font-black text-white tracking-wide uppercase block">${correctVocab.word}</span>
+                <span class="text-xs text-slate-400 block mt-1">Loại từ: (${correctVocab.type}) - Đâu là nghĩa đúng?</span>
+            `;
+            
+            const optionsContainer = document.getElementById('shooter-options-hud');
+            optionsContainer.innerHTML = '';
+            
+            Object.keys(shooterActiveOptions).forEach(key => {
+                const row = document.createElement('div');
+                row.className = "p-2.5 rounded-xl border border-white/5 bg-slate-900/60 flex items-center gap-2 text-slate-300";
+                row.innerHTML = `
+                    <span class="w-5 h-5 rounded bg-slate-800 text-white flex items-center justify-center font-bold text-[10px] font-mono shrink-0">${key}</span>
+                    <span class="text-xs font-semibold leading-tight">${shooterActiveOptions[key].text}</span>
+                `;
+                optionsContainer.appendChild(row);
+            });
+
+            updateShooterLivesUI();
+            spawnMeteorsForCurrentQuestion();
+
+            // Set up strict 15s timer
+            shooterTimerInterval = setInterval(() => {
+                shooterTimerVal--;
+                if (shooterTimerVal <= 0) {
+                    clearInterval(shooterTimerInterval);
+                    handleShooterTimeout();
+                }
+            }, 1000);
+        }
+
+        function updateShooterLivesUI() {
+            let uiStr = "";
+            for (let i = 0; i < 3; i++) {
+                uiStr += i < shooterLives ? "🛡️ " : "🖤 ";
+            }
+            document.getElementById('shooter-lives-hud').innerText = uiStr;
+        }
+
+        function speakShooterQuestion() {
+            if (shooterActiveVocab) {
+                speakWord(shooterActiveVocab.word);
+            }
+        }
+
+        function handleShooterTimeout() {
+            if (isShooterTransitioning || shooterLives <= 0) return;
+            
+            playSynthSound('fail');
+            triggerArenaShake();
+            shooterLives--;
+            updateShooterLivesUI();
+
+            isShooterTransitioning = true;
+            shooterTransitionTimer = 90; // Frame buffer transitions (1.5s)
+
+            if (shooterLives <= 0) {
+                setTimeout(() => {
+                    handleShooterGameOver();
+                }, 800);
+            }
+        }
+
+        function triggerMeteorExplosion(meteor, success) {
+            playSynthSound('explosion');
+            
+            for (let i = 0; i < 20; i++) {
+                particles.push({
+                    x: meteor.x,
+                    y: meteor.y,
+                    vx: (Math.random() * 6 - 3),
+                    vy: (Math.random() * 6 - 3),
+                    radius: Math.random() * 3 + 1,
+                    alpha: 1,
+                    color: success ? '#34d399' : '#f43f5e',
+                    decay: Math.random() * 0.03 + 0.015
+                });
+            }
+        }
+
+        function updateShooter() {
+            spaceship.x += (spaceship.targetX - spaceship.x) * 0.18;
+            
+            if (spaceship.x < 20) spaceship.x = 20;
+            if (spaceship.x > shooterCanvas.width - 20) spaceship.x = shooterCanvas.width - 20;
+
+            stars.forEach(star => {
+                star.y += star.speed;
+                if (star.y > shooterCanvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * shooterCanvas.width;
+                }
+            });
+
+            if (isShooterTransitioning) {
+                shooterTransitionTimer--;
+                if (shooterTransitionTimer <= 0) {
+                    loadShooterQuestion();
+                }
+            }
+
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                bullets[i].y -= bullets[i].speed;
+                if (bullets[i].y < 0) {
+                    bullets.splice(i, 1);
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].x += particles[i].vx;
+                particles[i].y += particles[i].vy;
+                particles[i].alpha -= particles[i].decay;
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            let correctLetter = 'A';
+            if (shooterActiveOptions.B && shooterActiveOptions.B.isCorrect) correctLetter = 'B';
+            else if (shooterActiveOptions.C && shooterActiveOptions.C.isCorrect) correctLetter = 'C';
+            
+            meteors.forEach(meteor => {
+                meteor.x += meteor.vx;
+                meteor.y += meteor.vy;
+
+                if (meteor.x - meteor.radius < 5 || meteor.x + meteor.radius > shooterCanvas.width - 5) {
+                    meteor.vx *= -1;
+                }
+                if (meteor.y - meteor.radius < 10 || meteor.y + meteor.radius > 160) {
+                    meteor.vy *= -1;
+                }
+
+                for (let bIdx = bullets.length - 1; bIdx >= 0; bIdx--) {
+                    const bullet = bullets[bIdx];
+                    const dist = Math.hypot(bullet.x - meteor.x, bullet.y - meteor.y);
+                    
+                    if (dist < meteor.radius + bullet.radius) {
+                        bullets.splice(bIdx, 1);
+                        
+                        if (isShooterTransitioning) return; 
+
+                        const isCorrect = meteor.letter === correctLetter;
+                        triggerMeteorExplosion(meteor, isCorrect);
+
+                        if (isCorrect) {
+                            clearInterval(shooterTimerInterval); 
+                            shooterScore += 50;
+                            document.getElementById('shooter-score-hud').innerText = shooterScore;
+                            userXP += 40;
+                            streak++;
+                            updateStats();
+
+                            isShooterTransitioning = true;
+                            shooterTransitionTimer = 100; 
+                            meteor.radius = 0; 
+                        } else {
+                            triggerArenaShake();
+                            shooterLives--;
+                            updateShooterLivesUI();
+                            streak = 0;
+                            updateStats();
+
+                            if (shooterLives <= 0) {
+                                clearInterval(shooterTimerInterval);
+                                handleShooterGameOver();
+                            } else {
+                                meteor.radius = 0; 
+                            }
+                        }
+                        break;
+                    }
+                }
+            });
+
+            meteors = meteors.filter(m => m.radius > 0);
+        }
+
+        function drawShooter() {
+            shooterCtx.fillStyle = '#020617';
+            shooterCtx.fillRect(0, 0, shooterCanvas.width, shooterCanvas.height);
+
+            shooterCtx.fillStyle = '#ffffff';
+            stars.forEach(star => {
+                shooterCtx.globalAlpha = star.speed * 0.5;
+                shooterCtx.fillRect(star.x, star.y, star.size, star.size);
+            });
+            shooterCtx.globalAlpha = 1;
+
+            if (!isShooterTransitioning && shooterLives > 0) {
+                shooterCtx.fillStyle = 'rgba(244, 63, 94, 0.2)'; 
+                shooterCtx.fillRect(0, 0, shooterCanvas.width, 6);
+                
+                shooterCtx.fillStyle = '#f43f5e'; 
+                const timeWidth = (shooterTimerVal / 15) * shooterCanvas.width;
+                shooterCtx.fillRect(0, 0, timeWidth, 6);
+            }
+
+            // Spaceship drawing
+            shooterCtx.save();
+            shooterCtx.translate(spaceship.x, spaceship.y);
+
+            if (Math.random() > 0.3) {
+                shooterCtx.beginPath();
+                shooterCtx.moveTo(-6, 12);
+                shooterCtx.lineTo(0, 22 + Math.random() * 6);
+                shooterCtx.lineTo(6, 12);
+                shooterCtx.fillStyle = '#f43f5e';
+                shooterCtx.fill();
+            }
+
+            shooterCtx.beginPath();
+            shooterCtx.moveTo(0, -16);
+            shooterCtx.lineTo(16, 12);
+            shooterCtx.lineTo(-16, 12);
+            shooterCtx.closePath();
+            shooterCtx.fillStyle = '#4f46e5';
+            shooterCtx.strokeStyle = '#818cf8';
+            shooterCtx.lineWidth = 2;
+            shooterCtx.fill();
+            shooterCtx.stroke();
+
+            shooterCtx.beginPath();
+            shooterCtx.arc(0, 0, 5, 0, Math.PI * 2);
+            shooterCtx.fillStyle = '#38bdf8';
+            shooterCtx.fill();
+
+            shooterCtx.restore();
+
+            // Laser beams
+            bullets.forEach(bullet => {
+                shooterCtx.beginPath();
+                shooterCtx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+                shooterCtx.fillStyle = '#fb7185';
+                shooterCtx.shadowBlur = 8;
+                shooterCtx.shadowColor = '#f43f5e';
+                shooterCtx.fill();
+                shooterCtx.shadowBlur = 0; 
+            });
+
+            // Target letters on meteors
+            meteors.forEach(meteor => {
+                shooterCtx.beginPath();
+                shooterCtx.arc(meteor.x, meteor.y, meteor.radius, 0, Math.PI * 2);
+                shooterCtx.fillStyle = meteor.color + '22'; 
+                shooterCtx.strokeStyle = meteor.color;
+                shooterCtx.lineWidth = 3;
+                shooterCtx.fill();
+                shooterCtx.stroke();
+
+                shooterCtx.beginPath();
+                shooterCtx.arc(meteor.x - 6, meteor.y - 6, 6, 0, Math.PI * 2);
+                shooterCtx.strokeStyle = meteor.color + '55';
+                shooterCtx.stroke();
+
+                shooterCtx.fillStyle = '#ffffff';
+                shooterCtx.font = 'bold 16px sans-serif';
+                shooterCtx.textAlign = 'center';
+                shooterCtx.textBaseline = 'middle';
+                shooterCtx.fillText(meteor.letter, meteor.x, meteor.y);
+            });
+
+            // Sparkle particles
+            particles.forEach(p => {
+                shooterCtx.save();
+                shooterCtx.globalAlpha = p.alpha;
+                shooterCtx.beginPath();
+                shooterCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                shooterCtx.fillStyle = p.color;
+                shooterCtx.fill();
+                shooterCtx.restore();
+            });
+
+            // Transition text indicators
+            if (isShooterTransitioning && shooterLives > 0) {
+                shooterCtx.fillStyle = 'rgba(2, 6, 23, 0.75)';
+                shooterCtx.fillRect(0, 0, shooterCanvas.width, shooterCanvas.height);
+
+                if (shooterTimerVal <= 0) {
+                    shooterCtx.fillStyle = '#f43f5e';
+                    shooterCtx.font = 'bold 16px sans-serif';
+                    shooterCtx.textAlign = 'center';
+                    shooterCtx.fillText('HẾT GIỜ! -1 MẠNG', shooterCanvas.width / 2, shooterCanvas.height / 2 - 10);
+                } else {
+                    shooterCtx.fillStyle = '#34d399';
+                    shooterCtx.font = 'bold 18px sans-serif';
+                    shooterCtx.textAlign = 'center';
+                    shooterCtx.fillText('CHÍNH XÁC! +50 XP', shooterCanvas.width / 2, shooterCanvas.height / 2 - 15);
+                }
+
+                shooterCtx.fillStyle = '#94a3b8';
+                shooterCtx.font = '10px sans-serif';
+                shooterCtx.fillText('Đang nạp từ vựng tiếp theo...', shooterCanvas.width / 2, shooterCanvas.height / 2 + 15);
+            }
+        }
+
+        function shooterGameLoop() {
+            updateShooter();
+            drawShooter();
+            shooterAnimFrame = requestAnimationFrame(shooterGameLoop);
+        }
+
+        function handleShooterGameOver() {
+            cancelAnimationFrame(shooterAnimFrame);
+            clearInterval(shooterTimerInterval);
+            playSynthSound('fail');
+            
+            customModal(
+                "ĐƯỜNG TRUYỀN NĂNG LƯỢNG SẬP!",
+                `Phi thuyền của bạn đã hết lá chắn bảo vệ! Điểm tích lũy được: ${shooterScore} điểm.`,
+                [
+                    {
+                        text: "Luyện lại trận",
+                        style: "bg-rose-600 hover:bg-rose-500 text-white font-bold",
+                        action: () => startShooterGame()
+                    },
+                    {
+                        text: "Rời đấu trường",
+                        style: "bg-slate-800 hover:bg-slate-700 text-slate-300",
+                        action: () => switchTab('learn')
+                    }
+                ],
+                "fa-solid fa-radiation animate-spin",
+                "text-rose-400 bg-rose-500/10"
+            );
+        }
+    </script>
+</body>
+</html>
