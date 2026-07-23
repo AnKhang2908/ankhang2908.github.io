@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC Part 1 Vocab Arena - Game Học Từ Vựng Thú Vị</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        }
+        /* Card Flip Style */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        /* Shake effect for wrong answers */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-full text-slate-100 flex flex-col">
+
+    <!-- Header -->
+    <header class="border-b border-white/10 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-graduation-cap text-lg text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">TOEIC PART 1</h1>
+                    <p class="text-[10px] text-slate-400">Vocab Arena & Interactive Gaming Hub</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <div class="flex bg-slate-950/60 p-1 rounded-xl border border-white/5 gap-1 text-xs sm:text-sm overflow-x-auto max-w-full">
+                <button onclick="switchTab('learn')" id="btn-tab-learn" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all bg-indigo-600 text-white shadow-md shrink-0">
+                    <i class="fa-solid fa-book-open mr-1"></i>Flashcard
+                </button>
+                <button onclick="switchTab('match')" id="btn-tab-match" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-puzzle-piece mr-1"></i>Ghép Cặp
+                </button>
+                <button onclick="switchTab('quiz')" id="btn-tab-quiz" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-images mr-1"></i>Trắc Nghiệm
+                </button>
+                <button onclick="switchTab('speed')" id="btn-tab-speed" class="tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0">
+                    <i class="fa-solid fa-bolt text-amber-400 mr-1"></i>Chớp Nhoáng
+                </button>
+            </div>
+
+            <!-- Score Badge -->
+            <div class="flex items-center gap-2">
+                <div class="bg-indigo-500/10 border border-indigo-500/30 px-3 py-1 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-fire text-amber-500 text-xs"></i>
+                    <span class="text-[11px] font-bold text-indigo-300">Streak: <span id="streak-count">0</span></span>
+                </div>
+                <div class="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-lg flex items-center gap-1.5">
+                    <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+                    <span class="text-[11px] font-bold text-emerald-300">XP: <span id="total-xp">0</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-4 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Sidebar: Vocab List tracker -->
+        <section class="lg:w-80 flex flex-col gap-4 bg-slate-900/50 border border-white/5 rounded-2xl p-4 h-[fit-content]">
+            <div class="flex justify-between items-center border-b border-white/10 pb-2.5">
+                <h2 class="font-bold text-sm text-slate-200">
+                    <i class="fa-solid fa-list-check text-indigo-400 mr-2"></i>Sổ Tay Từ Vựng (<span id="mastered-count">0</span>/25)
+                </h2>
+                <button onclick="confirmResetStats()" class="text-xs text-rose-400 hover:text-rose-300 flex items-center gap-1 transition">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+            
+            <!-- Search & Filter -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-500"></i>
+                <input type="text" id="vocab-search" placeholder="Tìm kiếm từ vựng..." class="w-full pl-9 pr-4 py-1.5 bg-slate-950/50 border border-white/10 rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500" onkeyup="filterVocabList()">
+            </div>
+
+            <!-- List elements container -->
+            <div id="vocab-list-items" class="max-h-[300px] lg:max-h-[460px] overflow-y-auto space-y-2 pr-1">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Dynamic Game Content Arena -->
+        <section id="game-arena-card" class="flex-grow flex flex-col bg-slate-900/40 border border-white/5 rounded-3xl p-5 md:p-6 min-h-[550px] relative overflow-hidden shadow-2xl justify-between">
+            
+            <!-- TAB 1: FLASHCARD MODE -->
+            <div id="tab-learn" class="tab-pane flex flex-col items-center justify-between h-full gap-6">
+                <div class="text-center w-full">
+                    <span class="px-3 py-1 bg-indigo-500/10 text-indigo-300 text-xs font-semibold rounded-full border border-indigo-500/20">Chế độ Học Flashcard</span>
+                    <h3 class="text-xs text-slate-400 mt-2">Nhấp vào thẻ để lật xem ý nghĩa và câu ví dụ thực tế.</h3>
+                </div>
+
+                <!-- 3D Flashcard Container -->
+                <div class="w-full max-w-md h-72 perspective-1000 cursor-pointer" onclick="toggleCardFlip()">
+                    <div id="flashcard" class="w-full h-full preserve-3d transition-transform duration-500 relative rounded-2xl shadow-xl shadow-slate-950/50">
+                        
+                        <!-- Front Face (English) -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden bg-gradient-to-br from-indigo-900/80 to-slate-800 border-2 border-indigo-500/30 rounded-2xl flex flex-col justify-between p-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-semibold text-indigo-400 tracking-wider" id="card-index">CARD 1/25</span>
+                                <button onclick="speakCurrentWord(event)" class="w-9 h-9 rounded-full bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600 hover:text-white transition flex items-center justify-center" title="Phát âm">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <h4 class="text-3xl font-extrabold tracking-tight text-white mb-2" id="card-word">dock</h4>
+                                <span class="text-xs bg-slate-700/60 text-slate-300 px-2.5 py-0.5 rounded-full border border-white/5" id="card-type">v</span>
+                            </div>
+                            <div class="text-center text-[11px] text-slate-400 italic">
+                                <i class="fa-solid fa-arrows-rotate mr-1"></i> Bấm để lật xem nghĩa tiếng Việt & Ví dụ
+                            </div>
+                        </div>
+
+                        <!-- Back Face (Vietnamese) -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-purple-950/80 to-slate-800 border-2 border-purple-500/30 rounded-2xl flex flex-col justify-between p-6">
+                            <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold text-purple-400">ĐỊNH NGHĨA & VÍ DỤ</span>
+                                <span class="text-xs text-slate-400" id="card-word-ref">dock</span>
+                            </div>
+                            <div class="my-3 text-center">
+                                <h4 class="text-2xl font-bold text-purple-300" id="card-vietnamese">neo đậu (tàu bè, máy bay)</h4>
+                                <p class="text-xs text-slate-400 mt-1" id="card-definition">Tàu bè cập bến hoặc máy bay đậu tại bến đậu.</p>
+                            </div>
+                            <div class="bg-slate-950/60 p-3 rounded-lg border border-white/5 text-left">
+                                <span class="text-[10px] uppercase font-bold text-indigo-400 block mb-1">Ví dụ TOEIC:</span>
+                                <p class="text-xs text-slate-200" id="card-example">The plane is docked at the airport.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Learning Progress Controls -->
+                <div class="flex flex-col gap-4 w-full max-w-md">
+                    <div class="flex justify-between gap-3">
+                        <button onclick="prevCard()" class="flex-1 bg-slate-800 hover:bg-slate-700 active:scale-95 transition py-2.5 rounded-xl text-xs font-semibold border border-white/10 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-chevron-left"></i> Trước đó
+                        </button>
+                        <button onclick="markAsLearned()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                            <i class="fa-solid fa-check"></i> Thuộc từ này
+                        </button>
+                        <button onclick="nextCard()" class="flex-1 bg-slate-800 hover:bg-slate-700 active:scale-95 transition py-2.5 rounded-xl text-xs font-semibold border border-white/10 flex items-center justify-center gap-2">
+                            Tiếp theo <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MATCH-UP GAME MODE -->
+            <div id="tab-match" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full flex flex-col sm:flex-row justify-between items-center border-b border-white/5 pb-3 gap-2">
+                    <div class="text-left">
+                        <span class="px-3 py-1 bg-amber-500/10 text-amber-300 text-xs font-semibold rounded-full border border-amber-500/20">Game Ghép Cặp Phản Xạ</span>
+                        <h3 class="text-[11px] text-slate-400 mt-1">Chọn một thẻ tiếng Anh và thẻ tiếng Việt tương ứng để ghi điểm!</h3>
+                    </div>
+                    <!-- Game Timer & Controls -->
+                    <div class="flex items-center gap-3">
+                        <div class="bg-slate-950/50 px-3 py-1 rounded-lg border border-white/10 flex items-center gap-2">
+                            <i class="fa-solid fa-stopwatch text-rose-400"></i>
+                            <span class="text-xs font-mono font-bold" id="match-timer">00:00</span>
+                        </div>
+                        <button onclick="startMatchGame()" class="bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-lg shadow-indigo-600/20">
+                            Chơi mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Match-Up Cards Arena Grid -->
+                <div id="match-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 my-auto py-2">
+                    <!-- Dynamic populated with 8 cards (4 Eng, 4 Vi) -->
+                </div>
+
+                <!-- Score Board for game -->
+                <div class="flex justify-between items-center bg-slate-950/40 p-3 rounded-xl border border-white/5 text-xs text-slate-400">
+                    <div>Combo hiện tại: <span id="match-combo" class="text-amber-400 font-bold">0</span> 🔥</div>
+                    <div>Thẻ hoàn thành: <span id="match-score" class="text-emerald-400 font-bold">0/8</span></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: TOEIC PHOTO QUIZ MODE -->
+            <div id="tab-quiz" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full">
+                    <span class="px-3 py-1 bg-emerald-500/10 text-emerald-300 text-xs font-semibold rounded-full border border-emerald-500/20">Phòng Thi Trắc Nghiệm Tranh</span>
+                    <h3 class="text-xs text-slate-400 mt-2">Dựa vào tranh minh họa và nghe/đọc các câu lựa chọn để chọn đáp án miêu tả đúng nhất.</h3>
+                </div>
+
+                <!-- Quiz Challenge Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center my-auto">
+                    
+                    <!-- SVG Scene Visual representation -->
+                    <div class="md:col-span-5 h-44 md:h-60 bg-slate-950/40 border border-white/10 rounded-xl overflow-hidden relative flex flex-col justify-between p-3" id="quiz-scene-container">
+                        <!-- Dynamic SVG will be injected here representing the current TOEIC scenario -->
+                    </div>
+
+                    <!-- Question & Options Block -->
+                    <div class="md:col-span-7 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-semibold text-indigo-400" id="quiz-question-index">CÂU HỎI 1/5</span>
+                            <div class="flex gap-2">
+                                <button onclick="speakQuizAllOptions()" class="text-[11px] bg-slate-800 hover:bg-slate-700 px-2 py-1 rounded border border-white/10 text-slate-300 flex items-center gap-1">
+                                    <i class="fa-solid fa-volume-high"></i> Đọc Toàn Bộ
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Audio Button -->
+                        <div class="bg-indigo-600/10 border border-indigo-500/20 p-2.5 rounded-lg flex items-center gap-3">
+                            <button onclick="playQuizTargetAudio()" class="w-9 h-9 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center transition shadow-md shadow-indigo-600/20 shrink-0">
+                                <i class="fa-solid fa-circle-play text-md"></i>
+                            </button>
+                            <div class="text-xs">
+                                <span class="font-bold text-slate-200 block">Nghe câu miêu tả đúng</span>
+                                <span class="text-slate-400 text-[10px]">Ấn nút phát để nghe câu miêu tả cốt lõi.</span>
+                            </div>
+                        </div>
+
+                        <!-- Option Buttons -->
+                        <div class="flex flex-col gap-2" id="quiz-options-container">
+                            <!-- Dynamic Options A, B, C, D -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quiz Feedback panel -->
+                <div id="quiz-feedback-panel" class="hidden p-3 bg-slate-950/60 rounded-xl border border-white/5 flex flex-col sm:flex-row justify-between items-center gap-2">
+                    <div class="text-left text-xs">
+                        <span id="quiz-feedback-status" class="font-bold block text-xs">Chính xác!</span>
+                        <span id="quiz-feedback-desc" class="text-slate-400 text-[11px]">The plane is docked at the airport. (Máy bay đang đậu ở sân bay).</span>
+                    </div>
+                    <button onclick="nextQuizQuestion()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg transition shrink-0">
+                        Câu tiếp theo <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 4: SPEED TRUE/FALSE MODE (NEW GAME MODE!) -->
+            <div id="tab-speed" class="tab-pane hidden flex-col justify-between h-full gap-4">
+                <div class="text-center w-full flex flex-col sm:flex-row justify-between items-center border-b border-white/5 pb-2 gap-2">
+                    <div class="text-left">
+                        <span class="px-3 py-0.5 bg-rose-500/10 text-rose-300 text-[10px] font-bold rounded-full border border-rose-500/20">HỎI NHANH PHẢN XẠ</span>
+                        <h3 class="text-[11px] text-slate-400 mt-1">Lắng nghe nhận định dưới áp lực thời gian cực nhanh! Đúng hay Sai?</h3>
+                    </div>
+                    
+                    <!-- Stats bar -->
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-1 bg-slate-950/60 px-2 py-1 rounded border border-white/5">
+                            <span class="text-[10px] text-slate-400">Combo:</span>
+                            <span class="text-xs font-bold text-amber-400 font-mono" id="speed-combo">0</span>
+                        </div>
+                        <div class="flex items-center gap-1 bg-slate-950/60 px-2 py-1 rounded border border-white/5">
+                            <span class="text-[10px] text-slate-400 font-bold">MẠNG:</span>
+                            <span class="text-rose-400 text-xs" id="speed-lives">❤️ ❤️ ❤️</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Active Panel -->
+                <div id="speed-game-active" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center my-auto">
+                    
+                    <!-- Scenario Graphic -->
+                    <div class="md:col-span-5 h-40 md:h-56 bg-slate-950/40 border border-white/10 rounded-xl overflow-hidden relative flex flex-col justify-between p-2" id="speed-scene-container">
+                        <!-- Dynamic SVG -->
+                    </div>
+
+                    <!-- Prompt and Countdown -->
+                    <div class="md:col-span-7 flex flex-col gap-4">
+                        <!-- Progress Timer Bar -->
+                        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-white/5 relative">
+                            <div id="speed-timer-bar" class="bg-gradient-to-r from-rose-500 via-purple-500 to-indigo-500 h-full w-full transition-all duration-100"></div>
+                        </div>
+
+                        <div class="bg-indigo-950/20 border border-indigo-500/20 p-3.5 rounded-xl text-center flex flex-col gap-2 relative">
+                            <button onclick="speakSpeedStatement()" class="absolute right-2 top-2 w-7 h-7 rounded-full bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white transition flex items-center justify-center">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                            <span class="text-[10px] text-indigo-400 font-extrabold uppercase tracking-wide">Nhận định tranh</span>
+                            <p class="text-sm font-bold text-white leading-snug" id="speed-statement-text">The chef is wearing a white apron.</p>
+                            <span class="text-xs text-slate-400 italic font-medium" id="speed-vietnamese-text">Đầu bếp đang mặc một chiếc tạp dề màu trắng.</span>
+                        </div>
+
+                        <!-- Big Decision Buttons -->
+                        <div class="grid grid-cols-2 gap-3.5">
+                            <button onclick="handleSpeedDecision(true)" class="bg-gradient-to-b from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 py-3.5 rounded-2xl font-extrabold text-sm text-white shadow-lg shadow-emerald-600/20 transition transform active:scale-95 flex flex-col items-center gap-0.5">
+                                <i class="fa-solid fa-circle-check text-base"></i>
+                                <span>ĐÚNG (TRUE)</span>
+                            </button>
+                            <button onclick="handleSpeedDecision(false)" class="bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 py-3.5 rounded-2xl font-extrabold text-sm text-white shadow-lg shadow-rose-600/20 transition transform active:scale-95 flex flex-col items-center gap-0.5">
+                                <i class="fa-solid fa-circle-xmark text-base"></i>
+                                <span>SAI (FALSE)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Over/Start Layout -->
+                <div id="speed-game-over" class="hidden flex-col items-center justify-center py-6 text-center gap-3 my-auto">
+                    <div class="w-14 h-14 bg-rose-500/10 border-2 border-rose-500/20 text-rose-400 text-xl rounded-2xl flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-skull-crossbones"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-white">Kết thúc phiên chơi!</h4>
+                    <p class="text-xs text-slate-400 max-w-xs leading-relaxed">Bạn đã hết lượt chơi hoặc đạt được cột mốc hoàn thành. Hãy cùng kiểm tra thành tích đạt được dưới đây.</p>
+                    <div class="bg-slate-950/50 p-3 rounded-lg border border-white/5 text-xs text-left space-y-1.5 min-w-[200px]">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Điểm tối đa:</span>
+                            <span class="font-bold text-amber-400" id="speed-summary-score">0 XP</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Chuỗi Combo:</span>
+                            <span class="font-bold text-purple-400" id="speed-summary-combo">0</span>
+                        </div>
+                    </div>
+                    <button onclick="startSpeedGame()" class="mt-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/20 active:scale-95">
+                        Chơi lại ngay
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Custom Modal Dialog System -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center hidden p-4 backdrop-blur-sm">
+        <div class="bg-slate-900 border border-white/10 p-5 rounded-2xl max-w-sm w-full text-center shadow-2xl relative">
+            <div id="modal-icon" class="w-11 h-11 rounded-full mx-auto mb-3 flex items-center justify-center text-lg bg-indigo-500/10 text-indigo-400">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="modal-title" class="text-base font-bold text-white mb-1.5">Thông báo</h3>
+            <p id="modal-message" class="text-xs text-slate-400 mb-5 leading-relaxed"></p>
+            <div class="flex gap-2.5 justify-center" id="modal-buttons-container">
+                <!-- Buttons will be dynamically updated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Celebration Screen overlay -->
+    <div id="celebration-screen" class="fixed inset-0 bg-slate-950/95 z-50 flex flex-col items-center justify-center hidden p-4">
+        <div class="max-w-sm w-full text-center bg-slate-900 border border-white/10 p-8 rounded-3xl relative overflow-hidden shadow-2xl">
+            <!-- Background glow -->
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
+            
+            <div class="w-16 h-16 bg-amber-500/10 border-2 border-amber-500/30 text-amber-500 text-2xl rounded-2xl flex items-center justify-center mx-auto mb-4 animate-bounce">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            
+            <h3 class="text-2xl font-black text-white mb-2">XUẤT SẮC!</h3>
+            <p class="text-xs text-slate-400 mb-6">Bạn vừa hoàn thành xuất sắc thử thách từ vựng TOEIC Part 1 ngày hôm nay!</p>
+            
+            <div class="bg-slate-950/60 border border-white/5 p-4 rounded-xl mb-6 text-left space-y-2 text-xs">
+                <div class="flex justify-between">
+                    <span class="text-slate-400">XP Tích Lũy:</span>
+                    <span class="font-bold text-emerald-400" id="final-xp">+250 XP</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-400">Từ Đã Thuộc:</span>
+                    <span class="font-bold text-indigo-400" id="final-mastered">25 / 25 từ</span>
+                </div>
+            </div>
+            
+            <button onclick="closeCelebration()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 py-3 rounded-xl font-bold text-sm text-white transition shadow-lg shadow-indigo-600/20 active:scale-95">
+                Tiếp Tục Ôn Luyện
+            </button>
+        </div>
+    </div>
+
+    <!-- Sound Synthesizer via Web Audio API -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSynthSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                const now = audioCtx.currentTime;
+                
+                if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'fail') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now); // A3
+                    osc.frequency.setValueAtTime(147, now + 0.1); // D3
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.08);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'fanfare') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.15); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.3); // G5
+                    osc.frequency.setValueAtTime(1046.50, now + 0.45); // C6
+                    osc.frequency.setValueAtTime(1318.51, now + 0.6); // E6
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                    osc.start(now);
+                    osc.stop(now + 1.0);
+                }
+            } catch (e) {
+                console.log("Audio contexts error:", e);
+            }
+        }
+    </script>
+
+    <!-- Master Vocabulary Data -->
+    <script>
+        const toeicVocab = [
+            { id: 1, word: "dock", type: "v", definition: "neo đậu (tàu bè, máy bay)", example: "The plane is docked at the airport.", vietnamese: "neo đậu tại bến", hint: "Chỉ tàu bè hoặc máy bay đỗ tại nơi bến bãi quy định." },
+            { id: 2, word: "pile", type: "v", definition: "chất đống, xếp chồng", example: "The boxes have been piled onto some carts.", vietnamese: "chất đống, xếp chồng", hint: "Hành động xếp nhiều vật lên nhau thành một đống lớn." },
+            { id: 3, word: "fire extinguisher", type: "n", definition: "bình chữa cháy", example: "He’s inspecting a fire extinguisher.", vietnamese: "bình chữa cháy", hint: "Thiết bị cầm tay màu đỏ dùng để dập tắt các đám cháy nhỏ." },
+            { id: 4, word: "inspect", type: "v", definition: "thanh tra, kiểm tra kỹ", example: "The man is inspecting some equipment.", vietnamese: "kiểm tra, thanh tra", hint: "Quan sát kỹ lưỡng một thiết bị hoặc khu vực để xem xét lỗi." },
+            { id: 5, word: "copier", type: "n", definition: "máy photocopy", example: "She's holding up the top of the copier.", vietnamese: "máy photocopy", hint: "Thiết bị văn phòng dùng để sao chép giấy tờ tài liệu." },
+            { id: 6, word: "aisle", type: "n", definition: "lối đi giữa các hàng kệ/ghế", example: "The shoppers are walking along the aisles.", vietnamese: "lối đi giữa các quầy kệ", hint: "Khoảng không gian nhỏ giữa 2 hàng kệ hàng trong siêu thị." },
+            { id: 7, word: "shelf", type: "n", definition: "kệ, giá đỡ (số nhiều: shelves)", example: "The products are displayed on shelves.", vietnamese: "kệ, giá đỡ", hint: "Tấm ván phẳng gắn trên tường hoặc trong tủ để trưng bày đồ vật." },
+            { id: 8, word: "moor", type: "v", definition: "neo, buộc tàu thuyền", example: "The boats are moored along the shore.", vietnamese: "neo, buộc tàu thuyền", hint: "Cố định tàu thuyền vào cầu cảng hoặc mỏ neo dưới nước." },
+            { id: 9, word: "browse", type: "v", definition: "xem lướt, đọc lướt", example: "Some people are browsing in a bookstore.", vietnamese: "xem lướt, đọc lướt", hint: "Xem qua sách, hàng hóa một cách thong thả không định hướng trước." },
+            { id: 10, word: "hand", type: "v", definition: "đưa cho, trao tận tay", example: "The woman is handing the man a drink.", vietnamese: "đưa, trao tay", hint: "Hành động đưa một vật trực tiếp từ tay mình sang tay người khác." },
+            { id: 11, word: "take off", type: "v", definition: "cất cánh", example: "The pilot is about to take off.", vietnamese: "cất cánh", hint: "Hành động rời mặt đất bay lên cao của máy bay/trực thăng." },
+            { id: 12, word: "malfunction", type: "v", definition: "bị trục trặc, hỏng hóc", example: "The aircraft has malfunctioned.", vietnamese: "bị trục trặc, hỏng hóc", hint: "Thiết bị hoặc bộ phận máy móc gặp lỗi không hoạt động bình thường." },
+            { id: 13, word: "clerk", type: "n", definition: "nhân viên bán hàng/văn phòng", example: "The store clerk is putting food on display.", vietnamese: "nhân viên bán hàng", hint: "Người hỗ trợ giao dịch bán hàng hoặc quản lý quầy kệ trong cửa tiệm." },
+            { id: 14, word: "spectator", type: "n", definition: "khán giả (ngoài trời/sự kiện thể thao)", example: "Some spectators are waiting for tickets.", vietnamese: "khán giả ngoài trời", hint: "Người xem trực tiếp một trận đấu thể thao hoặc buổi trình diễn công cộng." },
+            { id: 15, word: "notice", type: "n", definition: "thông báo dán tường", example: "She’s reading notices on the wall.", vietnamese: "bảng thông báo", hint: "Mẩu giấy chứa thông tin quan trọng được dán lên tường hoặc bảng tin." },
+            { id: 16, word: "sweep", type: "v", definition: "quét dọn", example: "He's sweeping the clean floor.", vietnamese: "quét dọn nền nhà", hint: "Hành động làm sạch bụi bẩn trên mặt đất bằng chổi." },
+            { id: 17, word: "adjust", type: "v", definition: "điều chỉnh", example: "She is adjusting the monitor screen.", vietnamese: "điều chỉnh, sửa lại", hint: "Hành động thay đổi vị trí hoặc cài đặt của đồ vật để cho vừa vặn." },
+            { id: 18, word: "assemble", type: "v", definition: "lắp ráp, tập hợp", example: "They are assembling some wooden chairs.", vietnamese: "lắp ráp, tập hợp", hint: "Hành động kết nối các mảnh ghép nhỏ lại thành cấu trúc hoàn chỉnh." },
+            { id: 19, word: "water", type: "v", definition: "tưới nước", example: "The woman is watering the office plants.", vietnamese: "tưới nước", hint: "Cung cấp nước trực tiếp cho cây cối, hoa quả." },
+            { id: 20, word: "load", type: "v", definition: "bốc xếp, tải lên", example: "Some boxes are being loaded onto a truck.", vietnamese: "bốc xếp lên xe", hint: "Hành động đưa hàng hóa hoặc đồ vật vào trong khoang chứa phương tiện vận chuyển." },
+            { id: 21, word: "pave", type: "v", definition: "lát đường", example: "The park walkway is being paved.", vietnamese: "lát đường, lát gạch", hint: "Phủ lên bề mặt đất gạch, đá hoặc bê tông để tạo lối đi nhẵn." },
+            { id: 22, word: "apron", type: "n", definition: "tạp dề", example: "The chef is wearing a white apron.", vietnamese: "tạp dề nhà bếp", hint: "Trang phục bảo hộ phủ phía trước bụng khi làm bếp hay thủ công." },
+            { id: 23, word: "stroll", type: "v", definition: "đi dạo thong thả", example: "Some people are strolling along the path.", vietnamese: "đi dạo thong thả", hint: "Hành động đi bộ nhẹ nhàng thong dong không vội vã." },
+            { id: 24, word: "board", type: "v", definition: "lên (tàu, xe, máy bay)", example: "The passengers are boarding the express train.", vietnamese: "bước lên tàu xe", hint: "Hành động di chuyển bước chân lên máy bay, tàu hỏa hoặc xe khách." },
+            { id: 25, word: "wheelbarrow", type: "n", definition: "xe cút kít, xe đẩy tay", example: "The gardener is pushing a wheelbarrow.", vietnamese: "xe cút kít đẩy tay", hint: "Phương tiện một bánh nhỏ phía trước có hai tay cầm đằng sau để chở đất cát." }
+        ];
+
+        // State variables
+        let userXP = 0;
+        let streak = 0;
+        let masteredIds = [];
+        let currentCardIndex = 0;
+        let isCardFlipped = false;
+
+        // Custom Modal UI Helper Functions
+        function customModal(title, message, buttons = [], iconClass = "fa-solid fa-circle-info", iconColor = "text-indigo-400 bg-indigo-500/10") {
+            const modal = document.getElementById('custom-modal');
+            const titleEl = document.getElementById('modal-title');
+            const msgEl = document.getElementById('modal-message');
+            const iconContainer = document.getElementById('modal-icon');
+            const btnContainer = document.getElementById('modal-buttons-container');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+            iconContainer.className = `w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center text-xl ${iconColor}`;
+            iconContainer.innerHTML = `<i class="${iconClass}"></i>`;
+
+            btnContainer.innerHTML = '';
+            if (buttons.length === 0) {
+                buttons = [{
+                    text: "Đã hiểu",
+                    style: "bg-indigo-600 hover:bg-indigo-500 text-white",
+                    action: () => closeModal()
+                }];
+            }
+
+            buttons.forEach(btn => {
+                const btnEl = document.createElement('button');
+                btnEl.innerText = btn.text;
+                btnEl.className = `px-4 py-2 rounded-xl text-xs font-semibold transition active:scale-95 ${btn.style || 'bg-slate-800 hover:bg-slate-700 text-slate-200'}`;
+                btnEl.onclick = () => {
+                    if (btn.action) btn.action();
+                    closeModal();
+                };
+                btnContainer.appendChild(btnEl);
+            });
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function confirmResetStats() {
+            playSynthSound('click');
+            customModal(
+                "Xác nhận đặt lại?",
+                "Bạn có chắc chắn muốn thiết lập lại toàn bộ tiến độ tự học từ vựng TOEIC Part 1 của mình từ đầu?",
+                [
+                    {
+                        text: "Xác nhận đặt lại",
+                        style: "bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-600/20",
+                        action: () => {
+                            masteredIds = [];
+                            userXP = 0;
+                            streak = 0;
+                            updateStats();
+                            playSynthSound('fail');
+                            customModal("Đã đặt lại", "Tất cả thành tích và từ vựng đã được xóa thành công.", [], "fa-solid fa-rotate-left", "text-rose-400 bg-rose-500/10");
+                        }
+                    },
+                    {
+                        text: "Hủy bỏ",
+                        style: "bg-slate-800 hover:bg-slate-700 text-slate-300"
+                    }
+                ],
+                "fa-solid fa-triangle-exclamation",
+                "text-amber-400 bg-amber-500/10"
+            );
+        }
+
+        // Onload initializations
+        window.onload = function() {
+            loadStats();
+            buildVocabSidebarList();
+            renderCard();
+            startMatchGame(); 
+            initQuizChallenge(); 
+        };
+
+        function switchTab(tabId) {
+            playSynthSound('click');
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all text-slate-400 hover:text-white hover:bg-white/5 shrink-0";
+            });
+            
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            document.getElementById('btn-tab-' + tabId).className = "tab-btn px-3 py-1.5 rounded-lg font-semibold transition-all bg-indigo-600 text-white shadow-md shrink-0";
+            
+            // Clean up timers when navigating away
+            if (tabId !== 'speed') {
+                clearInterval(speedTimerInterval);
+            }
+
+            if (tabId === 'match') {
+                startMatchGame();
+            } else if (tabId === 'quiz') {
+                initQuizChallenge();
+            } else if (tabId === 'speed') {
+                startSpeedGame();
+            }
+        }
+
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakCurrentWord(event) {
+            if (event) event.stopPropagation();
+            const word = toeicVocab[currentCardIndex].word;
+            speakWord(word);
+        }
+
+        // Sidebar List Renderer
+        function buildVocabSidebarList() {
+            const container = document.getElementById('vocab-list-items');
+            container.innerHTML = '';
+            
+            toeicVocab.forEach(item => {
+                const isMastered = masteredIds.includes(item.id);
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `p-2 rounded-xl border transition-all duration-300 flex items-center justify-between gap-2 ${
+                    isMastered 
+                        ? 'bg-emerald-950/20 border-emerald-500/20 text-slate-300' 
+                        : 'bg-slate-950/30 border-white/5 hover:border-white/10 text-slate-400'
+                }`;
+                
+                itemDiv.innerHTML = `
+                    <div class="overflow-hidden">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-bold text-xs text-slate-200">${item.word}</span>
+                            <span class="text-[9px] text-indigo-400 font-mono">(${item.type})</span>
+                        </div>
+                        <p class="text-[10px] truncate max-w-[180px]">${item.vietnamese}</p>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="speakWord('${item.word}')" class="text-xs hover:text-indigo-400 p-1 rounded transition" title="Nghe phát âm">
+                            <i class="fa-solid fa-volume-low"></i>
+                        </button>
+                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
+                            isMastered ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'
+                        }">
+                            <i class="fa-solid ${isMastered ? 'fa-check' : 'fa-minus'}"></i>
+                        </span>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+            
+            document.getElementById('mastered-count').innerText = masteredIds.length;
+        }
+
+        function filterVocabList() {
+            const query = document.getElementById('vocab-search').value.toLowerCase();
+            const items = document.getElementById('vocab-list-items').children;
+            
+            toeicVocab.forEach((item, index) => {
+                if (item.word.toLowerCase().includes(query) || item.vietnamese.toLowerCase().includes(query)) {
+                    items[index].classList.remove('hidden');
+                } else {
+                    items[index].classList.add('hidden');
+                }
+            });
+        }
+    </script>
+
+    <!-- FLASHCARD SYSTEM -->
+    <script>
+        function renderCard() {
+            const item = toeicVocab[currentCardIndex];
+            
+            const cardEl = document.getElementById('flashcard');
+            cardEl.classList.remove('rotate-y-180');
+            isCardFlipped = false;
+            
+            document.getElementById('card-index').innerText = `CARD ${currentCardIndex + 1}/${toeicVocab.length}`;
+            document.getElementById('card-word').innerText = item.word;
+            document.getElementById('card-type').innerText = item.type;
+            
+            document.getElementById('card-word-ref').innerText = item.word;
+            document.getElementById('card-vietnamese').innerText = item.vietnamese;
+            document.getElementById('card-definition').innerText = item.hint;
+            document.getElementById('card-example').innerText = item.example;
+        }
+
+        function toggleCardFlip() {
+            const cardEl = document.getElementById('flashcard');
+            isCardFlipped = !isCardFlipped;
+            playSynthSound('click');
+            if (isCardFlipped) {
+                cardEl.classList.add('rotate-y-180');
+            } else {
+                cardEl.classList.remove('rotate-y-180');
+            }
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % toeicVocab.length;
+            renderCard();
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + toeicVocab.length) % toeicVocab.length;
+            renderCard();
+        }
+
+        function markAsLearned() {
+            const currentItem = toeicVocab[currentCardIndex];
+            if (!masteredIds.includes(currentItem.id)) {
+                masteredIds.push(currentItem.id);
+                streak++;
+                userXP += 15;
+                updateStats();
+                playSynthSound('success');
+                
+                if (masteredIds.length === toeicVocab.length) {
+                    showFinalCelebration();
+                }
+            }
+            nextCard();
+        }
+
+        function updateStats() {
+            document.getElementById('streak-count').innerText = streak;
+            document.getElementById('total-xp').innerText = userXP;
+            buildVocabSidebarList();
+            
+            localStorage.setItem('toeic_mastered_ids', JSON.stringify(masteredIds));
+            localStorage.setItem('toeic_user_xp', userXP);
+            localStorage.setItem('toeic_streak', streak);
+        }
+
+        function loadStats() {
+            const savedIds = localStorage.getItem('toeic_mastered_ids');
+            const savedXP = localStorage.getItem('toeic_user_xp');
+            const savedStreak = localStorage.getItem('toeic_streak');
+            
+            if (savedIds) masteredIds = JSON.parse(savedIds);
+            if (savedXP) userXP = parseInt(savedXP);
+            if (savedStreak) streak = parseInt(savedStreak);
+            
+            updateStats();
+        }
+
+        function showFinalCelebration() {
+            document.getElementById('final-xp').innerText = `+${userXP} XP`;
+            document.getElementById('final-mastered').innerText = `${masteredIds.length} / ${toeicVocab.length} từ`;
+            document.getElementById('celebration-screen').classList.remove('hidden');
+            playSynthSound('fanfare');
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration-screen').classList.add('hidden');
+        }
+    </script>
+
+    <!-- TAB 2: MATCH-UP REFLEX GAME -->
+    <script>
+        let matchSelectedCard = null;
+        let matchCardsData = [];
+        let matchTimerInterval = null;
+        let matchTimeElapsed = 0;
+        let matchCompletedCount = 0;
+        let matchCombo = 0;
+
+        function startMatchGame() {
+            clearInterval(matchTimerInterval);
+            matchTimeElapsed = 0;
+            matchCompletedCount = 0;
+            matchCombo = 0;
+            matchSelectedCard = null;
+            
+            document.getElementById('match-timer').innerText = "00:00";
+            document.getElementById('match-combo').innerText = "0";
+            document.getElementById('match-score').innerText = "0/4";
+
+            // Pick 4 random words
+            const shuffled = [...toeicVocab].sort(() => 0.5 - Math.random());
+            const selectedItems = shuffled.slice(0, 4);
+
+            // Create cards: 4 English & 4 Vietnamese equivalent definitions
+            matchCardsData = [];
+            selectedItems.forEach(item => {
+                matchCardsData.push({ id: item.id, type: 'ENG', text: item.word, partnerId: item.id });
+                matchCardsData.push({ id: item.id + '_vi', type: 'VI', text: item.vietnamese, partnerId: item.id });
+            });
+
+            // Reshuffle deck
+            matchCardsData.sort(() => 0.5 - Math.random());
+
+            // Build html elements
+            const grid = document.getElementById('match-grid');
+            grid.innerHTML = '';
+
+            matchCardsData.forEach((card, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.id = `match-card-${index}`;
+                cardDiv.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200 hover:scale-[1.02] active:scale-[0.98]";
+                cardDiv.innerHTML = card.text;
+                cardDiv.onclick = () => selectMatchCard(index);
+                grid.appendChild(cardDiv);
+            });
+
+            // Start clock timer
+            matchTimerInterval = setInterval(() => {
+                matchTimeElapsed++;
+                const mins = String(Math.floor(matchTimeElapsed / 60)).padStart(2, '0');
+                const secs = String(matchTimeElapsed % 60).padStart(2, '0');
+                document.getElementById('match-timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function selectMatchCard(index) {
+            playSynthSound('click');
+            const cardEl = document.getElementById(`match-card-${index}`);
+            const cardObj = matchCardsData[index];
+
+            if (cardEl.classList.contains('bg-emerald-500/20')) return;
+
+            if (!matchSelectedCard) {
+                matchSelectedCard = { index, obj: cardObj };
+                cardEl.className = "p-3 bg-indigo-600/30 border-2 border-indigo-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-white scale-[1.02]";
+                return;
+            }
+
+            if (matchSelectedCard.index === index) {
+                cardEl.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200";
+                matchSelectedCard = null;
+                return;
+            }
+
+            const partnerEl = document.getElementById(`match-card-${matchSelectedCard.index}`);
+            
+            if (matchSelectedCard.obj.partnerId === cardObj.partnerId && matchSelectedCard.obj.type !== cardObj.type) {
+                // Correct match!
+                playSynthSound('success');
+                cardEl.className = "p-3 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-300 select-none h-20 text-xs sm:text-sm font-bold text-emerald-400 scale-[1.05]";
+                partnerEl.className = "p-3 bg-emerald-500/20 border-2 border-emerald-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-300 select-none h-20 text-xs sm:text-sm font-bold text-emerald-400 scale-[1.05]";
+                
+                setTimeout(() => {
+                    cardEl.className = "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-center select-none h-20 text-xs sm:text-sm font-semibold text-emerald-400 opacity-40 transition-all pointer-events-none";
+                    partnerEl.className = "p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-center select-none h-20 text-xs sm:text-sm font-semibold text-emerald-400 opacity-40 transition-all pointer-events-none";
+                }, 400);
+
+                matchCompletedCount++;
+                matchCombo++;
+                userXP += 10 + (matchCombo * 2);
+                streak++;
+                updateStats();
+
+                document.getElementById('match-combo').innerText = `${matchCombo}`;
+                document.getElementById('match-score').innerText = `${matchCompletedCount}/4`;
+
+                // Win Game validation
+                if (matchCompletedCount === 4) {
+                    clearInterval(matchTimerInterval);
+                    setTimeout(() => {
+                        playSynthSound('fanfare');
+                        customModal(
+                            "Chiến thắng tuyệt vời!", 
+                            `Bạn đã hoàn thành ghép cặp trong ${matchTimeElapsed} giây với chuỗi combo tối đa x${matchCombo}! Nhận được +${50 + matchCombo * 5} XP bonus.`,
+                            [{
+                                text: "Chơi ván mới",
+                                style: "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/20",
+                                action: () => startMatchGame()
+                            }],
+                            "fa-solid fa-trophy",
+                            "text-amber-400 bg-amber-500/10"
+                        );
+                        userXP += 50;
+                        updateStats();
+                    }, 500);
+                }
+            } else {
+                // Wrong Match
+                playSynthSound('fail');
+                cardEl.className = "p-3 bg-rose-500/20 border-2 border-rose-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-bold text-rose-400";
+                partnerEl.className = "p-3 bg-rose-500/20 border-2 border-rose-500 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-bold text-rose-400";
+                
+                matchCombo = 0;
+                document.getElementById('match-combo').innerText = "0";
+
+                setTimeout(() => {
+                    cardEl.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200";
+                    partnerEl.className = "p-3 bg-slate-950/60 hover:bg-slate-900 border border-white/10 rounded-xl flex items-center justify-center text-center cursor-pointer transition-all duration-200 select-none h-20 text-xs sm:text-sm font-semibold text-slate-200";
+                }, 500);
+            }
+
+            matchSelectedCard = null;
+        }
+    </script>
+
+    <!-- TAB 3: PHOTO QUIZ SIMULATOR -->
+    <script>
+        let quizQuestions = [
+            {
+                index: 1,
+                scene: 'plane',
+                correctOption: 'A',
+                correctWord: 'dock',
+                options: {
+                    A: "The plane is docked at the airport terminal.",
+                    B: "The pilot is opening the cargo doors.",
+                    C: "The aircraft is taking off into the sky.",
+                    D: "Some suitcases are stacked under the wing."
+                },
+                translation: {
+                    A: "Máy bay đang đậu ở nhà ga sân bay (Neo/đậu bến).",
+                    B: "Phi công đang mở các khoang chứa hàng.",
+                    C: "Chiếc phi cơ đang cất cánh lên bầu trời.",
+                    D: "Một số va ly được xếp đống dưới cánh máy bay."
+                }
+            },
+            {
+                index: 2,
+                scene: 'fire',
+                correctOption: 'C',
+                correctWord: 'inspect',
+                options: {
+                    A: "He's running out of the fire corridor.",
+                    B: "The man is repairing a ceiling sprinkler.",
+                    C: "He's inspecting a red fire extinguisher on the wall.",
+                    D: "The officer is painting the office wall."
+                },
+                translation: {
+                    A: "Anh ta đang chạy thoát khỏi hành lang có lửa.",
+                    B: "Người ông đang sửa vòi phun nước trần nhà.",
+                    C: "Anh ta đang kiểm tra bình cứu hỏa màu đỏ trên tường.",
+                    D: "Người sĩ quan đang sơn lại bức tường văn phòng."
+                }
+            },
+            {
+                index: 3,
+                scene: 'office',
+                correctOption: 'B',
+                correctWord: 'copier',
+                options: {
+                    A: "She's writing a letter on a tablet.",
+                    B: "The woman is holding up the lid of the copier.",
+                    C: "She is making coffee near the window.",
+                    D: "The technician is dismantling the copy machine."
+                },
+                translation: {
+                    A: "Cô ấy đang viết một lá thư trên máy tính bảng.",
+                    B: "Người phụ nữ đang giữ/nhấc nắp trên của máy photo.",
+                    C: "Cô ấy đang pha cà phê ở gần cửa sổ.",
+                    D: "Người kỹ thuật viên đang tháo dỡ chiếc máy photocopy."
+                }
+            },
+            {
+                index: 4,
+                scene: 'store',
+                correctOption: 'D',
+                correctWord: 'shelf',
+                options: {
+                    A: "Shoppers are standing in a long checkout line.",
+                    B: "The store clerk is sweeping the clean floor.",
+                    C: "Various fresh vegetables are lying on the counter.",
+                    D: "Many packages of products are displayed on shelves."
+                },
+                translation: {
+                    A: "Khách hàng đang đứng thành một hàng dài chờ thanh toán.",
+                    B: "Người bán hàng đang quét sàn nhà sạch sẽ.",
+                    C: "Nhiều loại rau tươi đang nằm trên quầy bar.",
+                    D: "Nhiều gói sản phẩm đang được trưng bày sẵn trên kệ đỡ."
+                }
+            },
+            {
+                index: 5,
+                scene: 'boat',
+                correctOption: 'A',
+                correctWord: 'moor',
+                options: {
+                    A: "Several small boats are moored close to the shore.",
+                    B: "The waves are crashing violently onto the rocks.",
+                    C: "Tourists are sunbathing on the sandy beach.",
+                    D: "The local fishermen are throwing nets out to sea."
+                },
+                translation: {
+                    A: "Một vài chiếc thuyền nhỏ đang được neo đậu sát bờ biển.",
+                    B: "Những con sóng đang đánh mạnh dữ dội vào mỏm đá.",
+                    C: "Các khách du lịch đang tắm nắng trên bãi cát mịn.",
+                    D: "Những người ngư dân địa phương đang quăng lưới ra biển rộng."
+                }
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let selectedQuizOption = null;
+
+        function initQuizChallenge() {
+            currentQuizIndex = 0;
+            selectedQuizOption = null;
+            document.getElementById('quiz-feedback-panel').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const quiz = quizQuestions[currentQuizIndex];
+            selectedQuizOption = null;
+            document.getElementById('quiz-feedback-panel').classList.add('hidden');
+            
+            document.getElementById('quiz-question-index').innerText = `THỬ THÁCH TRANH ${currentQuizIndex + 1}/${quizQuestions.length}`;
+            
+            const svgContainer = document.getElementById('quiz-scene-container');
+            svgContainer.innerHTML = getSceneSVG(quiz.scene);
+
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = '';
+
+            Object.keys(quiz.options).forEach(key => {
+                const button = document.createElement('button');
+                button.id = `quiz-opt-${key}`;
+                button.onclick = () => selectQuizOption(key);
+                button.className = "w-full text-left p-2.5 rounded-xl bg-slate-950/40 hover:bg-slate-900 border border-white/5 hover:border-white/10 flex items-center justify-between text-xs sm:text-sm font-medium transition duration-200 text-slate-300";
+                button.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="w-6 h-6 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center font-bold font-mono text-xs">${key}</span>
+                        <span class="option-text">${quiz.options[key]}</span>
+                    </div>
+                `;
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Return inline decorative SVGs represent real TOEIC picture elements
+        function getSceneSVG(scene) {
+            if (scene === 'plane') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#0a0f1d;">
+                    <rect x="0" y="80" width="200" height="40" fill="#334155"/>
+                    <line x1="0" y1="80" x2="200" y2="80" stroke="#475569" stroke-width="2"/>
+                    <rect x="30" y="40" width="60" height="25" fill="#1e293b" rx="2"/>
+                    <rect x="60" y="65" width="10" height="15" fill="#475569"/>
+                    <path d="M 80 50 C 130 50, 160 30, 200 30 L 200 80 L 120 80 Z" fill="#e2e8f0"/>
+                    <path d="M 120 40 L 140 40 L 140 50 L 120 48 Z" fill="#1e293b"/>
+                    <path d="M 50 35 L 90 48" stroke="#f43f5e" stroke-width="3" stroke-dasharray="2,2"/>
+                    <text x="10" y="20" fill="#cbd5e1" font-size="7" font-weight="bold">TERMINAL AREA</text>
+                    <text x="120" y="105" fill="#f43f5e" font-size="8" font-weight="extrabold" fill-opacity="0.9">PLANE DOCKED</text>
+                </svg>
+                `;
+            } else if (scene === 'fire') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#0f172a;">
+                    <rect x="10" y="10" width="180" height="100" fill="#1e293b" rx="4" stroke="#334155" stroke-width="2"/>
+                    <rect x="25" y="20" width="40" height="60" fill="#38bdf8" fill-opacity="0.2" stroke="#475569" stroke-width="2"/>
+                    <rect x="135" y="40" width="16" height="36" fill="#ef4444" rx="4"/>
+                    <rect x="141" y="32" width="4" height="8" fill="#94a3b8"/>
+                    <path d="M 137 32 L 149 32" stroke="#475569" stroke-width="2"/>
+                    <circle cx="95" cy="50" r="10" fill="#64748b"/>
+                    <path d="M 95 60 C 95 60, 90 95, 75 95" stroke="#64748b" stroke-width="12" stroke-linecap="round"/>
+                    <text x="125" y="95" fill="#ef4444" font-size="7" font-weight="bold">FIRE EXTINGUISHER</text>
+                </svg>
+                `;
+            } else if (scene === 'office') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#0f172a;">
+                    <rect x="20" y="60" width="160" height="40" fill="#1e293b" rx="2"/>
+                    <rect x="40" y="35" width="45" height="50" fill="#64748b" rx="3"/>
+                    <rect x="42" y="45" width="41" height="15" fill="#94a3b8"/>
+                    <path d="M 40 35 L 65 15 L 85 30 Z" fill="#475569"/>
+                    <circle cx="130" cy="35" r="9" fill="#e2e8f0"/>
+                    <path d="M 130 44 L 120 95" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M 125 50 L 75 25" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round"/>
+                    <text x="45" y="112" fill="#cbd5e1" font-size="7">Copier machine lid raised</text>
+                </svg>
+                `;
+            } else if (scene === 'store') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#0c0a09;">
+                    <rect x="15" y="20" width="170" height="10" fill="#292524"/>
+                    <rect x="15" y="50" width="170" height="10" fill="#292524"/>
+                    <rect x="15" y="80" width="170" height="10" fill="#292524"/>
+                    <rect x="30" y="32" width="10" height="18" fill="#e7e5e4" rx="1"/>
+                    <rect x="42" y="32" width="10" height="18" fill="#e7e5e4" rx="1"/>
+                    <rect x="54" y="32" width="10" height="18" fill="#e7e5e4" rx="1"/>
+                    <rect x="110" y="32" width="12" height="18" fill="#f59e0b" rx="1"/>
+                    <rect x="124" y="32" width="12" height="18" fill="#f59e0b" rx="1"/>
+                    <rect x="30" y="62" width="12" height="18" fill="#10b981" rx="1"/>
+                    <rect x="45" y="62" width="12" height="18" fill="#10b981" rx="1"/>
+                    <rect x="110" y="62" width="10" height="18" fill="#3b82f6" rx="1"/>
+                    <rect x="122" y="62" width="10" height="18" fill="#3b82f6" rx="1"/>
+                    <text x="20" y="14" fill="#a8a29e" font-size="7">SAUCES & NOODLES SHELVES</text>
+                </svg>
+                `;
+            } else if (scene === 'boat') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#0f172a;">
+                    <rect x="0" y="40" width="200" height="80" fill="#0369a1"/>
+                    <path d="M 0 100 Q 110 90, 200 120 L 200 120 L 0 120 Z" fill="#fef08a" fill-opacity="0.3"/>
+                    <path d="M 40 60 Q 55 50, 70 60 L 60 72 L 50 72 Z" fill="#f8fafc"/>
+                    <path d="M 100 70 Q 115 60, 130 70 L 120 82 L 110 82 Z" fill="#f8fafc"/>
+                    <line x1="60" y1="72" x2="80" y2="105" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="2,1"/>
+                    <line x1="120" y1="82" x2="140" y2="108" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="2,1"/>
+                    <text x="12" y="25" fill="#38bdf8" font-size="8" font-weight="bold">BOATS MOORED ON SHORE</text>
+                </svg>
+                `;
+            } else if (scene === 'gardener') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#064e3b;">
+                    <!-- Grass path -->
+                    <rect x="0" y="60" width="200" height="60" fill="#065f46"/>
+                    <path d="M 0 90 Q 100 70, 200 100" stroke="#047857" stroke-width="4"/>
+                    <!-- Wheelbarrow -->
+                    <rect x="60" y="70" width="40" height="20" fill="#b91c1c" rx="2"/>
+                    <circle cx="105" cy="90" r="8" fill="#1e293b"/>
+                    <line x1="45" y1="75" x2="60" y2="78" stroke="#cbd5e1" stroke-width="3"/>
+                    <line x1="45" y1="85" x2="60" y2="82" stroke="#cbd5e1" stroke-width="3"/>
+                    <!-- Flowers -->
+                    <circle cx="150" cy="75" r="4" fill="#f43f5e"/>
+                    <circle cx="160" cy="85" r="3" fill="#fbbf24"/>
+                    <circle cx="140" cy="88" r="4" fill="#a855f7"/>
+                    <text x="10" y="25" fill="#34d399" font-size="8" font-weight="extrabold">GARDEN SCENE</text>
+                </svg>
+                `;
+            } else if (scene === 'kitchen') {
+                return `
+                <svg viewBox="0 0 200 120" class="w-full h-full rounded" style="background:#1c1917;">
+                    <!-- Background kitchen counter -->
+                    <rect x="0" y="70" width="200" height="50" fill="#44403c"/>
+                    <rect x="20" y="45" width="50" height="25" fill="#78716c"/>
+                    <!-- Chef apron silhouette -->
+                    <circle cx="130" cy="35" r="9" fill="#e7e5e4"/>
+                    <path d="M 115 45 L 145 45 L 140 100 L 120 100 Z" fill="#ffffff"/> <!-- White Apron -->
+                    <path d="M 130 45 L 115 90" stroke="#1c1917" stroke-width="2"/> <!-- Strap -->
+                    <!-- Soup pot -->
+                    <rect x="35" y="55" width="20" height="15" fill="#a8a29e" rx="1"/>
+                    <path d="M 33 58 L 57 58" stroke="#78716c" stroke-width="2"/>
+                    <text x="10" y="25" fill="#f59e0b" font-size="8" font-weight="bold">KITCHEN & CHEF APPRON</text>
+                </svg>
+                `;
+            }
+        }
+
+        function playQuizTargetAudio() {
+            const quiz = quizQuestions[currentQuizIndex];
+            const targetSentence = quiz.options[quiz.correctOption];
+            speakWord(targetSentence);
+        }
+
+        function speakQuizAllOptions() {
+            const quiz = quizQuestions[currentQuizIndex];
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                let index = 0;
+                const keys = ['A', 'B', 'C', 'D'];
+                
+                function speakNext() {
+                    if (index >= keys.length) return;
+                    const key = keys[index];
+                    const utterance = new SpeechSynthesisUtterance(`Option ${key}. ${quiz.options[key]}`);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.82;
+                    utterance.onend = () => {
+                        index++;
+                        setTimeout(speakNext, 600);
+                    };
+                    window.speechSynthesis.speak(utterance);
+                }
+                speakNext();
+            }
+        }
+
+        function selectQuizOption(key) {
+            if (selectedQuizOption !== null) return;
+            
+            selectedQuizOption = key;
+            const quiz = quizQuestions[currentQuizIndex];
+            const isCorrect = key === quiz.correctOption;
+
+            const selectedBtn = document.getElementById(`quiz-opt-${key}`);
+            
+            if (isCorrect) {
+                playSynthSound('success');
+                selectedBtn.className = "w-full text-left p-2.5 rounded-xl bg-emerald-500/20 border-2 border-emerald-500 flex items-center justify-between text-xs sm:text-sm font-bold transition duration-200 text-emerald-400";
+                
+                streak++;
+                userXP += 30;
+                updateStats();
+                
+                document.getElementById('quiz-feedback-status').className = "font-bold block text-sm text-emerald-400";
+                document.getElementById('quiz-feedback-status').innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> HOÀN TOÀN CHÍNH XÁC! (+30 XP)`;
+            } else {
+                playSynthSound('fail');
+                selectedBtn.className = "w-full text-left p-2.5 rounded-xl bg-rose-500/20 border-2 border-rose-500 flex items-center justify-between text-xs sm:text-sm font-bold transition duration-200 text-rose-400";
+                
+                const correctBtn = document.getElementById(`quiz-opt-${quiz.correctOption}`);
+                correctBtn.className = "w-full text-left p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/50 flex items-center justify-between text-xs sm:text-sm font-medium transition duration-200 text-emerald-300";
+                
+                streak = 0;
+                updateStats();
+
+                document.getElementById('quiz-feedback-status').className = "font-bold block text-sm text-rose-400";
+                document.getElementById('quiz-feedback-status').innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> RẤT TIẾC, CHƯA ĐÚNG!`;
+            }
+
+            document.getElementById('quiz-feedback-desc').innerHTML = `
+                <span class="block text-slate-200 font-semibold mt-1">${quiz.options[quiz.correctOption]}</span>
+                <span class="block text-slate-400 italic text-[11px]">${quiz.translation[quiz.correctOption]}</span>
+            `;
+            document.getElementById('quiz-feedback-panel').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQuestions.length) {
+                renderQuizQuestion();
+            } else {
+                playSynthSound('fanfare');
+                customModal(
+                    "Thử thách hoàn tất!",
+                    `Chúc mừng bạn đã xuất sắc vượt qua toàn bộ 5/5 câu hỏi mô tả tranh thực tế hôm nay! Nhận thêm +100 XP điểm thưởng.`,
+                    [{
+                        text: "Luyện ván mới",
+                        style: "bg-emerald-600 hover:bg-emerald-500 text-white",
+                        action: () => initQuizChallenge()
+                    }],
+                    "fa-solid fa-medal",
+                    "text-yellow-400 bg-yellow-500/10"
+                );
+                userXP += 100;
+                updateStats();
+            }
+        }
+    </script>
+
+    <!-- TAB 4: SPEED REFLEX ENGINE LOGIC -->
+    <script>
+        // Database of Statements specifically tailored for True/False Arena
+        const speedStatements = [
+            { scene: 'plane', statement: "The plane is docked at the airport terminal.", isTrue: true, vi: "Máy bay đang neo đậu tại bến sân bay." },
+            { scene: 'plane', statement: "The pilot is preparing to take off into the cloudy sky.", isTrue: false, vi: "Phi công đang chuẩn bị cất cánh lên bầu trời nhiều mây." },
+            { scene: 'plane', statement: "The airplane is linked to the terminal corridor.", isTrue: true, vi: "Chiếc phi cơ đang được kết nối với hành lang nhà ga." },
+            
+            { scene: 'fire', statement: "He is inspecting a fire extinguisher on the corridor wall.", isTrue: true, vi: "Anh ta đang kiểm tra bình cứu hỏa trên tường hành lang." },
+            { scene: 'fire', statement: "The man is throwing safety equipment out of the building.", isTrue: false, vi: "Người đàn ông đang quăng thiết bị an toàn ra ngoài tòa nhà." },
+            
+            { scene: 'office', statement: "The woman is holding up the lid of the copier machine.", isTrue: true, vi: "Người phụ nữ đang giữ nắp trên của máy photocopy." },
+            { scene: 'office', statement: "She is currently cleaning the window pane with a cloth.", isTrue: false, vi: "Cô ấy hiện đang lau cửa kính bằng một mảnh vải." },
+            
+            { scene: 'store', statement: "The packages of products are neatly arranged on shelves.", isTrue: true, vi: "Các hộp sản phẩm được sắp xếp gọn gàng trên kệ giá." },
+            { scene: 'store', statement: "The shoppers are strolling outside the park walkways.", isTrue: false, vi: "Các khách mua sắm đang đi dạo bên ngoài lối đi công viên." },
+            
+            { scene: 'boat', statement: "Several small wooden boats are moored close to the shore.", isTrue: true, vi: "Một số thuyền gỗ nhỏ đang được buộc neo sát bờ biển." },
+            { scene: 'boat', statement: "A heavy truck is loading goods from the deep sea dock.", isTrue: false, vi: "Một chiếc xe tải nặng đang bốc hàng từ bến cảng nước sâu." },
+
+            { scene: 'gardener', statement: "The gardener is pushing a red wheelbarrow on the pathway.", isTrue: true, vi: "Người làm vườn đang đẩy xe cút kít màu đỏ trên lối đi." },
+            { scene: 'gardener', statement: "The pilot has malfunctioned the heavy vehicle.", isTrue: false, vi: "Người phi công đã làm hỏng chiếc xe tải hạng nặng." },
+
+            { scene: 'kitchen', statement: "The chef is wearing a white apron in the kitchen area.", isTrue: true, vi: "Đầu bếp đang mang một chiếc tạp dề trắng trong khu vực bếp." },
+            { scene: 'kitchen', statement: "A spectator is sweeping the workspace floor.", isTrue: false, vi: "Khán giả đang quét sạch sàn nhà nơi làm việc." }
+        ];
+
+        let speedTimerInterval = null;
+        let speedTimeLeft = 100; // Percentage
+        let speedCurrentIndex = 0;
+        let speedLives = 3;
+        let speedScore = 0;
+        let speedLocalCombo = 0;
+        let activeSpeedItem = null;
+
+        function startSpeedGame() {
+            clearInterval(speedTimerInterval);
+            speedLives = 3;
+            speedScore = 0;
+            speedLocalCombo = 0;
+            speedCurrentIndex = 0;
+
+            // Show active grid, hide game over
+            document.getElementById('speed-game-active').classList.remove('hidden');
+            document.getElementById('speed-game-over').classList.add('hidden');
+
+            updateSpeedUI();
+            nextSpeedQuestion();
+        }
+
+        function updateSpeedUI() {
+            // Update Lives indicator
+            let livesStr = "";
+            for (let i = 0; i < 3; i++) {
+                livesStr += i < speedLives ? "❤️ " : "🖤 ";
+            }
+            document.getElementById('speed-lives').innerText = livesStr;
+            document.getElementById('speed-combo').innerText = speedLocalCombo;
+        }
+
+        function nextSpeedQuestion() {
+            if (speedLives <= 0) {
+                endSpeedGame();
+                return;
+            }
+
+            updateSpeedUI();
+
+            // Select a random statement item
+            const randomIndex = Math.floor(Math.random() * speedStatements.length);
+            activeSpeedItem = speedStatements[randomIndex];
+
+            // Render SVG scene
+            const sceneContainer = document.getElementById('speed-scene-container');
+            sceneContainer.innerHTML = getSceneSVG(activeSpeedItem.scene);
+
+            // Populate Statement Texts
+            document.getElementById('speed-statement-text').innerText = activeSpeedItem.statement;
+            document.getElementById('speed-vietnamese-text').innerText = activeSpeedItem.vi;
+
+            // Auto voice playback
+            speakWord(activeSpeedItem.statement);
+
+            // Reset Timer Bar
+            speedTimeLeft = 100;
+            const timerBar = document.getElementById('speed-timer-bar');
+            timerBar.style.width = "100%";
+
+            // Start countdown timer: 8 seconds total (80 steps of 100ms)
+            clearInterval(speedTimerInterval);
+            const stepPercent = 100 / 80; // 8 seconds
+            
+            speedTimerInterval = setInterval(() => {
+                speedTimeLeft -= stepPercent;
+                if (speedTimeLeft <= 0) {
+                    speedTimeLeft = 0;
+                    timerBar.style.width = "0%";
+                    clearInterval(speedTimerInterval);
+                    // Time out counts as WRONG answer
+                    handleTimeout();
+                } else {
+                    timerBar.style.width = speedTimeLeft + "%";
+                }
+            }, 100);
+        }
+
+        function speakSpeedStatement() {
+            if (activeSpeedItem) {
+                speakWord(activeSpeedItem.statement);
+            }
+        }
+
+        function handleTimeout() {
+            playSynthSound('fail');
+            triggerArenaShake();
+            speedLives--;
+            speedLocalCombo = 0;
+            
+            customModal(
+                "HẾT GIỜ!",
+                `Bạn đã quá thời gian phản xạ cho nhận định này! Mất 1 mạng sinh mệnh.`,
+                [{
+                    text: "Tiếp tục",
+                    style: "bg-indigo-600 text-white",
+                    action: () => nextSpeedQuestion()
+                }],
+                "fa-solid fa-clock",
+                "text-rose-400 bg-rose-500/10"
+            );
+        }
+
+        function triggerArenaShake() {
+            const card = document.getElementById('game-arena-card');
+            card.classList.add('animate-shake');
+            setTimeout(() => {
+                card.classList.remove('animate-shake');
+            }, 500);
+        }
+
+        function handleSpeedDecision(userDecision) {
+            clearInterval(speedTimerInterval);
+            
+            const isCorrect = userDecision === activeSpeedItem.isTrue;
+
+            if (isCorrect) {
+                playSynthSound('success');
+                speedLocalCombo++;
+                // Score calculates fast response bonus
+                const bonus = Math.floor(speedTimeLeft / 10);
+                const pointsGained = 20 + bonus + (speedLocalCombo * 2);
+                speedScore += pointsGained;
+                userXP += pointsGained;
+                streak++;
+                updateStats();
+
+                // Small quick notify modal
+                customModal(
+                    "CHÍNH XÁC!",
+                    `Nhận +${pointsGained} XP! Chuỗi combo hiện tại là x${speedLocalCombo}.`,
+                    [{
+                        text: "Câu tiếp",
+                        style: "bg-emerald-600 text-white font-bold",
+                        action: () => nextSpeedQuestion()
+                    }],
+                    "fa-solid fa-square-check",
+                    "text-emerald-400 bg-emerald-500/10"
+                );
+            } else {
+                playSynthSound('fail');
+                triggerArenaShake();
+                speedLives--;
+                speedLocalCombo = 0;
+                streak = 0;
+                updateStats();
+
+                customModal(
+                    "CHƯA CHÍNH XÁC!",
+                    `Câu trả lời đúng phải là: ${activeSpeedItem.isTrue ? "ĐÚNG (TRUE)" : "SAI (FALSE)"}.\nGiải thích: ${activeSpeedItem.statement}\n(${activeSpeedItem.vi})`,
+                    [{
+                        text: "Luyện tiếp",
+                        style: "bg-rose-600 text-white font-bold",
+                        action: () => nextSpeedQuestion()
+                    }],
+                    "fa-solid fa-triangle-exclamation",
+                    "text-rose-400 bg-rose-500/10"
+                );
+            }
+        }
+
+        function endSpeedGame() {
+            clearInterval(speedTimerInterval);
+            playSynthSound('fanfare');
+
+            // Toggle screens
+            document.getElementById('speed-game-active').classList.add('hidden');
+            document.getElementById('speed-game-over').classList.remove('hidden');
+
+            document.getElementById('speed-summary-score').innerText = `+${speedScore} XP`;
+            document.getElementById('speed-summary-combo').innerText = `x${speedLocalCombo}`;
+
+            customModal(
+                "HOÀN THÀNH PHIÊN CHƠI!",
+                `Trận đấu phản xạ nhanh kết thúc. Bạn giành được tổng cộng +${speedScore} XP và bảo toàn thành công thành tích học tập hôm nay!`,
+                [{
+                    text: "Xem bảng thành tích",
+                    style: "bg-indigo-600 text-white font-bold",
+                    action: () => closeModal()
+                }],
+                "fa-solid fa-ranking-star",
+                "text-amber-400 bg-amber-500/10"
+            );
+        }
+    </script>
+</body>
+</html>
