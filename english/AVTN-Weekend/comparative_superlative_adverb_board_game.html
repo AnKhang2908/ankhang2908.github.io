@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adverb Quest: Comparative & Superlative Board Game</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            touch-action: manipulation;
+        }
+        .font-display {
+            font-family: 'Fredoka', cursive;
+        }
+
+        /* 3D Dice styling */
+        .dice-container {
+            perspective: 800px;
+        }
+        .dice {
+            width: 96px;
+            height: 96px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+        .dice-face {
+            position: absolute;
+            width: 96px;
+            height: 96px;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            border: 3px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            align-items: center;
+            justify-items: center;
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.35);
+        }
+        .dice-dot {
+            width: 18px;
+            height: 18px;
+            background-color: #0f172a;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 3px rgba(0,0,0,0.5);
+        }
+        .dice-dot.red {
+            background-color: #e11d48;
+            width: 22px;
+            height: 22px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.4), 0 0 6px rgba(225, 29, 72, 0.4);
+        }
+
+        .face-1 { transform: translateZ(48px); }
+        .face-2 { transform: rotateY(90deg) translateZ(48px); }
+        .face-3 { transform: rotateY(180deg) translateZ(48px); }
+        .face-4 { transform: rotateY(-90deg) translateZ(48px); }
+        .face-5 { transform: rotateX(90deg) translateZ(48px); }
+        .face-6 { transform: rotateX(-90deg) translateZ(48px); }
+
+        .tile-card {
+            transition: all 0.2s ease-in-out;
+            min-height: 75px;
+        }
+        .tile-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .active-player-card {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .player-token {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="h-full min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-xl shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-bold text-lg md:text-xl text-white leading-none">Adverb Quest</h1>
+                    <p class="text-xs text-slate-400 font-medium">Comparative & Superlative Adverbs Game</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="btn-rules" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition flex items-center gap-2 border border-slate-700">
+                    <i class="fa-solid fa-book-open text-indigo-400"></i> <span class="hidden sm:inline">Grammar Rules</span>
+                </button>
+                <button id="btn-sound" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition border border-slate-700">
+                    <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+                <button id="btn-restart" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition border border-slate-700" title="Reset Game">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Setup Screen -->
+    <main id="setup-screen" class="flex-grow flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-indigo-600/10 rounded-full blur-2xl"></div>
+            
+            <div class="text-center mb-6">
+                <span class="inline-block px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2 border border-indigo-500/20">A1-A2 EFL English Learning</span>
+                <h2 class="font-display text-2xl md:text-3xl font-bold text-white">Choose Your Players</h2>
+                <p class="text-slate-400 text-sm mt-1">Answer grammar questions correctly to move forward!</p>
+            </div>
+
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Number of Players</label>
+                    <div class="grid grid-cols-4 gap-2">
+                        <button class="player-count-btn active border-2 border-indigo-500 text-white font-bold py-2.5 rounded-xl bg-slate-800/80 transition" data-count="1">1 Player</button>
+                        <button class="player-count-btn border-2 border-slate-700 text-slate-400 font-bold py-2.5 rounded-xl bg-slate-800/80 hover:border-slate-600 transition" data-count="2">2 Players</button>
+                        <button class="player-count-btn border-2 border-slate-700 text-slate-400 font-bold py-2.5 rounded-xl bg-slate-800/80 hover:border-slate-600 transition" data-count="3">3 Players</button>
+                        <button class="player-count-btn border-2 border-slate-700 text-slate-400 font-bold py-2.5 rounded-xl bg-slate-800/80 hover:border-slate-600 transition" data-count="4">4 Players</button>
+                    </div>
+                </div>
+
+                <div id="player-setup-list" class="space-y-3">
+                    <!-- Dynamically populated setup fields -->
+                </div>
+
+                <button id="btn-start-game" class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-display font-bold text-lg shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-play"></i> Start Race
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Game Screen -->
+    <main id="game-screen" class="hidden flex-grow max-w-7xl w-full mx-auto p-4 flex-col lg:flex-row gap-6">
+        <!-- Left: Game Board (36 spaces) -->
+        <div class="flex-grow lg:w-3/4 flex flex-col gap-4">
+            <div id="board-container" class="grid grid-cols-4 sm:grid-cols-6 gap-2.5 sm:gap-3 p-4 bg-slate-900/60 rounded-2xl border border-slate-800 backdrop-blur shadow-inner">
+                <!-- Dynamically generated 36 tile cards -->
+            </div>
+        </div>
+
+        <!-- Right: Control Panel & Status -->
+        <div class="lg:w-1/4 flex flex-col gap-4">
+            <!-- Current Player Dashboard -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col items-center text-center shadow-lg relative overflow-hidden">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Current Turn</div>
+                <div id="current-player-name" class="font-display text-2xl font-bold text-indigo-400 mb-2">Player 1</div>
+                <p id="turn-action-msg" class="text-xs text-slate-400 mb-4 h-8 flex items-center justify-center">Roll the dice to get a grammar question!</p>
+
+                <!-- 3D Dice Visual -->
+                <div class="dice-container my-4 h-28 flex items-center justify-center">
+                    <div id="dice" class="dice">
+                        <div class="dice-face face-1">
+                            <span class="dice-dot red col-start-2 row-start-2"></span>
+                        </div>
+                        <div class="dice-face face-2">
+                            <span class="dice-dot col-start-3 row-start-1"></span>
+                            <span class="dice-dot col-start-1 row-start-3"></span>
+                        </div>
+                        <div class="dice-face face-3">
+                            <span class="dice-dot col-start-3 row-start-1"></span>
+                            <span class="dice-dot col-start-2 row-start-2"></span>
+                            <span class="dice-dot col-start-1 row-start-3"></span>
+                        </div>
+                        <div class="dice-face face-4">
+                            <span class="dice-dot col-start-1 row-start-1"></span>
+                            <span class="dice-dot col-start-3 row-start-1"></span>
+                            <span class="dice-dot col-start-1 row-start-3"></span>
+                            <span class="dice-dot col-start-3 row-start-3"></span>
+                        </div>
+                        <div class="dice-face face-5">
+                            <span class="dice-dot col-start-1 row-start-1"></span>
+                            <span class="dice-dot col-start-3 row-start-1"></span>
+                            <span class="dice-dot col-start-2 row-start-2"></span>
+                            <span class="dice-dot col-start-1 row-start-3"></span>
+                            <span class="dice-dot col-start-3 row-start-3"></span>
+                        </div>
+                        <div class="dice-face face-6">
+                            <span class="dice-dot col-start-1 row-start-1"></span>
+                            <span class="dice-dot col-start-3 row-start-1"></span>
+                            <span class="dice-dot col-start-1 row-start-2"></span>
+                            <span class="dice-dot col-start-3 row-start-2"></span>
+                            <span class="dice-dot col-start-1 row-start-3"></span>
+                            <span class="dice-dot col-start-3 row-start-3"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btn-roll" class="mt-4 w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 disabled:opacity-50 text-white font-display font-bold text-base shadow-lg shadow-emerald-500/20 transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-dice"></i> Roll Dice
+                </button>
+            </div>
+
+            <!-- Race Progress Scoreboard -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex-grow flex flex-col">
+                <h3 class="font-display font-bold text-slate-300 text-sm mb-3 flex items-center justify-between">
+                    <span><i class="fa-solid fa-flag-checkered text-indigo-400 mr-2"></i>Race Progress</span>
+                    <span class="text-xs font-normal text-slate-500">First to Tile 35</span>
+                </h3>
+                <div id="players-status-container" class="space-y-2.5 flex-grow">
+                    <!-- Dynamic player position status list -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Question Modal -->
+    <div id="modal-question" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+                <span id="question-type-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Comparative Adverb</span>
+                <span id="question-move-badge" class="text-xs font-semibold text-emerald-400"><i class="fa-solid fa-shoe-prints mr-1"></i>Move +3 Spaces</span>
+            </div>
+
+            <p id="question-prompt" class="text-slate-400 text-xs font-medium mb-1 uppercase tracking-wider">Choose the correct word:</p>
+            <div id="question-sentence-box" class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-slate-100 font-semibold text-base sm:text-lg mb-6 leading-relaxed">
+                <!-- Example: Sentence goes here -->
+            </div>
+
+            <div id="options-container" class="grid grid-cols-1 gap-3">
+                <!-- Exactly 2 choice buttons dynamically rendered -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="modal-feedback" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center shadow-2xl relative">
+            <div id="feedback-icon-bg" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-3">
+                <i id="feedback-icon" class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="feedback-title" class="font-display text-2xl font-bold mb-2">Correct!</h3>
+            <p id="feedback-message" class="text-slate-300 text-sm mb-4">You move forward!</p>
+            
+            <div id="feedback-explanation" class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-400 mb-5 text-left leading-relaxed">
+                <!-- Grammar explanation -->
+            </div>
+
+            <button id="btn-close-feedback" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition">
+                Continue Game
+            </button>
+        </div>
+    </div>
+
+    <!-- Grammar Rules Modal -->
+    <div id="modal-rules" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+                <h3 class="font-display font-bold text-xl text-white flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-indigo-400"></i> Grammar Rules Guide
+                </h3>
+                <button id="btn-close-rules" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-4 overflow-y-auto pr-2 text-sm text-slate-300 leading-relaxed">
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                    <h4 class="font-bold text-amber-400 mb-1">1. Comparative Adverbs (2 things)</h4>
+                    <p class="text-xs text-slate-400 mb-1">Use when comparing two actions:</p>
+                    <ul class="list-disc list-inside text-xs space-y-1">
+                        <li>Short adverbs: add <strong>-er</strong> (fast &rarr; <em>faster</em>, hard &rarr; <em>harder</em>)</li>
+                        <li>-ly adverbs: use <strong>more</strong> (carefully &rarr; <em>more carefully</em>)</li>
+                        <li>Irregular: well &rarr; <strong>better</strong>, badly &rarr; <strong>worse</strong></li>
+                    </ul>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                    <h4 class="font-bold text-emerald-400 mb-1">2. Superlative Adverbs (3+ things)</h4>
+                    <p class="text-xs text-slate-400 mb-1">Use when comparing three or more actions:</p>
+                    <ul class="list-disc list-inside text-xs space-y-1">
+                        <li>Short adverbs: use <strong>the -est</strong> (fast &rarr; <em>the fastest</em>)</li>
+                        <li>-ly adverbs: use <strong>the most</strong> (carefully &rarr; <em>the most carefully</em>)</li>
+                        <li>Irregular: well &rarr; <strong>the best</strong>, badly &rarr; <strong>the worst</strong></li>
+                    </ul>
+                </div>
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                    <h4 class="font-bold text-indigo-400 mb-1">3. Game Rules</h4>
+                    <ul class="list-disc list-inside text-xs space-y-1 text-slate-400">
+                        <li>Roll the dice and answer the grammar question correctly to advance.</li>
+                        <li>If you choose the <strong>wrong</strong> answer, you stand still on your space!</li>
+                        <li>First player to reach the final <strong>FINISH</strong> tile wins!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="modal-gameover" class="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-slate-900 border border-amber-500/30 rounded-2xl p-8 text-center shadow-2xl relative overflow-hidden">
+            <div class="w-20 h-20 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 mx-auto flex items-center justify-center text-4xl mb-4 animate-bounce">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="font-display text-3xl font-bold text-white mb-1">Winner!</h2>
+            <p id="winner-text" class="text-amber-400 font-semibold text-lg mb-6">Player 1 Reached the Finish Line First! 🎉</p>
+
+            <div id="final-scoreboard" class="space-y-2 mb-6">
+                <!-- Final results list -->
+            </div>
+
+            <button id="btn-play-again" class="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-display font-bold text-lg shadow-lg shadow-amber-500/20 transition">
+                Play Again
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-3 text-center text-xs text-slate-500">
+        Adverb Quest Board Game &bull; Comparative & Superlative EFL Learning Tool
+    </footer>
+
+    <script>
+        const BOARD_SIZE = 36;
+
+        const AVATAR_COLORS = [
+            { name: 'Indigo', class: 'bg-indigo-600 text-white', border: 'border-indigo-400' },
+            { name: 'Emerald', class: 'bg-emerald-600 text-white', border: 'border-emerald-400' },
+            { name: 'Amber', class: 'bg-amber-500 text-slate-950', border: 'border-amber-400' },
+            { name: 'Rose', class: 'bg-rose-600 text-white', border: 'border-rose-400' }
+        ];
+
+        const AVATAR_ICONS = [
+            'fa-user-ninja',
+            'fa-robot',
+            'fa-cat',
+            'fa-dragon'
+        ];
+
+        // A1/A2 EFL Question Bank (Exactly 2 choices per question)
+        const QUESTION_BANK = [
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'There were eight top runners in the race, but the American ran <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (fast).',
+                options: ['the fastest', 'the most fast'],
+                correct: 0,
+                explanation: 'For short adverbs like <em>fast</em>, add <strong>the -est</strong> for superlative form.'
+            },
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Which of the three singers do you think has performed <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (well)?',
+                options: ['the best', 'the most well'],
+                correct: 0,
+                explanation: '<em>Well</em> is an irregular adverb! Its superlative form is <strong>the best</strong>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Tom can run <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (fast) than Peter.',
+                options: ['faster', 'more fast'],
+                correct: 0,
+                explanation: 'Short 1-syllable adverbs use <strong>-er</strong> in comparative: <em>faster</em>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'She sings <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (well) than her brother.',
+                options: ['better', 'more well'],
+                correct: 0,
+                explanation: 'The comparative form of <em>well</em> is <strong>better</strong>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'David works <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (hard) than John.',
+                options: ['harder', 'more hard'],
+                correct: 0,
+                explanation: 'For short adverbs like <em>hard</em>, add <strong>-er</strong>: <em>harder</em>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Emma drives <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (carefully) than her father.',
+                options: ['more carefully', 'carefullyer'],
+                correct: 0,
+                explanation: 'For adverbs ending in <strong>-ly</strong>, use <strong>more</strong>: <em>more carefully</em>.'
+            },
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Of all the students, Alex studied <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (hard) for the exam.',
+                options: ['the hardest', 'the most hard'],
+                correct: 0,
+                explanation: 'The superlative form of <em>hard</em> is <strong>the hardest</strong>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'He arrived at school <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (early) than usual.',
+                options: ['earlier', 'more early'],
+                correct: 0,
+                explanation: 'Adverbs ending in <strong>-y</strong> change to <strong>-ier</strong>: <em>earlier</em>.'
+            },
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Who came <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (late) to class today?',
+                options: ['the latest', 'the most late'],
+                correct: 0,
+                explanation: 'The superlative form of <em>late</em> is <strong>the latest</strong>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'The eagle flies <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (high) than the small bird.',
+                options: ['higher', 'more high'],
+                correct: 0,
+                explanation: 'Short 1-syllable adverbs add <strong>-er</strong>: <em>higher</em>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Ben behaved <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (badly) today than yesterday.',
+                options: ['worse', 'more badly'],
+                correct: 0,
+                explanation: '<em>Badly</em> is irregular! Its comparative form is <strong>worse</strong>.'
+            },
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Out of all four teams, our team played <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (badly).',
+                options: ['the worst', 'the most bad'],
+                correct: 0,
+                explanation: 'The superlative form of <em>badly</em> is <strong>the worst</strong>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Can you write <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (neatly), please?',
+                options: ['more neatly', 'neatlier'],
+                correct: 0,
+                explanation: 'For -ly adverbs like <em>neatly</em>, use <strong>more</strong>.'
+            },
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'My sister speaks <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (quietly) in our family.',
+                options: ['the most quietly', 'the quietestly'],
+                correct: 0,
+                explanation: 'Use <strong>the most</strong> for superlative form of -ly adverbs: <em>the most quietly</em>.'
+            },
+            {
+                type: 'Superlative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Who can jump <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (far) in your class?',
+                options: ['the farthest', 'the most far'],
+                correct: 0,
+                explanation: '<em>Far</em> is irregular! Its superlative form is <strong>the farthest</strong>.'
+            },
+            {
+                type: 'Comparative Adverb',
+                prompt: 'Choose the correct word:',
+                sentence: 'Lisa speaks English <span class="text-amber-400 font-bold underline decoration-wavy decoration-amber-500">___________</span> (well) than last year.',
+                options: ['better', 'more well'],
+                correct: 0,
+                explanation: 'The comparative form of <em>well</em> is <strong>better</strong>.'
+            }
+        ];
+
+        const sound = {
+            enabled: true,
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            },
+            playNote(freq, type = 'sine', duration = 0.15, vol = 0.1) {
+                if (!this.enabled || !this.ctx) return;
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e){}
+            },
+            roll() { this.playNote(300, 'triangle', 0.08); },
+            step() { this.playNote(440, 'sine', 0.1); },
+            correct() {
+                this.playNote(523.25, 'sine', 0.15);
+                setTimeout(() => this.playNote(659.25, 'sine', 0.25), 120);
+            },
+            wrong() {
+                this.playNote(220, 'sawtooth', 0.2);
+                setTimeout(() => this.playNote(180, 'sawtooth', 0.3), 150);
+            },
+            win() {
+                const notes = [400, 500, 600, 800];
+                notes.forEach((n, i) => setTimeout(() => this.playNote(n, 'sine', 0.3), i * 120));
+            }
+        };
+
+        function generateBoardTiles() {
+            const tiles = [];
+            for (let i = 0; i < BOARD_SIZE; i++) {
+                if (i === 0) {
+                    tiles.push({ id: 0, type: 'start', label: 'START', icon: 'fa-flag-checkered', color: 'from-indigo-600 to-purple-700' });
+                } else if (i === BOARD_SIZE - 1) {
+                    tiles.push({ id: i, type: 'finish', label: 'FINISH', icon: 'fa-trophy', color: 'from-amber-500 to-yellow-600' });
+                } else if (i === 6 || i === 15 || i === 24 || i === 31) {
+                    tiles.push({ id: i, type: 'shortcut', label: 'SHORTCUT', icon: 'fa-forward-fast', color: 'from-emerald-600 to-teal-700', effect: '+2 Spaces' });
+                } else if (i === 10 || i === 20 || i === 28) {
+                    tiles.push({ id: i, type: 'bonus', label: 'BONUS', icon: 'fa-star', color: 'from-amber-600 to-orange-700', effect: '+1 Space' });
+                } else {
+                    tiles.push({ id: i, type: 'question', label: `Tile ${i}`, icon: 'fa-brain', color: 'from-slate-800 to-slate-900' });
+                }
+            }
+            return tiles;
+        }
+
+        let gameState = {
+            numPlayers: 1,
+            players: [],
+            activePlayerIndex: 0,
+            boardTiles: generateBoardTiles(),
+            isRolling: false,
+            currentDiceValue: 1,
+            pendingRollValue: 0,
+            lastAnswerCorrect: false,
+            selectedQuestion: null,
+            usedQuestionIndices: new Set()
+        };
+
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const playerSetupList = document.getElementById('player-setup-list');
+        const btnStartGame = document.getElementById('btn-start-game');
+        const boardContainer = document.getElementById('board-container');
+        const playersStatusContainer = document.getElementById('players-status-container');
+        const btnRoll = document.getElementById('btn-roll');
+        const diceEl = document.getElementById('dice');
+        const currentPlayerNameEl = document.getElementById('current-player-name');
+        const turnActionMsgEl = document.getElementById('turn-action-msg');
+
+        const modalQuestion = document.getElementById('modal-question');
+        const modalFeedback = document.getElementById('modal-feedback');
+        const modalRules = document.getElementById('modal-rules');
+        const modalGameOver = document.getElementById('modal-gameover');
+
+        function initSetupUI() {
+            playerSetupList.innerHTML = '';
+            for (let i = 0; i < gameState.numPlayers; i++) {
+                const color = AVATAR_COLORS[i % AVATAR_COLORS.length];
+                const icon = AVATAR_ICONS[i % AVATAR_ICONS.length];
+                
+                const div = document.createElement('div');
+                div.className = 'flex items-center gap-3 p-3 rounded-xl bg-slate-950 border border-slate-800';
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-xl ${color.class} flex items-center justify-center text-lg shadow">
+                        <i class="fa-solid ${icon}"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <input type="text" value="Player ${i+1}" class="player-name-input w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-semibold text-white focus:outline-none focus:border-indigo-500" placeholder="Player Name">
+                    </div>
+                    ${i > 0 ? `
+                        <label class="flex items-center gap-2 text-xs text-slate-400 cursor-pointer">
+                            <input type="checkbox" class="cpu-checkbox rounded bg-slate-900 border-slate-700 text-indigo-500 focus:ring-0">
+                            CPU Bot
+                        </label>
+                    ` : ''}
+                `;
+                playerSetupList.appendChild(div);
+            }
+        }
+
+        document.querySelectorAll('.player-count-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.player-count-btn').forEach(b => {
+                    b.classList.remove('border-indigo-500', 'text-white');
+                    b.classList.add('border-slate-700', 'text-slate-400');
+                });
+                btn.classList.remove('border-slate-700', 'text-slate-400');
+                btn.classList.add('border-indigo-500', 'text-white');
+
+                gameState.numPlayers = parseInt(btn.dataset.count);
+                initSetupUI();
+            });
+        });
+
+        btnStartGame.addEventListener('click', () => {
+            sound.init();
+            const nameInputs = document.querySelectorAll('.player-name-input');
+            const cpuCheckboxes = document.querySelectorAll('.cpu-checkbox');
+
+            gameState.players = [];
+            for (let i = 0; i < gameState.numPlayers; i++) {
+                const name = nameInputs[i].value.trim() || `Player ${i+1}`;
+                const isCpu = cpuCheckboxes[i] ? cpuCheckboxes[i].checked : false;
+                
+                gameState.players.push({
+                    id: i,
+                    name: name,
+                    isCpu: isCpu,
+                    position: 0,
+                    color: AVATAR_COLORS[i % AVATAR_COLORS.length],
+                    icon: AVATAR_ICONS[i % AVATAR_ICONS.length]
+                });
+            }
+
+            gameState.activePlayerIndex = 0;
+            gameState.usedQuestionIndices.clear();
+
+            setupScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            gameScreen.classList.add('flex');
+
+            renderBoard();
+            updateScoreboard();
+            updateTurnUI();
+        });
+
+        function renderBoard() {
+            boardContainer.innerHTML = '';
+            gameState.boardTiles.forEach((tile) => {
+                const card = document.createElement('div');
+                card.id = `tile-${tile.id}`;
+                card.className = `tile-card relative rounded-2xl p-2 md:p-3 bg-gradient-to-br ${tile.color} border border-slate-700/60 flex flex-col justify-between overflow-hidden shadow-lg`;
+                
+                let badgeHTML = '';
+                if (tile.type === 'start') {
+                    badgeHTML = '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200">START</span>';
+                } else if (tile.type === 'finish') {
+                    badgeHTML = '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-200">FINISH</span>';
+                } else if (tile.effect) {
+                    badgeHTML = `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-black/40 text-amber-300">${tile.effect}</span>`;
+                } else {
+                    badgeHTML = `<span class="text-[10px] font-mono text-slate-400">#${tile.id}</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-1 mb-1">
+                        ${badgeHTML}
+                        <i class="fa-solid ${tile.icon} text-slate-400/80 text-xs"></i>
+                    </div>
+                    <div id="tile-tokens-${tile.id}" class="flex flex-wrap gap-1 items-center justify-center min-h-[28px] my-1 z-10">
+                        <!-- Player tokens dynamically placed here -->
+                    </div>
+                `;
+                boardContainer.appendChild(card);
+            });
+
+            updatePlayerTokenPositions();
+        }
+
+        function updatePlayerTokenPositions() {
+            for (let i = 0; i < BOARD_SIZE; i++) {
+                const el = document.getElementById(`tile-tokens-${i}`);
+                if (el) el.innerHTML = '';
+            }
+
+            gameState.players.forEach((player) => {
+                const container = document.getElementById(`tile-tokens-${player.position}`);
+                if (container) {
+                    const token = document.createElement('div');
+                    token.className = `player-token w-7 h-7 rounded-full ${player.color.class} border-2 ${player.color.border} flex items-center justify-center text-xs shadow-md`;
+                    token.title = player.name;
+                    token.innerHTML = `<i class="fa-solid ${player.icon}"></i>`;
+                    container.appendChild(token);
+                }
+            });
+        }
+
+        function updateScoreboard() {
+            playersStatusContainer.innerHTML = '';
+
+            gameState.players.forEach((player, idx) => {
+                const isCurrent = idx === gameState.activePlayerIndex;
+                const progressPct = Math.round((player.position / (BOARD_SIZE - 1)) * 100);
+                const card = document.createElement('div');
+                card.className = `player-card p-3 rounded-xl bg-slate-950/80 border ${isCurrent ? 'border-indigo-500 active-player-card' : 'border-slate-800'} flex items-center justify-between transition-all`;
+                card.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg ${player.color.class} flex items-center justify-center text-xs font-bold shadow">
+                            <i class="fa-solid ${player.icon}"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm text-slate-100 flex items-center gap-1.5">
+                                ${player.name}
+                                ${player.isCpu ? '<span class="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400">BOT</span>' : ''}
+                            </div>
+                            <div class="text-[11px] text-slate-400">Tile ${player.position} / ${BOARD_SIZE - 1}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-display font-bold text-emerald-400 text-sm">${progressPct}%</div>
+                    </div>
+                `;
+                playersStatusContainer.appendChild(card);
+            });
+        }
+
+        function updateTurnUI() {
+            const activePlayer = gameState.players[gameState.activePlayerIndex];
+            currentPlayerNameEl.textContent = activePlayer.name;
+            currentPlayerNameEl.className = `font-display text-2xl font-bold ${activePlayer.color.class.includes('amber') ? 'text-amber-400' : 'text-indigo-300'}`;
+
+            turnActionMsgEl.textContent = `${activePlayer.name}'s turn to roll!`;
+            btnRoll.disabled = false;
+
+            if (activePlayer.isCpu) {
+                btnRoll.disabled = true;
+                setTimeout(() => {
+                    handleRollDice();
+                }, 1000);
+            }
+        }
+
+        btnRoll.addEventListener('click', handleRollDice);
+
+        function handleRollDice() {
+            if (gameState.isRolling) return;
+            gameState.isRolling = true;
+            btnRoll.disabled = true;
+
+            sound.roll();
+
+            const rollVal = Math.floor(Math.random() * 6) + 1;
+            gameState.currentDiceValue = rollVal;
+
+            const rotations = {
+                1: { x: 0, y: 0 },
+                2: { x: 0, y: -90 },
+                3: { x: 0, y: -180 },
+                4: { x: 0, y: 90 },
+                5: { x: -90, y: 0 },
+                6: { x: 90, y: 0 }
+            };
+
+            const extraRot = 720;
+            const rot = rotations[rollVal];
+            diceEl.style.transform = `rotateX(${rot.x + extraRot}deg) rotateY(${rot.y + extraRot}deg)`;
+
+            setTimeout(() => {
+                gameState.isRolling = false;
+                gameState.pendingRollValue = rollVal;
+                presentGrammarQuestion();
+            }, 1000);
+        }
+
+        function presentGrammarQuestion() {
+            let availableIndices = QUESTION_BANK.map((_, i) => i).filter(i => !gameState.usedQuestionIndices.has(i));
+            if (availableIndices.length === 0) {
+                gameState.usedQuestionIndices.clear();
+                availableIndices = QUESTION_BANK.map((_, i) => i);
+            }
+
+            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+            gameState.usedQuestionIndices.add(randomIndex);
+            const question = QUESTION_BANK[randomIndex];
+            gameState.selectedQuestion = question;
+
+            document.getElementById('question-type-badge').textContent = question.type;
+            document.getElementById('question-move-badge').textContent = `Move +${gameState.pendingRollValue} ${gameState.pendingRollValue === 1 ? 'Space' : 'Spaces'}`;
+            document.getElementById('question-prompt').textContent = question.prompt;
+            document.getElementById('question-sentence-box').innerHTML = question.sentence;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const activePlayer = gameState.players[gameState.activePlayerIndex];
+
+            // Render 2 choices (A & B)
+            question.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 rounded-xl bg-slate-950 border border-slate-700 hover:border-indigo-500 hover:bg-indigo-950/40 text-left text-white font-medium transition flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span class="text-base font-semibold">${opt}</span>
+                    <span class="w-8 h-8 rounded-full bg-slate-800 text-xs font-bold flex items-center justify-center text-slate-300 group-hover:bg-indigo-600 group-hover:text-white transition">${String.fromCharCode(65 + idx)}</span>
+                `;
+                btn.addEventListener('click', () => submitAnswer(idx));
+                optionsContainer.appendChild(btn);
+            });
+
+            modalQuestion.classList.remove('hidden');
+
+            if (activePlayer.isCpu) {
+                setTimeout(() => {
+                    const isBotCorrect = Math.random() < 0.75;
+                    const choice = isBotCorrect ? question.correct : (question.correct + 1) % question.options.length;
+                    submitAnswer(choice);
+                }, 1800);
+            }
+        }
+
+        function submitAnswer(selectedIndex) {
+            modalQuestion.classList.add('hidden');
+            const question = gameState.selectedQuestion;
+            const activePlayer = gameState.players[gameState.activePlayerIndex];
+            const isCorrect = selectedIndex === question.correct;
+
+            const feedbackIconBg = document.getElementById('feedback-icon-bg');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const feedbackExplanation = document.getElementById('feedback-explanation');
+
+            if (isCorrect) {
+                sound.correct();
+                gameState.lastAnswerCorrect = true;
+                feedbackIconBg.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl mb-4 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+                feedbackIcon.className = "fa-solid fa-check";
+                feedbackTitle.textContent = "Correct!";
+                feedbackTitle.className = "font-display text-2xl md:text-3xl font-bold text-emerald-400 mb-2";
+                feedbackMessage.textContent = `${activePlayer.name} answered correctly! Advancing ${gameState.pendingRollValue} ${gameState.pendingRollValue === 1 ? 'space' : 'spaces'}.`;
+            } else {
+                sound.wrong();
+                gameState.lastAnswerCorrect = false;
+                feedbackIconBg.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-4xl mb-4 bg-rose-500/20 text-rose-400 border border-rose-500/40";
+                feedbackIcon.className = "fa-solid fa-xmark";
+                feedbackTitle.textContent = "Wrong Answer!";
+                feedbackTitle.className = "font-display text-2xl md:text-3xl font-bold text-rose-400 mb-2";
+                feedbackMessage.textContent = `Correct answer was: "${question.options[question.correct]}". ${activePlayer.name} stands still on Tile ${activePlayer.position}!`;
+            }
+
+            feedbackExplanation.innerHTML = question.explanation;
+            updateScoreboard();
+
+            modalFeedback.classList.remove('hidden');
+
+            if (activePlayer.isCpu) {
+                setTimeout(() => {
+                    closeFeedbackAndNextTurn();
+                }, 2200);
+            }
+        }
+
+        document.getElementById('btn-close-feedback').addEventListener('click', () => {
+            closeFeedbackAndNextTurn();
+        });
+
+        function closeFeedbackAndNextTurn() {
+            modalFeedback.classList.add('hidden');
+
+            if (gameState.lastAnswerCorrect) {
+                advancePlayer(gameState.pendingRollValue);
+            } else {
+                nextTurn();
+            }
+        }
+
+        function advancePlayer(steps) {
+            const activePlayer = gameState.players[gameState.activePlayerIndex];
+            let stepCount = 0;
+
+            const moveInterval = setInterval(() => {
+                if (stepCount < steps && activePlayer.position < BOARD_SIZE - 1) {
+                    activePlayer.position++;
+                    stepCount++;
+                    sound.step();
+                    updatePlayerTokenPositions();
+                    updateScoreboard();
+                } else {
+                    clearInterval(moveInterval);
+                    handleTileLanding();
+                }
+            }, 300);
+        }
+
+        function handleTileLanding() {
+            const activePlayer = gameState.players[gameState.activePlayerIndex];
+            const currentTile = gameState.boardTiles[activePlayer.position];
+
+            updateScoreboard();
+
+            if (activePlayer.position >= BOARD_SIZE - 1) {
+                triggerGameOver(activePlayer);
+                return;
+            }
+
+            if (currentTile.type === 'shortcut') {
+                turnActionMsgEl.textContent = "Shortcut space! Boosted +2 extra spaces!";
+                setTimeout(() => {
+                    activePlayer.position = Math.min(BOARD_SIZE - 1, activePlayer.position + 2);
+                    sound.step();
+                    updatePlayerTokenPositions();
+                    updateScoreboard();
+                    if (activePlayer.position >= BOARD_SIZE - 1) {
+                        triggerGameOver(activePlayer);
+                    } else {
+                        nextTurn();
+                    }
+                }, 800);
+            } else if (currentTile.type === 'bonus') {
+                turnActionMsgEl.textContent = "Star Bonus space! Boosted +1 extra space!";
+                setTimeout(() => {
+                    activePlayer.position = Math.min(BOARD_SIZE - 1, activePlayer.position + 1);
+                    sound.step();
+                    updatePlayerTokenPositions();
+                    updateScoreboard();
+                    if (activePlayer.position >= BOARD_SIZE - 1) {
+                        triggerGameOver(activePlayer);
+                    } else {
+                        nextTurn();
+                    }
+                }, 800);
+            } else {
+                nextTurn();
+            }
+        }
+
+        function nextTurn() {
+            gameState.activePlayerIndex = (gameState.activePlayerIndex + 1) % gameState.players.length;
+            updateTurnUI();
+        }
+
+        function triggerGameOver(winner) {
+            sound.win();
+            
+            document.getElementById('winner-text').textContent = `${winner.name} Reached the Finish Line First! 🎉`;
+
+            const finalScoreboard = document.getElementById('final-scoreboard');
+            finalScoreboard.innerHTML = '';
+
+            const sortedPlayers = [...gameState.players].sort((a, b) => b.position - a.position);
+
+            sortedPlayers.forEach((p, idx) => {
+                const entry = document.createElement('div');
+                entry.className = "flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 text-sm";
+                entry.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold w-5 text-amber-400">#${idx + 1}</span>
+                        <span class="font-semibold text-white">${p.name}</span>
+                    </div>
+                    <span class="font-display font-bold text-emerald-400">Tile ${p.position} / ${BOARD_SIZE - 1}</span>
+                `;
+                finalScoreboard.appendChild(entry);
+            });
+
+            modalGameOver.classList.remove('hidden');
+        }
+
+        document.getElementById('btn-play-again').addEventListener('click', () => {
+            modalGameOver.classList.add('hidden');
+            gameScreen.classList.add('hidden');
+            gameScreen.classList.remove('flex');
+            setupScreen.classList.remove('hidden');
+        });
+
+        document.getElementById('btn-rules').addEventListener('click', () => {
+            modalRules.classList.remove('hidden');
+        });
+        document.getElementById('btn-close-rules').addEventListener('click', () => {
+            modalRules.classList.add('hidden');
+        });
+
+        document.getElementById('btn-sound').addEventListener('click', () => {
+            sound.enabled = !sound.enabled;
+            const icon = document.getElementById('sound-icon');
+            if (sound.enabled) {
+                icon.className = "fa-solid fa-volume-high";
+            } else {
+                icon.className = "fa-solid fa-volume-xmark text-slate-500";
+            }
+        });
+
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            location.reload();
+        });
+
+        window.onload = function() {
+            initSetupUI();
+        };
+    </script>
+</body>
+</html>
