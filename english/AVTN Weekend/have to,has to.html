@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Monsters: Magical Spell Clash</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5b4cc4;
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --sky: #74b9ff;
+            --bg: #ffeaa7;
+            --dark: #2d3436;
+            --card-bg: #ffffff;
+            --panel-bg: #f9f9fb;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka One', sans-serif;
+            background: radial-gradient(circle, #a29bfe 0%, #6c5ce7 100%);
+            color: var(--dark);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #game-container {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 0px rgba(0, 0, 0, 0.2), 0 30px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 680px;
+            text-align: center;
+            border: 6px solid var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #game-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 12px;
+            background: linear-gradient(90deg, var(--warning), var(--danger), var(--sky), var(--success));
+        }
+
+        h1 {
+            color: var(--primary);
+            margin: 10px 0 5px 0;
+            font-size: 2.8rem;
+            text-shadow: 3px 3px 0px var(--warning);
+            -webkit-text-stroke: 2px var(--dark);
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+        }
+
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            background: var(--panel-bg);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 3px solid var(--dark);
+        }
+
+        #timer {
+            color: #fff;
+            background: var(--danger);
+            padding: 5px 18px;
+            border-radius: 50px;
+            border: 3px solid var(--dark);
+            box-shadow: 0 4px 0 var(--dark);
+        }
+
+        #score-box {
+            color: var(--primary-dark);
+        }
+
+        .arena {
+            background: linear-gradient(180deg, #74b9ff 0%, #81ecec 50%, #55efc4 100%);
+            border-radius: 24px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 4px solid var(--dark);
+            position: relative;
+            min-height: 200px;
+            box-shadow: inset 0 -10px 0 rgba(0,0,0,0.1), 0 8px 0 rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Magical Attack Flash Screen Overlay */
+        .arena-flash::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: 5;
+            pointer-events: none;
+            animation: flashBurst 0.4s ease-out;
+        }
+
+        @keyframes flashBurst {
+            0% { opacity: 0; }
+            20% { opacity: 0.85; }
+            100% { opacity: 0; }
+        }
+
+        .arena::after {
+            content: '☁️';
+            position: absolute;
+            top: 20px;
+            left: 40%;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: cloudFloat 15s linear infinite;
+        }
+
+        @keyframes cloudFloat {
+            from { transform: translateX(100px); }
+            to { transform: translateX(-200px); }
+        }
+
+        .fighter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 42%;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .avatar {
+            font-size: 5rem;
+            filter: drop-shadow(0 8px 0px rgba(0,0,0,0.15));
+            margin: 10px 0;
+            transition: all 0.4s ease;
+        }
+
+        .hero-avatar {
+            animation: heroBounce 0.6s infinite alternate ease-in-out;
+        }
+
+        .monster-avatar {
+            animation: monsterFloat 2s infinite alternate ease-in-out;
+        }
+
+        /* Attack State Transitions */
+        .hero-launch {
+            animation: heroLunge 0.4s ease-in-out !important;
+        }
+        @keyframes heroLunge {
+            0% { transform: translateX(0) scale(1); }
+            30% { transform: translateX(40px) scale(1.2) rotate(15deg); }
+            100% { transform: translateX(0) scale(1); }
+        }
+
+        .monster-defeat {
+            transform: scale(0) rotate(360deg);
+            opacity: 0;
+        }
+
+        @keyframes heroBounce {
+            from { transform: translateY(0) scaleY(1); }
+            to { transform: translateY(-12px) scaleY(0.95); }
+        }
+
+        @keyframes monsterFloat {
+            from { transform: translateY(0) rotate(-3deg); }
+            to { transform: translateY(-8px) rotate(3deg); }
+        }
+
+        .hp-bar-outer {
+            width: 100%;
+            background: #dfe6e9;
+            border: 3px solid var(--dark);
+            border-radius: 12px;
+            height: 22px;
+            overflow: hidden;
+            margin-top: 8px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .hp-bar-inner {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #55efc4, var(--success));
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .name-tag {
+            font-weight: 900;
+            font-size: 1.1rem;
+            background: var(--dark);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 50px;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        #combat-text {
+            position: absolute;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--danger);
+            text-shadow: 3px 3px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+            display: none;
+            z-index: 10;
+            animation: popUpCombat 0.8s forwards ease-out;
+        }
+
+        @keyframes popUpCombat {
+            0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+            50% { opacity: 1; transform: scale(1.4) rotate(12deg); }
+            100% { transform: translateY(-70px) scale(1) rotate(0deg); opacity: 0; }
+        }
+
+        .spell-scroll {
+            font-size: 1.4rem;
+            background: #fffdf3;
+            padding: 22px;
+            border-radius: 20px;
+            border: 4px dashed var(--warning);
+            line-height: 2.3;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 15px rgba(253, 203, 110, 0.2), 0 6px 0 rgba(0,0,0,0.05);
+            font-weight: 700;
+        }
+
+        .dropzone {
+            display: inline-flex;
+            width: 190px;
+            height: 46px;
+            background: #ffeaa7;
+            border: 3px dashed var(--primary);
+            border-radius: 14px;
+            vertical-align: middle;
+            margin: 0 8px;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.08);
+        }
+
+        .dropzone.hovered {
+            background: #ff7675;
+            border-color: var(--dark);
+            transform: scale(1.08);
+            color: white;
+        }
+
+        .hint {
+            display: block;
+            font-size: 1rem;
+            color: #636e72;
+            line-height: 1.4;
+            margin-top: 12px;
+            background: #f1f2f6;
+            padding: 6px 15px;
+            border-radius: 12px;
+            border-left: 4px solid var(--sky);
+        }
+
+        .spells-deck {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            background: #f5f6fa;
+            padding: 20px;
+            border-radius: 24px;
+            border: 3px solid var(--dark);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.1);
+        }
+
+        .spell-gem {
+            background-color: #fff;
+            border: 3px solid var(--dark);
+            color: var(--dark);
+            padding: 12px 22px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            border-radius: 25px;
+            cursor: grab;
+            box-shadow: 0 6px 0px var(--dark);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .spell-gem:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0px var(--dark);
+            background: #fffdf3;
+        }
+
+        .spell-gem:active {
+            cursor: grabbing;
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px var(--dark);
+        }
+
+        .spell-gem.dragging {
+            opacity: 0.2;
+        }
+
+        .spell-gem:nth-child(1) { border-color: #0984e3; color: #0984e3; }
+        .spell-gem:nth-child(2) { border-color: #e84393; color: #e84393; }
+        .spell-gem:nth-child(3) { border-color: #e17055; color: #e17055; }
+        .spell-gem:nth-child(4) { border-color: #20bf6b; color: #20bf6b; }
+
+        .action-btn {
+            background-color: var(--success);
+            color: white;
+            border: 4px solid var(--dark);
+            padding: 16px 45px;
+            font-size: 1.6rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 900;
+            box-shadow: 0 8px 0px var(--dark);
+            transition: all 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            background-color: #00c29b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0px var(--dark);
+        }
+
+        .action-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0px 0px transparent;
+        }
+
+        .instructions {
+            text-align: left;
+            background: #fffdf3;
+            padding: 22px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 3px dashed var(--primary);
+        }
+        .instructions li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+
+        .screen { display: none; }
+        .active { display: block; }
+
+        .shake-screen {
+            animation: screenShake 0.4s ease-in-out;
+        }
+        @keyframes screenShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+        <h1>✨ Spell Clash! ✨</h1>
+        <div class="subtitle">Grammar Arena Chronicles</div>
+        
+        <div class="avatar" style="font-size: 6.5rem; margin: 15px 0;">💧</div>
+        
+        <div class="instructions">
+            <strong style="font-size:1.2rem; color:var(--primary-dark)">⚔️ Rules of Engagement:</strong>
+            <ul style="padding-left: 20px; margin: 10px 0 0 0;">
+                <li>Drag powerful <strong>Spell Runes</strong> from the bottom tray.</li>
+                <li>Drop them inside the blank slot on the golden scroll to power up your attack.</li>
+                <li><strong>Have to / Has to</strong> = Duties and Laws!</li>
+                <li><strong>Don't / Doesn't have to</strong> = Freedom and choices!</li>
+                <li>Defeat all 10 monsters before your Hero runs out of health!</li>
+            </ul>
+        </div>
+        
+        <button class="action-btn" onclick="startGame()">Enter Arena</button>
+    </div>
+
+    <!-- GAMEPLAY SCREEN -->
+    <div id="game-screen" class="screen">
+        <div class="hud">
+            <div id="score-box">✨ Score: <span id="score">0</span></div>
+            <div>👾 Monster: <span id="wave-num">1</span>/10</div>
+            <div id="timer">30s</div>
+        </div>
+
+        <div class="arena" id="battle-field">
+            <div id="combat-text">💥 CRITICAL SMASH!</div>
+            
+            <div class="fighter" id="hero-fighter">
+                <div class="name-tag">Hero Slime</div>
+                <div class="avatar hero-avatar" id="hero-sprite">💧</div>
+                <div class="hp-bar-outer"><div id="hero-hp" class="hp-bar-inner"></div></div>
+            </div>
+            
+            <div style="font-size: 1.8rem; font-weight: 900; color: white; text-shadow: 2px 2px 0px var(--dark); z-index: 2;">VS</div>
+            
+            <div class="fighter" id="monster-fighter">
+                <div class="name-tag" id="monster-name">Wild Goblin</div>
+                <div class="avatar monster-avatar" id="monster-avatar">👹</div>
+                <div class="hp-bar-outer"><div id="monster-hp" class="hp-bar-inner"></div></div>
+            </div>
+        </div>
+        
+        <div class="spell-scroll" id="scroll-container">
+            <!-- Loaded via JS -->
+        </div>
+
+        <div class="spells-deck">
+            <div class="spell-gem" draggable="true" data-spell="have to">have to 🔮</div>
+            <div class="spell-gem" draggable="true" data-spell="has to">has to ⚡</div>
+            <div class="spell-gem" draggable="true" data-spell="don't have to">don't have to 🍃</div>
+            <div class="spell-gem" draggable="true" data-spell="doesn't have to">doesn't have to 🔥</div>
+        </div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end-screen" class="screen">
+        <h1 id="end-title">Victory!</h1>
+        <div id="end-emoji" style="font-size: 7rem; margin: 20px 0; filter: drop-shadow(0 10px 0 rgba(0,0,0,0.15))">👑</div>
+        <p id="end-msg" style="font-size: 1.3rem; font-weight: bold; color: var(--primary-dark);">You protected the realm!</p>
+        <h2 style="font-size: 2.3rem; -webkit-text-stroke: 1px var(--dark);">Total Bounty: <span id="final-score" style="color:var(--warning); text-shadow: 2px 2px 0 #000;">0</span> Gems</h2>
+        <button class="action-btn" onclick="restartGame()" style="background-color: var(--warning); color: #2d3436;">Battle Again</button>
+    </div>
+
+</div>
+
+<script>
+    const questions = [
+        { qBefore: "To stay healthy, a person", qAfter: "drink plenty of water daily.", hint: "👉 Hint: One single person needs this rule to survive!", ans: "has to" },
+        { qBefore: "Tomorrow is Sunday! We", qAfter: "wake up early.", hint: "👉 Hint: Yay! We are totally free to sleep all morning!", ans: "don't have to" },
+        { qBefore: "An astronaut", qAfter: "train for years before travelling to space.", hint: "👉 Hint: Space rules are super strict for a pilot!", ans: "has to" },
+        { qBefore: "She already bought tickets online, so she", qAfter: "wait in line.", hint: "👉 Hint: Skip the line! She doesn't need to stand there.", ans: "doesn't have to" },
+        { qBefore: "In football, players", qAfter: "use their feet, not their hands.", hint: "👉 Hint: Big team rule! Hand usage breaks rules.", ans: "have to" },
+        { qBefore: "You", qAfter: "pay to enter the local park; it is completely free!", hint: "👉 Hint: Free fun! No money is required from you.", ans: "don't have to" },
+        { qBefore: "He", qAfter: "carry an umbrella because there is not a single cloud.", hint: "👉 Hint: Sunny skies! An umbrella is useless right now.", ans: "doesn't have to" },
+        { qBefore: "To successfully pass the final school test, the students", qAfter: "study hard.", hint: "👉 Hint: All students must do this to win an A+!", ans: "have to" },
+        { qBefore: "A cat", qAfter: "take regular baths like a dog; it cleans itself!", hint: "👉 Hint: Kitty power! The cat doesn't need a bath.", ans: "doesn't have to" },
+        { qBefore: "🔥 BOSS STAGE: If someone gives you a gift, you", qAfter: "buy them one back, though it is nice.", hint: "👉 Hint: It is not a law! You choose what you want to do.", ans: "don't have to" }
+    ];
+
+    const monsterRoster = [
+        { name: "Wild Goblin 👹", avatar: "👹" },
+        { name: "Ghost Pup 👻", avatar: "👻" },
+        { name: "Mud Clod 🐻", avatar: "🐻" },
+        { name: "Sneaky Pixie 🧚", avatar: "🧚" },
+        { name: "Cactus Rex 🌵", avatar: "🌵" },
+        { name: "Spike Balloon 🐡", avatar: "🐡" },
+        { name: "Robo Beetle 🤖", avatar: "🤖" },
+        { name: "Fire Lizard 🦎", avatar: "🦎" },
+        { name: "Shadow Bat 🦇", avatar: "🦇" },
+        { name: "CRIMSON DRAGON 🐲", avatar: "🐲" }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timeLeft = 30;
+    let timerInterval;
+    let selectedSpell = null;
+    let monsterHp = 100;
+    let heroHp = 100;
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function startGame() {
+        currentQuestionIndex = 0;
+        score = 0;
+        heroHp = 100;
+        document.getElementById('score').innerText = score;
+        document.getElementById('hero-hp').style.width = "100%";
+        document.getElementById('hero-hp').style.backgroundColor = "";
+        showScreen('game-screen');
+        setupSpells();
+        loadChallenge();
+    }
+
+    function loadChallenge() {
+        clearInterval(timerInterval);
+        timeLeft = 30;
+        monsterHp = 100;
+        document.getElementById('timer').innerText = timeLeft + "s";
+        document.getElementById('wave-num').innerText = currentQuestionIndex + 1;
+        
+        const currentMonster = monsterRoster[currentQuestionIndex];
+        const avatarEl = document.getElementById('monster-avatar');
+        avatarEl.classList.remove('monster-defeat');
+        document.getElementById('monster-name').innerText = currentMonster.name;
+        avatarEl.innerText = currentMonster.avatar;
+        document.getElementById('monster-hp').style.width = "100%";
+        document.getElementById('monster-hp').style.background = "";
+
+        const data = questions[currentQuestionIndex];
+        document.getElementById('scroll-container').innerHTML = `
+            <div>
+                ${data.qBefore} <div class="dropzone" id="spell-slot">✨ Drop Spell</div> ${data.qAfter}
+                <span class="hint">${data.hint}</span>
+            </div>
+        `;
+
+        const slot = document.getElementById('spell-slot');
+        slot.addEventListener('dragover', (e) => e.preventDefault());
+        slot.addEventListener('dragenter', () => slot.classList.add('hovered'));
+        slot.addEventListener('dragleave', () => slot.classList.remove('hovered'));
+        slot.addEventListener('drop', castSpell);
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft + "s";
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                triggerAttack(false, true);
+            }
+        }, 1000);
+    }
+
+    function setupSpells() {
+        document.querySelectorAll('.spell-gem').forEach(gem => {
+            gem.addEventListener('dragstart', () => {
+                gem.classList.add('dragging');
+                selectedSpell = gem.getAttribute('data-spell');
+            });
+            gem.addEventListener('dragend', () => gem.classList.remove('dragging'));
+        });
+    }
+
+    function castSpell(e) {
+        e.preventDefault();
+        clearInterval(timerInterval);
+        
+        const slot = document.getElementById('spell-slot');
+        slot.classList.remove('hovered');
+        
+        const solution = questions[currentQuestionIndex].ans;
+        const isCorrect = (selectedSpell === solution);
+        
+        slot.innerText = selectedSpell.toUpperCase() + " ✨";
+        slot.style.borderStyle = "solid";
+        slot.style.background = isCorrect ? "#55efc4" : "#ff7675";
+        slot.style.color = isCorrect ? "#2d3436" : "#fff";
+
+        triggerAttack(isCorrect, false);
+    }
+
+    function triggerAttack(isCorrect, isTimeout) {
+        const combatText = document.getElementById('combat-text');
+        const container = document.getElementById('game-container');
+        const arena = document.getElementById('battle-field');
+        const heroSprite = document.getElementById('hero-sprite');
+        const monsterAvatar = document.getElementById('monster-avatar');
+        
+        combatText.style.display = "block";
+        
+        if (isCorrect) {
+            // Trigger Attack Animations
+            heroSprite.classList.add('hero-launch');
+            arena.classList.add('arena-flash');
+            
+            setTimeout(() => {
+                monsterHp = 0;
+                document.getElementById('monster-hp').style.width = "0%";
+                monsterAvatar.classList.add('monster-defeat');
+            }, 200);
+
+            combatText.innerText = "💥 CRITICAL SMASH!";
+            combatText.style.color = "var(--warning)";
+            
+            const points = currentQuestionIndex === 9 ? 200 : 100;
+            score += points;
+            document.getElementById('score').innerText = score;
+        } else {
+            // Trigger Defeat / Damage Animations
+            heroHp -= 20;
+            if(heroHp < 0) heroHp = 0;
+            
+            document.getElementById('hero-hp').style.width = heroHp + "%";
+            if(heroHp < 40) {
+                document.getElementById('hero-hp').style.background = "var(--danger)";
+            }
+            
+            combatText.innerText = isTimeout ? "⌛ TIME OUT! OUCH!" : "⚡ SPELL FAILED!";
+            combatText.style.color = "var(--danger)";
+            container.classList.add('shake-screen');
+        }
+
+        setTimeout(() => {
+            container.classList.remove('shake-screen');
+            arena.classList.remove('arena-flash');
+            heroSprite.classList.remove('hero-launch');
+            combatText.style.display = "none";
+            
+            if (heroHp <= 0) {
+                endGame(false);
+            } else {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    loadChallenge();
+                } else {
+                    endGame(true);
+                }
+            }
+        }, 1600);
+    }
+
+    function endGame(victory) {
+        showScreen('end-screen');
+        document.getElementById('final-score').innerText = score;
+        
+        const title = document.getElementById('end-title');
+        const emoji = document.getElementById('end-emoji');
+        const msg = document.getElementById('end-msg');
+
+        if (victory && score >= 800) {
+            title.innerText = "🏆 Legendary Monarch!";
+            emoji.innerText = "👑";
+            msg.innerText = "Sensational! You vanquished the Crimson Dragon and ruled the charts!";
+        } else if (victory) {
+            title.innerText = "⚔️ Victory Achieved!";
+            emoji.innerText = "🛡️";
+            msg.innerText = "Splendid job! The monsters retreated and the village is safe.";
+        } else {
+            title.innerText = "💀 Defeated in Battle";
+            emoji.innerText = "❌";
+            msg.innerText = "Oh no! The Slime collapsed. Recharge your magic and match your singular vs plural subjects!";
+        }
+    }
+
+    function restartGame() {
+        startGame();
+    }
+</script>
+
+</body>
+</html>

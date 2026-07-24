@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pack Your Suitcase! - Travel Vocabulary Game</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Canvas Confetti for Victory Effects -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Google Font: Inter -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    @keyframes bounce-subtle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-bounce-subtle {
+      animation: bounce-subtle 2s infinite ease-in-out;
+    }
+    @keyframes pack-item {
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      50% { transform: scale(1.1) translateY(-20px); opacity: 0.8; }
+      100% { transform: scale(0.2) translateY(100px); opacity: 0; }
+    }
+    .packing-anim {
+      animation: pack-item 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes shake-err {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .animate-shake {
+      animation: shake-err 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-between p-4 md:p-6 selection:bg-sky-500 selection:text-white">
+
+  <header class="w-full max-w-4xl flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 bg-sky-500/20 border border-sky-400/30 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-sky-500/10 animate-bounce-subtle">
+        🧳
+      </div>
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+          Pack Your Suitcase!
+        </h1>
+        <p class="text-xs text-sky-300/80 font-medium">Master Travel Vocabulary</p>
+      </div>
+    </div>
+
+    <!-- Controls & Stats Bar -->
+    <div class="flex items-center gap-3 bg-slate-800/80 border border-slate-700/60 backdrop-blur px-4 py-2 rounded-2xl shadow-md">
+      <div class="flex items-center gap-1.5 px-2">
+        <span class="text-xs text-slate-400 uppercase font-semibold">Score</span>
+        <span id="score-val" class="text-lg font-bold text-sky-400">0</span>
+      </div>
+      <div class="h-4 w-px bg-slate-700"></div>
+      <div class="flex items-center gap-1.5 px-2">
+        <span class="text-xs text-slate-400 uppercase font-semibold">Streak</span>
+        <span id="streak-val" class="text-lg font-bold text-amber-400">0🔥</span>
+      </div>
+      <div class="h-4 w-px bg-slate-700"></div>
+      <button id="sound-btn" onclick="toggleSound()" class="p-2 text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-xl transition-all" title="Toggle Sound">
+        🔊
+      </button>
+    </div>
+  </header>
+
+  <main class="w-full max-w-4xl flex-1 flex flex-col items-center justify-center gap-6 my-2">
+    <!-- Prompt Card -->
+    <div id="clue-box" class="w-full bg-gradient-to-br from-slate-800 to-slate-800/90 border border-slate-700/80 rounded-3xl p-6 shadow-xl relative overflow-hidden transition-all duration-300">
+      <div class="absolute -right-8 -top-8 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="flex items-center justify-between gap-4 mb-3">
+        <span class="px-3 py-1 bg-sky-500/10 border border-sky-400/20 text-sky-400 rounded-full text-xs font-bold uppercase tracking-wider">
+          Packing Task <span id="progress-text">1/10</span>
+        </span>
+        <span id="hint-tag" class="text-xs text-slate-400 italic">Click the matching travel item below</span>
+      </div>
+      <p id="clue-text" class="text-lg md:text-xl font-semibold text-slate-100 leading-relaxed">
+        Loading challenge...
+      </p>
+    </div>
+
+    <div id="items-grid" class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+      <!-- Items dynamically populated -->
+    </div>
+
+    <div class="w-full bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 mt-2">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+          <span>🧳</span> Inside Suitcase (<span id="packed-count">0</span>/10)
+        </h2>
+        <span class="text-xs text-slate-500">Collect items to complete your trip</span>
+      </div>
+      <div id="suitcase-tray" class="min-h-[56px] flex flex-wrap gap-2 items-center justify-start bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80">
+        <span id="empty-msg" class="text-xs text-slate-500 italic px-2">Your suitcase is empty. Select correct items to pack!</span>
+      </div>
+    </div>
+  </main>
+
+  <div id="victory-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-700/80 rounded-3xl p-8 max-w-md w-full text-center shadow-2xl relative overflow-hidden">
+      <div class="text-5xl mb-4">✈️</div>
+      <h2 class="text-2xl font-black text-white mb-2">All Packed & Ready!</h2>
+      <p class="text-slate-300 text-sm mb-6" id="final-stats">You got everything into your luggage!</p>
+      
+      <div class="bg-slate-800/80 rounded-2xl p-4 mb-6 border border-slate-700/50 flex justify-around">
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Final Score</div>
+          <div id="modal-score" class="text-2xl font-extrabold text-sky-400">0</div>
+        </div>
+        <div class="h-8 w-px bg-slate-700"></div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Best Streak</div>
+          <div id="modal-streak" class="text-2xl font-extrabold text-amber-400">0</div>
+        </div>
+      </div>
+
+      <button onclick="restartGame()" class="w-full py-3.5 px-6 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-sky-500/25 transition-all transform active:scale-95">
+        Play Again 🔄
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Audio FX using Web Audio API
+    let audioEnabled = true;
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.1) {
+      if (!audioEnabled || audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playCorrectSound() {
+      playTone(523.25, 'triangle', 0.1, 0.15); // C5
+      setTimeout(() => playTone(659.25, 'triangle', 0.15, 0.15), 80); // E5
+      setTimeout(() => playTone(783.99, 'triangle', 0.2, 0.2), 160); // G5
+    }
+
+    function playWrongSound() {
+      playTone(220, 'sawtooth', 0.15, 0.15);
+      setTimeout(() => playTone(180, 'sawtooth', 0.2, 0.15), 100);
+    }
+
+    function playWinFanfare() {
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        setTimeout(() => playTone(freq, 'triangle', 0.25, 0.2), idx * 120);
+      });
+    }
+
+    function toggleSound() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('sound-btn').textContent = audioEnabled ? '🔊' : '🔇';
+    }
+
+    const vocabData = [
+      { id: 'passport', name: 'Passport', icon: '🛂', clue: 'An official little book you need to enter and travel in other countries.' },
+      { id: 'suitcase', name: 'Suitcase', icon: '🧳', clue: 'A big bag with wheels to pack your clothes and shoes for a trip.' },
+      { id: 'sunscreen', name: 'Sunscreen', icon: '🧴', clue: 'Cream you rub on your skin to protect yourself from sunburn at the beach.' },
+      { id: 'sunglasses', name: 'Sunglasses', icon: '🕶️', clue: 'Cool dark glasses that shield your eyes from bright sunlight.' },
+      { id: 'camera', name: 'Camera', icon: '📷', clue: 'A gadget used to snap photos and record fun travel memories.' },
+      { id: 'boarding-pass', name: 'Boarding Pass', icon: '🎫', clue: 'Your flight ticket that lets you board the airplane.' },
+      { id: 'adapter', name: 'Travel Adapter', icon: '🔌', clue: 'A special plug so you can charge your phone in another country.' },
+      { id: 'pillow', name: 'Neck Pillow', icon: '🛋️', clue: 'A soft U-shaped cushion that helps you sleep on long flights or bus rides.' },
+      { id: 'water-bottle', name: 'Water Bottle', icon: '🍼', clue: 'A reusable bottle you fill up to stay hydrated while exploring.' },
+      { id: 'guidebook', name: 'Guidebook', icon: '📖', clue: 'A book with maps and tips about cool places to visit on your trip.' },
+      { id: 'first-aid', name: 'First Aid Kit', icon: '🩹', clue: 'A small box with bandages and ointment in case someone gets hurt.' },
+      { id: 'headphones', name: 'Headphones', icon: '🎧', clue: 'Put these over your ears to listen to music or movies privately.' },
+      { id: 'backpack', name: 'Backpack', icon: '🎒', clue: 'A lightweight bag on your back for holding snacks and water during day trips.' },
+      { id: 'power-bank', name: 'Power Bank', icon: '🔋', clue: 'A portable battery you carry around to charge your phone on the go.' },
+      { id: 'luggage-tag', name: 'Luggage Tag', icon: '🏷️', clue: 'A card attached to your bag showing your name and phone number.' },
+      { id: 'toiletries', name: 'Toiletries Bag', icon: '🪥', clue: 'A pouch containing your toothbrush, toothpaste, soap, and shampoo.' },
+      { id: 'umbrella', name: 'Umbrella', icon: '☂️', clue: 'An object you open up to stay dry when it rains on your trip.' },
+      { id: 'currency', name: 'Foreign Cash', icon: '💵', clue: 'The local money used to buy food and souvenirs in another country.' },
+      { id: 'journal', name: 'Travel Journal', icon: '📓', clue: 'A notebook where you write down daily experiences and memories.' },
+      { id: 'swimsuit', name: 'Swimsuit', icon: '🩱', clue: 'Special clothes you wear when swimming in a pool or at the ocean.' },
+      { id: 'snacks', name: 'Snacks', icon: '🍿', clue: 'Quick food like nuts, chips, or fruit bars to eat when you get hungry.' },
+      { id: 'flip-flops', name: 'Flip-Flops', icon: '🩴', clue: 'Light open sandals that are easy to slip on at the beach or pool.' }
+    ];
+
+    let currentQueue = [];
+    let currentTarget = null;
+    let packedItems = [];
+    let score = 0;
+    let streak = 0;
+    let bestStreak = 0;
+    let totalQuestions = 0;
+
+    function restartGame() {
+      score = 0;
+      streak = 0;
+      bestStreak = 0;
+      packedItems = [];
+      
+      // Select 10 random items from vocabulary set
+      const shuffled = [...vocabData].sort(() => Math.random() - 0.5);
+      currentQueue = shuffled.slice(0, 10);
+      totalQuestions = currentQueue.length;
+
+      document.getElementById('score-val').textContent = score;
+      document.getElementById('streak-val').textContent = `${streak}🔥`;
+      document.getElementById('victory-modal').classList.add('hidden');
+      document.getElementById('suitcase-tray').innerHTML = '<span id="empty-msg" class="text-xs text-slate-500 italic px-2">Your suitcase is empty. Select correct items to pack!</span>';
+      
+      renderItemGrid();
+      nextTurn();
+    }
+
+    function renderItemGrid() {
+      const grid = document.getElementById('items-grid');
+      grid.innerHTML = '';
+
+      // Shuffle visible choices
+      const visibleSet = [...vocabData].sort(() => Math.random() - 0.5);
+
+      visibleSet.forEach(item => {
+        const button = document.createElement('button');
+        button.id = `card-${item.id}`;
+        button.onclick = () => checkSelection(item.id, button);
+        button.className = "group relative bg-slate-800 hover:bg-slate-700/80 border border-slate-700/70 hover:border-sky-500/50 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 transition-all duration-200 transform hover:-translate-y-1 active:scale-95 shadow-md";
+        
+        button.innerHTML = `
+          <span class="text-3xl filter drop-shadow group-hover:scale-110 transition-transform">${item.icon}</span>
+          <span class="text-xs font-semibold text-slate-200 group-hover:text-sky-300 text-center leading-tight">${item.name}</span>
+        `;
+        grid.appendChild(button);
+      });
+    }
+
+    function nextTurn() {
+      if (currentQueue.length === 0) {
+        finishGame();
+        return;
+      }
+
+      currentTarget = currentQueue[0];
+      const progressIndex = totalQuestions - currentQueue.length + 1;
+      
+      document.getElementById('progress-text').textContent = `${progressIndex}/${totalQuestions}`;
+      document.getElementById('clue-text').textContent = `"${currentTarget.clue}"`;
+      document.getElementById('packed-count').textContent = packedItems.length;
+    }
+
+    function checkSelection(selectedId, btnElement) {
+      if (!currentTarget) return;
+
+      if (selectedId === currentTarget.id) {
+        // Correct Choice
+        playCorrectSound();
+        score += 100 + (streak * 20);
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+
+        // Visual feedback on card
+        btnElement.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-500/20');
+        
+        // Disable packed item card
+        setTimeout(() => {
+          btnElement.classList.add('opacity-40', 'pointer-events-none');
+          btnElement.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-500/20');
+        }, 400);
+
+        // Add to packed tray
+        packItemIntoSuitcase(currentTarget);
+
+        // Advance question queue
+        currentQueue.shift();
+
+        setTimeout(() => {
+          nextTurn();
+        }, 500);
+
+      } else {
+        // Wrong Choice
+        playWrongSound();
+        streak = 0;
+        
+        btnElement.classList.add('ring-2', 'ring-rose-500', 'bg-rose-500/20', 'animate-shake');
+        setTimeout(() => {
+          btnElement.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-500/20', 'animate-shake');
+        }, 450);
+      }
+
+      document.getElementById('score-val').textContent = score;
+      document.getElementById('streak-val').textContent = `${streak}🔥`;
+    }
+
+    function packItemIntoSuitcase(item) {
+      packedItems.push(item);
+      const tray = document.getElementById('suitcase-tray');
+      const emptyMsg = document.getElementById('empty-msg');
+      if (emptyMsg) emptyMsg.remove();
+
+      const tag = document.createElement('div');
+      tag.className = "flex items-center gap-1.5 bg-sky-500/10 border border-sky-400/30 text-sky-300 px-2.5 py-1 rounded-xl text-xs font-semibold animate-bounce-subtle";
+      tag.innerHTML = `<span>${item.icon}</span> <span>${item.name}</span>`;
+      tray.appendChild(tag);
+    }
+
+    function finishGame() {
+      playWinFanfare();
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+
+      document.getElementById('modal-score').textContent = score;
+      document.getElementById('modal-streak').textContent = `${bestStreak}🔥`;
+      document.getElementById('final-stats').textContent = `Great vocabulary work! You successfully packed all ${totalQuestions} travel essentials!`;
+      document.getElementById('victory-modal').classList.remove('hidden');
+    }
+
+    // Launch game on DOM load
+    window.onload = function() {
+      restartGame();
+    };
+  </script>
+</body>
+</html>
