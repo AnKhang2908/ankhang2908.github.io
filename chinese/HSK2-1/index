@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中文课程</title>
 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Microsoft YaHei", Arial, sans-serif;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+    min-height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:1000px;
+    margin:40px auto;
+}
+
+h1{
+    color:white;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+p{
+    color:white;
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h2{
+    margin-bottom:20px;
+    color:#333;
+}
+
+.btn{
+    display:inline-block;
+    text-decoration:none;
+    background:#2196F3;
+    color:white;
+    padding:10px 22px;
+    border-radius:8px;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:#1565C0;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>📚 中文课程</h1>
+<p>  HSK2.1 - MR.KHANG</p>
+
+<div class="grid">
+
+<div class="card">
+<h2>第一课</h2>
+<a class="btn" href="1.第一课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第二课</h2>
+<a class="btn" href="2.第二课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第三课</h2>
+<a class="btn" href="3.第三课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第四课</h2>
+<a class="btn" href="4.第四课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第五课</h2>
+<a class="btn" href="5.第五课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第六课</h2>
+<a class="btn" href="6.第六课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第七课</h2>
+<a class="btn" href="7.第七课.html">打开</a>
+</div>
+
+<div class="card">
+<h2>第八课</h2>
+<a class="btn" href="8.第八课.html">打开</a>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
