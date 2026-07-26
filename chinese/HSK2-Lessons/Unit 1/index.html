@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>九月去北京旅游最好 · Bài 1 · HSK Chuẩn 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,600;0,700;1,500&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4ECDA;
+  --paper-2:#EBE0C4;
+  --paper-3:#E2D5B2;
+  --ink:#251F17;
+  --ink-soft:#5B5140;
+  --red:#AE3327;
+  --red-deep:#7E2018;
+  --red-tint:#F1DAD3;
+  --gold:#B98A2E;
+  --gold-tint:#F0E1B8;
+  --jade:#3E6659;
+  --jade-tint:#DCE9E1;
+  --line:#D8C9A0;
+  --shadow: 0 10px 30px -14px rgba(37,31,23,.35);
+  --radius: 18px;
+  --serif-cn:'Noto Serif SC', serif;
+  --serif-vn:'Noto Serif', serif;
+  --sans-cn:'Noto Sans SC', sans-serif;
+  --sans-vn:'Noto Sans', sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #FBF6E8 0%, var(--paper) 55%),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--sans-vn);
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:74px;
+}
+.app{
+  max-width:640px;
+  margin:0 auto;
+  position:relative;
+  min-height:100vh;
+  background:
+    linear-gradient(180deg, rgba(174,51,39,.03), transparent 180px),
+    var(--paper);
+  box-shadow: 0 0 0 1px rgba(37,31,23,.04);
+}
+
+/* ---------- top progress ---------- */
+.progress-bar{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:4px;
+  padding:10px 12px;
+  background:rgba(244,236,218,.9);
+  backdrop-filter: blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.progress-bar .brand{
+  font-family:var(--serif-cn);
+  font-weight:700;
+  font-size:15.5px;
+  color:var(--red-deep);
+  white-space:nowrap;
+  letter-spacing:.02em;
+  flex:0 0 auto;
+  margin-right:6px;
+}
+.dots{display:flex; gap:6px; flex:1 1 auto; overflow-x:auto; scrollbar-width:none;}
+.dots::-webkit-scrollbar{display:none;}
+.dot{
+  flex:0 0 auto;
+  padding:7px 13px; border-radius:99px;
+  border:1.5px solid var(--line);
+  background:var(--paper-2);
+  color:var(--ink-soft);
+  font-size:15.5px; font-weight:700;
+  white-space:nowrap;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:.2s;
+  font-family:var(--sans-vn);
+}
+.dot.done{background:var(--gold-tint); border-color:var(--gold); color:var(--gold-tint) ; color:#8a6a1f;}
+.dot.active{background:var(--red); border-color:var(--red); color:#fff; box-shadow:0 3px 10px -3px rgba(174,51,39,.6);}
+
+/* ---------- tabbed panels (thay cho cuộn dọc) ---------- */
+.app > .slide{display:none;}
+.app > .slide.active{display:block; animation:fadeIn .3s ease;}
+
+/* ---------- seal / signature badge ---------- */
+.seal{
+  --sz:56px;
+  width:var(--sz); height:var(--sz);
+  border-radius:50%;
+  background:var(--red);
+  color:#F6E9C9;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif-cn);
+  font-weight:700;
+  font-size:23.5px;
+  position:relative;
+  flex:0 0 auto;
+  transform:rotate(-4deg);
+  box-shadow: inset 0 0 0 2px rgba(246,233,201,.35), 0 8px 16px -8px rgba(174,51,39,.7);
+}
+.seal::before{
+  content:"";
+  position:absolute; inset:-6px;
+  border-radius:50%;
+  border:1.5px dashed rgba(174,51,39,.35);
+}
+.eyebrow{
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:14px;
+}
+.eyebrow .txt{display:flex; flex-direction:column;}
+.eyebrow .txt .vn{
+  font-family:var(--sans-vn); font-weight:600; font-size:14px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--red-deep);
+}
+.eyebrow .txt .cn{
+  font-family:var(--serif-cn); font-weight:700; font-size:17.5px; color:var(--ink-soft);
+  margin-top:2px;
+}
+
+/* ---------- slide/section ---------- */
+.slide{
+  padding:28px 20px 40px;
+  border-bottom:1px solid var(--line);
+  scroll-margin-top:56px;
+}
+.slide h2.title{
+  font-family:var(--serif-vn);
+  font-size:30.5px;
+  font-weight:700;
+  line-height:1.25;
+  margin:0 0 6px;
+  color:var(--ink);
+}
+.slide h2.title .cn-big{
+  display:block;
+  font-family:var(--serif-cn);
+  font-size:17.5px;
+  font-weight:600;
+  color:var(--gold);
+  margin-top:6px;
+  letter-spacing:.02em;
+}
+.lede{color:var(--ink-soft); font-size:17px; line-height:1.65; margin:0 0 18px;}
+
+/* ---------- cards ---------- */
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
+  margin-bottom:14px;
+}
+.card + .card{margin-top:14px;}
+
+/* ---------- cover ---------- */
+.cover{
+  padding:52px 24px 44px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.cover .ring{
+  width:112px; height:112px; border-radius:50%;
+  background:var(--red);
+  color:#F6E9C9;
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 22px;
+  font-family:var(--serif-cn);
+  font-size:52px; font-weight:700;
+  box-shadow: inset 0 0 0 3px rgba(246,233,201,.3), 0 16px 30px -12px rgba(174,51,39,.55);
+  position:relative;
+}
+.cover .ring::before{
+  content:"";
+  position:absolute; inset:-10px;
+  border-radius:50%;
+  border:1.5px dashed rgba(174,51,39,.3);
+}
+.cover .unit{
+  font-size:14px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--red-deep); font-weight:700; margin-bottom:14px;
+}
+.cover h1{
+  font-family:var(--serif-cn);
+  font-size:40px; line-height:1.3; margin:0 0 10px; color:var(--ink);
+}
+.cover .pinyin{
+  font-family:var(--sans-vn); font-style:italic; color:var(--gold); font-size:17.5px; margin-bottom:14px;
+}
+.cover .vn{
+  font-family:var(--serif-vn); font-size:21px; color:var(--ink-soft); line-height:1.5; max-width:420px; margin:0 auto 26px;
+}
+.cover .meta{
+  display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+  font-size:14px; color:var(--ink-soft); margin-bottom:28px;
+}
+.cover .meta span{background:var(--paper-2); padding:5px 12px; border-radius:99px; border:1px solid var(--line);}
+.btn{
+  appearance:none; border:none; cursor:pointer;
+  font-family:var(--sans-vn); font-weight:700; font-size:17px;
+  padding:13px 26px; border-radius:99px;
+  background:var(--red); color:#fff;
+  box-shadow:0 10px 22px -10px rgba(174,51,39,.6);
+  transition:.2s;
+}
+.btn:hover{background:var(--red-deep); transform:translateY(-1px);}
+.btn.ghost{
+  background:transparent; color:var(--red-deep); border:1.5px solid var(--red);
+  box-shadow:none;
+}
+.btn.ghost:hover{background:var(--red-tint);}
+.btn.small{padding:8px 16px; font-size:15px;}
+.btn.jade{background:var(--jade); box-shadow:0 10px 22px -10px rgba(62,102,89,.55);}
+.btn.jade:hover{background:#325549;}
+.btn:disabled{opacity:.45; cursor:default;}
+
+/* ---------- dialogue ---------- */
+.dlg-tabs{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+.dlg-tab{
+  flex:1 1 auto; min-width:70px;
+  text-align:center;
+  padding:9px 6px; border-radius:12px;
+  background:var(--paper-2); border:1px solid var(--line);
+  font-size:15px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+}
+.dlg-tab.active{background:var(--red); border-color:var(--red); color:#fff;}
+.dlg-panel{display:none;}
+.dlg-panel.active{display:block; animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.dlg-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.dlg-head .place{
+  font-size:14px; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:.1em;
+}
+.audio-btn{
+  display:flex; align-items:center; gap:7px;
+  background:var(--jade-tint); color:var(--jade); border:1px solid rgba(62,102,89,.3);
+  border-radius:99px; padding:6px 13px; font-size:14px; font-weight:700; cursor:pointer;
+}
+.audio-btn:hover{background:#cfe4d9;}
+.audio-btn svg{width:13px; height:13px;}
+.track-tag{
+  background:var(--jade-tint); color:var(--jade); border:1px solid rgba(62,102,89,.3);
+  border-radius:99px; padding:6px 13px; font-size:15.5px; font-weight:700;
+}
+.dlg-audio{
+  width:100%; margin-bottom:18px; border-radius:99px; height:42px;
+  accent-color:var(--red);
+}
+.line{display:flex; gap:10px; margin-bottom:14px;}
+.line .who{
+  flex:0 0 26px; height:26px; border-radius:50%;
+  background:var(--paper-3); color:var(--ink-soft); font-weight:700; font-size:14px;
+  display:flex; align-items:center; justify-content:center; margin-top:1px;
+}
+.line.b .who{background:var(--red-tint); color:var(--red-deep);}
+.line .txt .cn{font-family:var(--serif-cn); font-size:20px; font-weight:600; color:var(--ink);}
+.line .txt .py{font-family:var(--sans-vn); font-style:italic; color:var(--gold); font-size:15px; margin-top:1px;}
+.line .txt .vn{font-family:var(--sans-vn); color:var(--ink-soft); font-size:15.5px; margin-top:3px;}
+
+.vocab-list{margin-top:16px; border-top:1px dashed var(--line); padding-top:12px;}
+.vocab-list .h{font-size:13.5px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--red-deep); margin-bottom:8px;}
+.vocab-row{display:flex; align-items:baseline; gap:8px; padding:5px 0; font-size:16px; border-bottom:1px dotted var(--line);}
+.vocab-row:last-child{border-bottom:none;}
+.vocab-row{flex-wrap:wrap;}
+.vocab-row .cn{font-family:var(--serif-cn); font-weight:700; color:var(--ink); min-width:78px;}
+.vocab-row .py{font-style:italic; color:var(--gold); min-width:92px; font-size:15px;}
+.vocab-row .pos{color:#9a8f74; font-size:13px; min-width:38px;}
+.vocab-row .vn{color:var(--ink-soft); flex:1;}
+
+/* ---------- grammar ---------- */
+.gram-block{margin-bottom:22px;}
+.gram-block:last-child{margin-bottom:0;}
+.gram-block h3{
+  font-family:var(--serif-vn); font-size:20px; margin:0 0 4px; color:var(--ink);
+  display:flex; align-items:center; gap:8px;
+}
+.gram-block h3 .tag{
+  font-family:var(--serif-cn); background:var(--red); color:#fff; font-size:15.5px;
+  padding:2px 9px; border-radius:7px; font-weight:700;
+}
+.gram-block p{font-size:16px; color:var(--ink-soft); line-height:1.6; margin:6px 0 12px;}
+table.gtab{width:100%; border-collapse:collapse; margin-bottom:12px; font-size:15.5px;}
+table.gtab th{
+  background:var(--paper-2); color:var(--red-deep); text-align:left; padding:8px 10px;
+  font-size:13px; text-transform:uppercase; letter-spacing:.06em; border:1px solid var(--line);
+}
+table.gtab td{padding:8px 10px; border:1px solid var(--line); font-family:var(--serif-cn); font-weight:600;}
+table.gtab td.hl{background:var(--gold-tint); color:var(--red-deep);}
+.examples{list-style:none; margin:0; padding:0;}
+.examples li{
+  font-size:16px; padding:9px 12px; background:var(--paper-2); border-radius:10px; margin-bottom:6px;
+  font-family:var(--serif-cn); font-weight:600; color:var(--ink);
+}
+.examples li b{color:var(--red-deep);}
+
+/* ---------- matching game ---------- */
+.match-wrap{display:flex; gap:10px;}
+.match-col{flex:1; display:flex; flex-direction:column; gap:8px;}
+.match-item{
+  border:1.5px solid var(--line); background:#fff; border-radius:12px; padding:11px 12px;
+  font-size:16px; cursor:pointer; transition:.15s; text-align:center;
+  min-height:44px; display:flex; align-items:center; justify-content:center;
+}
+.match-col.left .match-item{font-family:var(--serif-cn); font-weight:700; font-size:17.5px;}
+.match-item.picked{border-color:var(--gold); background:var(--gold-tint);}
+.match-item.correct{border-color:var(--jade); background:var(--jade-tint); color:var(--jade); cursor:default;}
+.match-item.wrong{animation:shake .3s;}
+.match-item.done{opacity:.5;}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-4px);}
+  75%{transform:translateX(4px);}
+}
+.match-status{margin-top:12px; font-size:15px; color:var(--ink-soft); text-align:center;}
+.match-status b{color:var(--jade);}
+
+/* ---------- icon grid (khởi động) ---------- */
+.icon-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px;}
+.icon-card{
+  background:#fff; border:1.5px solid var(--line); border-radius:14px; padding:10px 6px;
+  text-align:center; cursor:pointer; transition:.15s;
+}
+.icon-card svg{width:38px; height:38px; margin-bottom:4px;}
+.icon-card .lbl{font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+.icon-card.picked{border-color:var(--gold); background:var(--gold-tint);}
+.icon-card.correct{border-color:var(--jade); background:var(--jade-tint);}
+.icon-card.wrong{animation:shake .3s;}
+
+.word-grid{display:flex; flex-direction:column; gap:8px;}
+.word-chip{
+  border:1.5px solid var(--line); background:#fff; border-radius:12px; padding:11px 12px;
+  font-family:var(--serif-cn); font-weight:700; font-size:17.5px; text-align:center; cursor:pointer;
+}
+.word-chip .py{display:block; font-family:var(--sans-vn); font-style:italic; font-weight:400; color:var(--gold); font-size:13px;}
+.word-chip.picked{border-color:var(--gold); background:var(--gold-tint);}
+.word-chip.correct{border-color:var(--jade); background:var(--jade-tint); color:var(--jade); cursor:default;}
+.word-chip.wrong{animation:shake .3s;}
+
+.km-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+@media(max-width:380px){.km-grid{grid-template-columns:1fr;}}
+.month-card{
+  background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:14px 12px; cursor:pointer;
+  position:relative; transition:.2s;
+}
+.month-card svg{width:100%; height:74px; margin-bottom:8px;}
+.month-card .cn{font-family:var(--serif-cn); font-weight:700; font-size:17.5px;}
+.month-card .py{font-style:italic; color:var(--gold); font-size:13px; display:block;}
+.month-card .vn{font-size:14px; color:var(--ink-soft); margin-top:2px;}
+.month-card .note{
+  display:none; margin-top:8px; font-size:14px; color:var(--ink-soft); line-height:1.5;
+  border-top:1px dashed var(--line); padding-top:8px;
+}
+.month-card.open .note{display:block;}
+.month-card.best::after{
+  content:"Tốt nhất";
+  position:absolute; top:-9px; right:10px;
+  background:var(--red); color:#fff; font-size:12px; font-weight:700;
+  padding:3px 9px; border-radius:99px;
+}
+
+/* ---------- q&a ---------- */
+.qa{border:1px solid var(--line); border-radius:14px; margin-bottom:10px; overflow:hidden;}
+.qa .q{
+  padding:12px 14px; background:#fff; cursor:pointer; font-size:16px; font-weight:600; color:var(--ink);
+  display:flex; gap:10px; align-items:flex-start;
+}
+.qa .q .num{
+  flex:0 0 20px; height:20px; border-radius:50%; background:var(--red); color:#fff;
+  font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:1px;
+}
+.qa .a{max-height:0; overflow:hidden; transition:max-height .3s ease; background:var(--paper-2);}
+.qa.open .a{max-height:220px;}
+.qa .a-in{padding:12px 14px 14px 44px; font-size:15.5px; color:var(--ink-soft); line-height:1.6;}
+.qa .a-in .cn{font-family:var(--serif-cn); color:var(--ink); font-weight:600; display:block; margin-bottom:2px;}
+
+/* ---------- fill in blank ---------- */
+.fib{margin-bottom:16px; padding-bottom:16px; border-bottom:1px dashed var(--line);}
+.fib:last-child{border-bottom:none; margin-bottom:0; padding-bottom:0;}
+.fib .prompt{font-family:var(--serif-cn); font-size:18.5px; font-weight:600; margin-bottom:6px; line-height:1.6;}
+.fib input{
+  border:1.5px solid var(--line); border-radius:8px; padding:4px 8px; width:74px; text-align:center;
+  font-family:var(--serif-cn); font-size:16.5px; font-weight:700; margin:0 2px;
+}
+.fib input.ok{border-color:var(--jade); background:var(--jade-tint);}
+.fib input.bad{border-color:var(--red); background:var(--red-tint);}
+.fib .vn{font-size:15px; color:var(--ink-soft); margin-top:4px;}
+.fib .fb{font-size:14px; margin-top:6px; display:none;}
+.fib .fb.show{display:block;}
+.fib .fb.ok-t{color:var(--jade); font-weight:700;}
+.fib .fb.bad-t{color:var(--red-deep); font-weight:700;}
+
+/* ---------- phonetics ---------- */
+.phon-cols{display:grid; grid-template-columns:1fr 1fr; gap:10px 14px;}
+@media(max-width:380px){.phon-cols{grid-template-columns:1fr;}}
+.phon-item{font-size:16px; padding:8px 0; border-bottom:1px dotted var(--line); text-align:center;}
+.phon-item .cn{font-family:var(--serif-cn); font-weight:700; display:block;}
+.phon-item .cn .stress{color:var(--red); }
+.phon-item .py{font-style:italic; color:var(--gold); font-size:13.5px;}
+
+/* ---------- hanzi ---------- */
+.stroke-row{display:flex; gap:12px; align-items:center; margin-bottom:14px;}
+.stroke-row .svgbox{
+  flex:0 0 58px; height:58px; background:var(--paper-2); border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+}
+.stroke-row .svgbox svg{width:34px; height:34px;}
+.stroke-row .info b{font-family:var(--sans-vn); font-size:16px; display:block;}
+.stroke-row .info span{font-size:14px; color:var(--ink-soft);}
+.stroke-row .ex{margin-left:auto; display:flex; gap:8px;}
+.stroke-row .ex div{font-family:var(--serif-cn); font-size:26px; text-align:center;}
+.stroke-row .ex div small{display:block; font-family:var(--sans-vn); font-style:italic; font-size:12px; color:var(--gold);}
+
+.evo{display:flex; align-items:center; gap:8px; margin:10px 0 8px; flex-wrap:wrap;}
+.evo span{font-size:23.5px; color:var(--ink-soft);}
+.evo b{font-family:var(--serif-cn); font-size:35.5px; color:var(--red-deep);}
+.evo .arrow{color:var(--gold); font-size:19px;}
+
+.radical-card{display:flex; gap:12px; align-items:center; margin-bottom:12px;}
+.radical-card .rad{
+  flex:0 0 52px; height:52px; border-radius:50%; background:var(--red); color:#fff;
+  font-family:var(--serif-cn); font-size:28.5px; font-weight:700; display:flex; align-items:center; justify-content:center;
+}
+.radical-card .info{flex:1; font-size:15px; color:var(--ink-soft); line-height:1.5;}
+.radical-card .info b{color:var(--ink); font-family:var(--sans-vn);}
+.radical-card .examples2{display:flex; gap:10px; margin-top:4px;}
+.radical-card .examples2 div{font-family:var(--serif-cn); font-size:22.5px; text-align:center;}
+.radical-card .examples2 small{display:block; font-family:var(--sans-vn); font-style:italic; font-size:12px; color:var(--gold);}
+
+/* ---------- van dung ---------- */
+.sample-dlg{background:var(--paper-2); border-radius:12px; padding:12px 14px; font-size:15.5px; margin-bottom:14px; line-height:1.7;}
+.sample-dlg .cn{font-family:var(--serif-cn); font-weight:600;}
+.sample-dlg .vn{color:var(--ink-soft); font-style:italic; display:block; font-size:13.5px; margin-bottom:6px;}
+table.fillt{width:100%; border-collapse:collapse; font-size:15px; margin-bottom:10px;}
+table.fillt th{background:var(--paper-2); padding:7px 8px; border:1px solid var(--line); font-size:13px; color:var(--red-deep);}
+table.fillt td{border:1px solid var(--line); padding:6px 8px;}
+table.fillt td[contenteditable]{background:#fffef9;}
+table.fillt td[contenteditable]:focus{outline:2px solid var(--gold);}
+.addrow{font-size:13.5px; color:var(--red-deep); font-weight:700; cursor:pointer; display:inline-block; margin-top:4px;}
+
+/* ---------- vocab game sub-tabs ---------- */
+.vg-panel{display:none;}
+.vg-panel.active{display:block; animation:fadeIn .3s ease;}
+
+/* ---------- quiz game (grammar + vocab) ---------- */
+.gg-top{display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--ink-soft); margin-bottom:8px; font-weight:600;}
+.gg-score b{color:var(--gold);}
+.gg-progress b{color:var(--red-deep);}
+.gg-bar{height:6px; background:var(--paper-2); border-radius:99px; overflow:hidden; margin-bottom:18px;}
+.gg-bar-fill{height:100%; width:10%; background:var(--red); border-radius:99px; transition:width .35s ease;}
+.gg-sentence{
+  font-family:var(--serif-cn); font-size:21px; font-weight:700; line-height:1.7; text-align:center;
+  padding:18px 14px; background:var(--paper-2); border-radius:14px; margin-bottom:8px;
+}
+.gg-sentence .blank{
+  display:inline-block; min-width:44px; border-bottom:3px solid var(--red); color:var(--red-deep);
+  padding:0 4px;
+}
+.gg-vn{text-align:center; font-size:13.5px; color:var(--ink-soft); font-style:italic; margin-bottom:16px;}
+.gg-options{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.gg-opt{
+  border:1.5px solid var(--line); background:#fff; border-radius:12px; padding:13px 10px;
+  font-family:var(--serif-cn); font-weight:700; font-size:18px; text-align:center; cursor:pointer; transition:.15s;
+}
+.gg-opt:hover{border-color:var(--gold);}
+.gg-opt.correct{background:var(--jade-tint); border-color:var(--jade); color:var(--jade);}
+.gg-opt.wrong{background:var(--red-tint); border-color:var(--red); color:var(--red-deep); animation:shake .3s;}
+.gg-opt.disabled{pointer-events:none; opacity:.55;}
+.gg-feedback{text-align:center; font-size:14px; font-weight:700; margin-top:14px; min-height:20px;}
+.gg-feedback.ok-t{color:var(--jade);}
+.gg-feedback.bad-t{color:var(--red-deep);}
+.gg-end{text-align:center; padding:14px 0 4px;}
+.gg-end-title{font-family:var(--serif-vn); font-size:22px; font-weight:700; margin-bottom:6px;}
+.gg-end-sub{font-size:14px; color:var(--ink-soft); margin-bottom:16px;}
+
+/* ---------- memory match game ---------- */
+.memory-status{font-size:13.5px; color:var(--ink-soft); margin-bottom:12px; text-align:center; font-weight:600;}
+.memory-status b{color:var(--red-deep);}
+.memory-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;}
+@media(max-width:380px){.memory-grid{grid-template-columns:repeat(3,1fr);}}
+.memory-card{
+  aspect-ratio:1/1; border-radius:10px; cursor:pointer; position:relative;
+  perspective:600px;
+}
+.memory-card .inner{
+  width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .4s;
+}
+.memory-card.flipped .inner{transform:rotateY(180deg);}
+.memory-card .face{
+  position:absolute; inset:0; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  backface-visibility:hidden; padding:4px; text-align:center; overflow:hidden;
+}
+.memory-card .face.back{
+  background:var(--red); color:#F6E9C9; font-family:var(--serif-cn); font-size:20px; font-weight:700;
+}
+.memory-card .face.front{
+  background:#fff; border:1.5px solid var(--gold); transform:rotateY(180deg); font-size:11.5px; font-weight:700;
+  color:var(--ink); line-height:1.25;
+}
+.memory-card .face.front.cn{font-family:var(--serif-cn); font-size:16px;}
+.memory-card.matched .face.front{background:var(--jade-tint); border-color:var(--jade); color:var(--jade);}
+.memory-card.matched{cursor:default;}
+
+/* ---------- bottom nav ---------- */
+.bottom-nav{
+  position:fixed; bottom:0; left:0; right:0; z-index:50;
+  background:rgba(244,236,218,.95); backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+}
+.bottom-nav .navlabel{
+  font-size:13.5px; color:var(--ink-soft); text-align:center; flex:1;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.nav-btn{
+  border:none; cursor:pointer; border-radius:99px; width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--paper-2); border:1px solid var(--line); color:var(--ink-soft);
+  flex:0 0 auto;
+}
+.nav-btn.primary{background:var(--red); color:#fff; border-color:var(--red);}
+.nav-btn:disabled{opacity:.35;}
+.nav-btn svg{width:16px; height:16px;}
+
+/* small helpers */
+.note-box{
+  background:var(--jade-tint); border:1px solid rgba(62,102,89,.25); border-radius:12px;
+  padding:11px 13px; font-size:15px; color:#2c4a40; line-height:1.55; margin-bottom:14px;
+}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+@media(max-width:380px){.two-col{grid-template-columns:1fr;}}
+.divider{border:none; border-top:1px dashed var(--line); margin:20px 0;}
+footer.end{
+  text-align:center; padding:40px 20px 60px; color:var(--ink-soft); font-size:15px;
+}
+footer.end .seal{margin:0 auto 14px;}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <div class="progress-bar" id="progressBar">
+    <div class="brand">HSK · 第一课</div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <!-- ================= 0. COVER ================= -->
+  <section class="slide cover" id="s0">
+    <div class="unit">Giáo trình chuẩn HSK 2 · Bài 1</div>
+    <div class="ring">01</div>
+    <h1>九月去北京旅游最好。</h1>
+    <div class="pinyin">Jiǔ yuè qù Běijīng lǚyóu zuì hǎo.</div>
+    <div class="vn">Nếu đi Bắc Kinh để du lịch thì tốt nhất là đi vào tháng chín.</div>
+    <div class="meta">
+      <span>🀄 12 từ mới</span>
+      <span>💬 4 hội thoại</span>
+      <span>📐 3 ngữ pháp</span>
+    </div>
+    <button class="btn" onclick="goTo(1)">Bắt đầu học →</button>
+  </section>
+
+  <!-- ================= 1. KHỞI ĐỘNG 1 ================= -->
+  <section class="slide" id="s1">
+    <div class="eyebrow">
+      <div class="seal">热身</div>
+      <div class="txt"><span class="vn">Phần khởi động · 1</span><span class="cn">给下面的词语选择对应的图片</span></div>
+    </div>
+    <h2 class="title">Chọn hình tương ứng<span class="cn-big">Bấm vào từ, rồi bấm vào hình tương ứng</span></h2>
+    <p class="lede">Ghép mỗi từ dưới đây với hình minh hoạ đúng nghĩa của nó.</p>
+    <div class="card">
+      <div style="display:flex; gap:14px;">
+        <div class="word-grid" id="w1-words" style="flex:1;"></div>
+        <div class="icon-grid" id="w1-icons" style="flex:1; grid-template-columns:repeat(2,1fr); align-content:start;"></div>
+      </div>
+      <div class="match-status" id="w1-status">Đã ghép đúng: <b>0</b>/6</div>
+    </div>
+  </section>
+
+  <!-- ================= 2. KHỞI ĐỘNG 2 ================= -->
+  <section class="slide" id="s2">
+    <div class="eyebrow">
+      <div class="seal">热身</div>
+      <div class="txt"><span class="vn">Phần khởi động · 2</span><span class="cn">看下面的图片，说说来北京旅游最好的时间</span></div>
+    </div>
+    <h2 class="title">Tháng nào đẹp nhất để đi Bắc Kinh?<span class="cn-big">Bấm vào từng tháng để xem đặc điểm thời tiết</span></h2>
+    <div class="km-grid" id="months"></div>
+    <div class="note-box" id="monthsAnswer" style="display:none;">
+      Theo bài học: <b>九月 (tháng chín)</b> là thời điểm tốt nhất, vì "九月的北京天气不冷也不热" — tháng chín thời tiết Bắc Kinh không lạnh cũng không nóng.
+    </div>
+  </section>
+
+  <!-- ================= 3. BÀI HỌC (DIALOGUES) ================= -->
+  <section class="slide" id="s3">
+    <div class="eyebrow">
+      <div class="seal">课文</div>
+      <div class="txt"><span class="vn">Bài học</span><span class="cn">课文 · Kèm phát âm</span></div>
+    </div>
+    <h2 class="title">4 đoạn hội thoại<span class="cn-big">Bấm 🔊 để nghe máy đọc, bấm tab để chuyển hội thoại</span></h2>
+    <div class="dlg-tabs" id="dlgTabs"></div>
+    <div class="card" id="dlgPanels"></div>
+  </section>
+
+  <!-- ================= 4. NGỮ PHÁP ================= -->
+  <section class="slide" id="s4">
+    <div class="eyebrow">
+      <div class="seal">注释</div>
+      <div class="txt"><span class="vn">Chú thích ngữ pháp</span><span class="cn">语法点</span></div>
+    </div>
+    <h2 class="title">3 điểm ngữ pháp cần nhớ</h2>
+
+    <div class="card gram-block">
+      <h3><span class="tag">要</span>Trợ động từ 要</h3>
+      <p>Dùng trước động từ, thể hiện nguyện vọng làm việc gì đó. Ở dạng phủ định, người ta thường dùng <b>不想</b>.</p>
+      <table class="gtab">
+        <tr><th>Chủ ngữ</th><th>Trợ động từ 要</th><th>Vị ngữ</th></tr>
+        <tr><td>王方</td><td class="hl">要</td><td>学习英语</td></tr>
+        <tr><td>我</td><td class="hl">要</td><td>吃米饭</td></tr>
+        <tr><td>我们</td><td class="hl">要不要</td><td>买几个新的椅子？</td></tr>
+      </table>
+      <ul class="examples">
+        <li>(1) 小王要去，我<b>不想</b>去。</li>
+        <li>(2) A: 你要吃米饭吗？ B: 我<b>不想</b>吃米饭。</li>
+        <li>(3) A: 我要去商店买椅子，你去吗？ B: 我不去，我<b>不想</b>买椅子。</li>
+      </ul>
+    </div>
+
+    <div class="card gram-block">
+      <h3><span class="tag">最</span>Phó từ chỉ mức độ 最</h3>
+      <p>Thể hiện vị trí hàng đầu trong các sự vật cùng loại — "nhất".</p>
+      <ul class="examples">
+        <li>(1) 大卫的汉语<b>最</b>好。</li>
+        <li>(2) 我<b>最</b>喜欢吃米饭。</li>
+        <li>(3) 它的眼睛<b>最</b>漂亮。</li>
+      </ul>
+    </div>
+
+    <div class="card gram-block">
+      <h3><span class="tag">几 · 多</span>Cách diễn tả số ước lượng</h3>
+      <p><b>几</b> chỉ con số không xác định nhỏ hơn 10, phía sau phải có lượng từ:</p>
+      <table class="gtab">
+        <tr><th>几</th><th>Lượng từ</th><th>Danh từ</th></tr>
+        <tr><td class="hl">几</td><td>个</td><td>人</td></tr>
+        <tr><td class="hl">几</td><td>本</td><td>书</td></tr>
+        <tr><td class="hl">几</td><td>个</td><td>新的椅子</td></tr>
+      </table>
+      <ul class="examples">
+        <li>(1) 车上有<b>几</b>个人。</li>
+        <li>(2) 我想买<b>几</b>本书。</li>
+        <li>(3) 我们要不要买<b>几</b>个新的椅子？</li>
+      </ul>
+      <p style="margin-top:14px;">几 dùng sau 十 để chỉ số 10–20 (十<b>几</b>个人); dùng trước 十 để chỉ số 20–100 (<b>几</b>十个人).</p>
+      <p><b>多</b> kết hợp với số lượng. Nếu số &lt; 10, 多 đứng <i>sau</i> lượng từ:</p>
+      <table class="gtab">
+        <tr><th>Số đếm</th><th>Lượng từ</th><th>多</th><th>Danh từ</th></tr>
+        <tr><td>三</td><td>个</td><td class="hl">多</td><td>星期</td></tr>
+        <tr><td>五</td><td>年</td><td class="hl">多</td><td>—</td></tr>
+        <tr><td>六</td><td>个</td><td class="hl">多</td><td>月</td></tr>
+      </table>
+      <p>Nếu số ≥ 10 (số nguyên chục), 多 đứng <i>trước</i> lượng từ — khi đó 多 và 几 dùng thay thế được cho nhau:</p>
+      <table class="gtab">
+        <tr><th>Số đếm</th><th>多</th><th>Lượng từ</th><th>Danh từ</th></tr>
+        <tr><td>十</td><td class="hl">多</td><td>个</td><td>月</td></tr>
+        <tr><td>二十</td><td class="hl">多</td><td>块</td><td>钱</td></tr>
+        <tr><td>八十</td><td class="hl">多</td><td>个</td><td>人</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= 4b. GAME NGỮ PHÁP ================= -->
+  <section class="slide" id="s4g">
+    <div class="eyebrow">
+      <div class="seal">游戏</div>
+      <div class="txt"><span class="vn">Trò chơi ôn ngữ pháp</span><span class="cn">语法小游戏 · 要 / 最 / 几 / 多 / 也</span></div>
+    </div>
+    <h2 class="title">Điền đúng từ ngữ pháp<span class="cn-big">Chọn từ thích hợp để hoàn thành câu</span></h2>
+    <div class="card">
+      <div class="gg-top">
+        <div class="gg-progress">Câu <b id="ggIdx">1</b>/<span id="ggTotal">10</span></div>
+        <div class="gg-score">⭐ Điểm: <b id="ggScore">0</b></div>
+      </div>
+      <div class="gg-bar"><div class="gg-bar-fill" id="ggBarFill"></div></div>
+      <div class="gg-sentence" id="ggSentence"></div>
+      <div class="gg-vn" id="ggVn"></div>
+      <div class="gg-options" id="ggOptions"></div>
+      <div class="gg-feedback" id="ggFeedback"></div>
+      <div style="text-align:center; margin-top:14px;">
+        <button class="btn small" id="ggNextBtn" style="display:none;" onclick="ggNext()">Câu tiếp theo →</button>
+      </div>
+      <div class="gg-end" id="ggEnd" style="display:none;">
+        <div class="gg-end-title" id="ggEndTitle"></div>
+        <div class="gg-end-sub" id="ggEndSub"></div>
+        <button class="btn" onclick="ggRestart()">🔁 Chơi lại</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 5. GHÉP CẶP - TỪ MỚI ================= -->
+  <section class="slide" id="s5">
+    <div class="eyebrow">
+      <div class="seal">练习</div>
+      <div class="txt"><span class="vn">Ôn tập từ vựng</span><span class="cn">词语搭配 · 12 từ mới trong bài</span></div>
+    </div>
+    <h2 class="title">Ôn từ mới qua 3 trò chơi<span class="cn-big">Chọn một chế độ chơi bên dưới</span></h2>
+
+    <div class="dlg-tabs" id="vocabGameTabs">
+      <div class="dlg-tab active" data-g="match">🔗 Ghép cặp</div>
+      <div class="dlg-tab" data-g="quiz">📝 Trắc nghiệm</div>
+      <div class="dlg-tab" data-g="memory">🃏 Lật thẻ nhớ</div>
+    </div>
+
+    <div class="card vg-panel active" id="vg-match">
+      <div class="match-wrap">
+        <div class="match-col left" id="vocabLeft"></div>
+        <div class="match-col right" id="vocabRight"></div>
+      </div>
+      <div class="match-status" id="vocabStatus">Đã ghép đúng: <b>0</b>/12</div>
+      <div style="text-align:center; margin-top:10px;">
+        <button class="btn ghost small" onclick="resetVocabMatch()">Chơi lại</button>
+      </div>
+    </div>
+
+    <div class="card vg-panel" id="vg-quiz">
+      <div class="gg-top">
+        <div class="gg-progress">Câu <b id="vqIdx">1</b>/<span id="vqTotal">12</span></div>
+        <div class="gg-score">⭐ Điểm: <b id="vqScore">0</b></div>
+      </div>
+      <div class="gg-bar"><div class="gg-bar-fill" id="vqBarFill"></div></div>
+      <div class="gg-sentence" id="vqWord"></div>
+      <div class="gg-vn" id="vqPy"></div>
+      <div class="gg-options" id="vqOptions"></div>
+      <div class="gg-feedback" id="vqFeedback"></div>
+      <div style="text-align:center; margin-top:14px;">
+        <button class="btn small" id="vqNextBtn" style="display:none;" onclick="vqNext()">Câu tiếp theo →</button>
+      </div>
+      <div class="gg-end" id="vqEnd" style="display:none;">
+        <div class="gg-end-title" id="vqEndTitle"></div>
+        <div class="gg-end-sub" id="vqEndSub"></div>
+        <button class="btn" onclick="vqRestart()">🔁 Chơi lại</button>
+      </div>
+    </div>
+
+    <div class="card vg-panel" id="vg-memory">
+      <p class="lede" style="margin-bottom:10px;">Bấm để lật 2 thẻ — nếu đúng cặp Hán tự ↔ nghĩa tiếng Việt sẽ giữ nguyên, nếu sai sẽ úp lại.</p>
+      <div class="memory-status">Số lượt lật: <b id="memMoves">0</b> · Đã tìm: <b id="memFound">0</b>/12</div>
+      <div class="memory-grid" id="memoryGrid"></div>
+      <div style="text-align:center; margin-top:12px;">
+        <button class="btn ghost small" onclick="initMemory()">🔁 Xáo lại</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 6. BÀI TẬP ================= -->
+  <section class="slide" id="s6">
+    <div class="eyebrow">
+      <div class="seal">练习</div>
+      <div class="txt"><span class="vn">Bài tập</span><span class="cn">练习</span></div>
+    </div>
+    <h2 class="title">3 dạng bài tập theo sách</h2>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">Bài tập 1 · 分角色朗读课文</div></div>
+      <p class="lede" style="margin-bottom:0;">Đóng vai các nhân vật trong bài học và đọc to các câu đối thoại. Quay lại mục <b>课文</b> ở trên, chọn A hoặc B và luyện đọc theo giọng máy 🔊.</p>
+    </div>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">Bài tập 2 · 根据课文内容回答问题</div></div>
+      <p class="lede" style="margin-bottom:12px;">Trả lời câu hỏi theo nội dung bài học — bấm vào câu hỏi để xem gợi ý đáp án.</p>
+      <div id="qaList"></div>
+    </div>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">Bài tập 3 · 用本课新学的语言点和词语描述图片</div></div>
+      <p class="lede" style="margin-bottom:12px;">Điền từ còn thiếu vào chỗ trống, sau đó bấm “Kiểm tra”.</p>
+      <div id="fibList"></div>
+      <button class="btn small" onclick="checkAllFib()">Kiểm tra tất cả</button>
+    </div>
+  </section>
+
+  <!-- ================= 7. NGỮ ÂM ================= -->
+  <section class="slide" id="s7">
+    <div class="eyebrow">
+      <div class="seal">语音</div>
+      <div class="txt"><span class="vn">Phần ngữ âm</span><span class="cn">双音节词语的重音</span></div>
+    </div>
+    <h2 class="title">Trọng âm của từ có hai âm tiết</h2>
+    <div class="card">
+      <div class="dlg-head" style="margin-bottom:10px;">
+        <div class="place">听录音 · Nghe bản ghi âm</div>
+        <div class="track-tag">🎧 01-5</div>
+      </div>
+      <audio class="dlg-audio" controls preload="none" src="audio-5.mp3"></audio>
+      <p class="lede" style="margin-bottom:0;">Vừa nghe vừa đọc theo các từ bên dưới để cảm nhận rõ trọng âm.</p>
+    </div>
+
+    <div class="card gram-block">
+      <h3><span class="tag">(1)</span>中重格式 — nhấn vừa + nhấn mạnh</h3>
+      <p>Đa số từ hai âm tiết thuộc cấu trúc này: âm tiết thứ hai được đọc nhấn mạnh và kéo dài hơn.</p>
+      <div class="phon-cols" id="phon1"></div>
+    </div>
+
+    <div class="card gram-block">
+      <h3><span class="tag">(2)</span>重轻格式 — nhấn mạnh + đọc nhẹ</h3>
+      <p>Một số ít từ thuộc cấu trúc này: âm tiết thứ nhất nhấn mạnh và kéo dài, âm tiết thứ hai đọc nhẹ và nhanh.</p>
+      <div class="phon-cols" id="phon2"></div>
+    </div>
+  </section>
+
+  <!-- ================= 8. CHỮ HÁN ================= -->
+  <section class="slide" id="s8">
+    <div class="eyebrow">
+      <div class="seal">汉字</div>
+      <div class="txt"><span class="vn">Phần chữ Hán</span><span class="cn">笔画 · 独体字 · 偏旁</span></div>
+    </div>
+    <h2 class="title">Nét chữ, chữ đơn &amp; bộ thủ</h2>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">1 · 汉字的笔画 (7) — Các nét của chữ Hán</div></div>
+      <div class="stroke-row">
+        <div class="svgbox">
+          <svg viewBox="0 0 60 60"><path d="M12 14 H40 L40 32 L52 42" stroke="var(--red)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="info"><b>横折提 héngzhétí</b><span>ngang gập hất</span></div>
+        <div class="ex">
+          <div>话<small>huà</small></div>
+          <div>说<small>shuō</small></div>
+        </div>
+      </div>
+      <div class="stroke-row">
+        <div class="svgbox">
+          <svg viewBox="0 0 60 60"><path d="M10 14 H30 L30 26 L44 26 L44 38 L36 48" stroke="var(--red)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="info"><b>横折折折钩 héngzhézhézhégōu</b><span>ngang gập gập gập móc</span></div>
+        <div class="ex">
+          <div>奶<small>nǎi</small></div>
+          <div>场<small>chǎng</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">2 · 认识独体字 — Làm quen với chữ đơn</div></div>
+      <div class="evo">爲<span class="arrow">→</span><b>为</b><span style="font-style:italic;color:var(--gold);font-size:15.5px;">wéi</span></div>
+      <p style="font-size:15px; color:var(--ink-soft); line-height:1.6;">Chữ phồn thể 爲 giống một bàn tay dắt voi để nó làm việc cho người — nghĩa gốc là <b>"làm"</b>.</p>
+      <div class="evo" style="margin-top:14px;">㐌<span class="arrow">→</span><b>也</b><span style="font-style:italic;color:var(--gold);font-size:15.5px;">yě</span></div>
+      <p style="font-size:15px; color:var(--ink-soft); line-height:1.6;">Chữ 也 có hình dạng giống con rắn đầu nhọn, mình dài. Về sau nghĩa gốc mất dần, ngày nay 也 trở thành phó từ (nghĩa <b>"cũng"</b>).</p>
+    </div>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">3 · 汉字偏旁 「王」「⻊」— Các bộ của chữ Hán</div></div>
+      <div class="radical-card">
+        <div class="rad">王</div>
+        <div class="info"><b>Vương tự bàng (斜玉旁)</b> — thường liên quan đến ngọc.
+          <div class="examples2">
+            <div>现<small>xiàn · hiện tại</small></div>
+            <div>球<small>qiú · quả bóng</small></div>
+          </div>
+        </div>
+      </div>
+      <div class="radical-card">
+        <div class="rad" style="font-size:23.5px;">⻊</div>
+        <div class="info"><b>Túc tự bàng (足字旁)</b> — thường liên quan đến chân.
+          <div class="examples2">
+            <div>跑<small>pǎo · chạy</small></div>
+            <div>踢<small>tī · đá</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 9. GHÉP CẶP TỔNG ÔN ================= -->
+  <section class="slide" id="s9">
+    <div class="eyebrow">
+      <div class="seal">总</div>
+      <div class="txt"><span class="vn">Luyện tập ghép cặp — tổng ôn</span><span class="cn">12 个新词语</span></div>
+    </div>
+    <h2 class="title">Ghép cặp lần cuối trước khi sang phần vận dụng</h2>
+    <div class="card">
+      <div class="match-wrap">
+        <div class="match-col left" id="finalLeft"></div>
+        <div class="match-col right" id="finalRight"></div>
+      </div>
+      <div class="match-status" id="finalStatus">Đã ghép đúng: <b>0</b>/12</div>
+      <div style="text-align:center; margin-top:10px;">
+        <button class="btn ghost small" onclick="resetFinalMatch()">Chơi lại</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 10. VẬN DỤNG ================= -->
+  <section class="slide" id="s10">
+    <div class="eyebrow">
+      <div class="seal">运用</div>
+      <div class="txt"><span class="vn">Phần vận dụng</span><span class="cn">应用练习</span></div>
+    </div>
+    <h2 class="title">Thực hành nói theo cặp &amp; theo nhóm</h2>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">1 · 双人活动 — Hoạt động theo cặp</div></div>
+      <p class="lede" style="margin-bottom:10px;">Hai người ghép thành cặp, đặt câu hỏi để tìm hiểu về sở thích và thói quen của nhau.</p>
+      <div class="sample-dlg">
+        <span class="vn">Bạn thích ăn gì nhất? Ghét ăn gì nhất?</span>
+        <span class="cn">A：你最喜欢吃什么？最不喜欢吃什么？</span><br>
+        <span class="cn">B：我最……</span><br><br>
+        <span class="vn">Bạn thích môn thể thao nào?</span>
+        <span class="cn">A：你最喜欢什么运动？</span><br>
+        <span class="cn">B：……</span>
+      </div>
+      <p style="font-size:15.5px; margin-bottom:6px;">我的朋友 <input type="text" placeholder="tên bạn" style="border:1.5px solid var(--line);border-radius:8px;padding:4px 8px;font-family:var(--serif-cn);width:110px;">，他最喜欢 <input type="text" placeholder="…" style="border:1.5px solid var(--line);border-radius:8px;padding:4px 8px;font-family:var(--serif-cn);width:90px;">，最不喜欢 <input type="text" placeholder="…" style="border:1.5px solid var(--line);border-radius:8px;padding:4px 8px;font-family:var(--serif-cn);width:90px;">。</p>
+    </div>
+
+    <div class="card">
+      <div class="vocab-list"><div class="h">2 · 小组活动 — Hoạt động nhóm</div></div>
+      <p class="lede" style="margin-bottom:10px;">3–4 người một nhóm, hỏi và ghi lại nơi bạn muốn/không muốn đi du lịch nhất cùng lý do. Cử một đại diện trình bày kết quả.</p>
+      <div class="sample-dlg">
+        <span class="vn">Bạn muốn đi đâu du lịch nhất? — Tại sao? — Bạn không muốn đi đâu nhất? Tại sao?</span>
+        <span class="cn">A：你最想去什么地方旅游？ B：我最……</span><br>
+        <span class="cn">A：为什么？ B：……</span>
+      </div>
+      <table class="fillt" id="groupTable">
+        <tr><th>姓名<br><small>Họ tên</small></th><th>最想/最不想去的地方<br><small>Nơi muốn/không muốn nhất</small></th><th>原因<br><small>Lý do</small></th></tr>
+        <tr>
+          <td>小王<br><i style="font-size:12px;color:var(--gold);">Xiǎo Wáng</i></td>
+          <td>最想去北京<br><i style="font-size:12px;color:var(--gold);">zuì xiǎng qù Běijīng</i></td>
+          <td>他想学汉语，想吃中国菜。</td>
+        </tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+        <tr><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+      </table>
+      <span class="addrow" onclick="addGroupRow()">+ Thêm dòng</span>
+    </div>
+
+    <footer class="end">
+      <div class="seal">完</div>
+      Hoàn thành Bài 1 · 九月去北京旅游最好<br>
+      Giáo trình chuẩn HSK 2 — Nhân trí Việt
+    </footer>
+  </section>
+
+</div>
+
+<div class="bottom-nav">
+  <button class="nav-btn" id="prevBtn" onclick="step(-1)" aria-label="Trước">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+  <div class="navlabel" id="navLabel">Trang bìa</div>
+  <button class="nav-btn primary" id="nextBtn" onclick="step(1)" aria-label="Tiếp">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+  </button>
+</div>
+
+<script>
+/* ============ section registry ============ */
+const SECTIONS = [
+  {id:'s0', label:'Trang bìa', tab:'封面'},
+  {id:'s1', label:'热身 · Khởi động 1', tab:'热身①'},
+  {id:'s2', label:'热身 · Khởi động 2', tab:'热身②'},
+  {id:'s3', label:'课文 · Bài học', tab:'课文'},
+  {id:'s4', label:'注释 · Ngữ pháp', tab:'注释'},
+  {id:'s4g', label:'游戏 · Trò chơi ngữ pháp', tab:'语法游戏'},
+  {id:'s5', label:'练习 · Ôn tập từ vựng', tab:'生词游戏'},
+  {id:'s6', label:'练习 · Bài tập', tab:'练习'},
+  {id:'s7', label:'语音 · Ngữ âm', tab:'语音'},
+  {id:'s8', label:'汉字 · Chữ Hán', tab:'汉字'},
+  {id:'s9', label:'总 · Tổng ôn ghép cặp', tab:'总复习'},
+  {id:'s10', label:'运用 · Vận dụng', tab:'运用'},
+];
+const dotsEl = document.getElementById('dots');
+SECTIONS.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.className='dot'; d.textContent=s.tab; d.dataset.i=i;
+  d.title=s.label;
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+});
+let current = 0;
+function setActive(i){
+  current=i;
+  document.querySelectorAll('#dots .dot').forEach((d,idx)=>{
+    d.classList.toggle('active', idx===i);
+    d.classList.toggle('done', idx<i);
+  });
+  document.querySelectorAll('.app > .slide').forEach((el,idx)=>{
+    el.classList.toggle('active', idx===i);
+  });
+  document.getElementById('navLabel').textContent = SECTIONS[i].label;
+  document.getElementById('prevBtn').disabled = i===0;
+  document.getElementById('nextBtn').disabled = i===SECTIONS.length-1;
+  const activeDot = document.querySelectorAll('#dots .dot')[i];
+  if(activeDot) activeDot.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function goTo(i){
+  i = Math.max(0, Math.min(SECTIONS.length-1, i));
+  setActive(i);
+}
+function step(d){ goTo(current+d); }
+setActive(0);
+
+/* ============ TTS ============ */
+function speak(text){
+  if(!('speechSynthesis' in window)){ alert('Trình duyệt không hỗ trợ đọc tiếng Trung.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='zh-CN'; u.rate=0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const v = voices.find(v=>v.lang && v.lang.toLowerCase().startsWith('zh'));
+  if(v) u.voice=v;
+  window.speechSynthesis.speak(u);
+}
+
+/* ============ generic matching component ============ */
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function buildMatch(pairs, leftEl, rightEl, statusEl, leftItemClass, rightItemClass){
+  const state = {leftPick:null, rightPick:null, solved:0};
+  const leftOrder = shuffle(pairs.map((p,i)=>i));
+  const rightOrder = shuffle(pairs.map((p,i)=>i));
+  leftEl.innerHTML=''; rightEl.innerHTML='';
+  leftOrder.forEach(i=>{
+    const el = document.createElement('div');
+    el.className = leftItemClass; el.dataset.idx=i;
+    el.innerHTML = pairs[i].leftHTML;
+    el.onclick=()=>pick('left', i, el);
+    leftEl.appendChild(el);
+  });
+  rightOrder.forEach(i=>{
+    const el = document.createElement('div');
+    el.className = rightItemClass; el.dataset.idx=i;
+    el.innerHTML = pairs[i].rightHTML;
+    el.onclick=()=>pick('right', i, el);
+    rightEl.appendChild(el);
+  });
+  function updateStatus(){
+    statusEl.querySelector('b').textContent = state.solved;
+  }
+  function pick(side, idx, el){
+    if(el.classList.contains('correct')) return;
+    if(side==='left'){
+      if(state.leftPickEl) state.leftPickEl.classList.remove('picked');
+      state.leftPick=idx; state.leftPickEl=el; el.classList.add('picked');
+    } else {
+      if(state.rightPickEl) state.rightPickEl.classList.remove('picked');
+      state.rightPick=idx; state.rightPickEl=el; el.classList.add('picked');
+    }
+    if(state.leftPick!==null && state.rightPick!==null){
+      if(state.leftPick===state.rightPick){
+        state.leftPickEl.classList.remove('picked'); state.rightPickEl.classList.remove('picked');
+        state.leftPickEl.classList.add('correct'); state.rightPickEl.classList.add('correct');
+        state.solved++; updateStatus();
+        state.leftPick=null; state.rightPick=null; state.leftPickEl=null; state.rightPickEl=null;
+      } else {
+        const l=state.leftPickEl, r=state.rightPickEl;
+        l.classList.add('wrong'); r.classList.add('wrong');
+        setTimeout(()=>{
+          l.classList.remove('picked','wrong'); r.classList.remove('picked','wrong');
+          state.leftPick=null; state.rightPick=null; state.leftPickEl=null; state.rightPickEl=null;
+        },420);
+      }
+    }
+  }
+  updateStatus();
+}
+
+/* ============ 1. Khởi động 1: word <-> icon ============ */
+const ICONS = {
+  travel: `<svg viewBox="0 0 48 48"><path d="M6 34 L18 14 L26 26 L32 18 L42 34 Z" fill="none" stroke="var(--red)" stroke-width="2.6" stroke-linejoin="round"/><circle cx="34" cy="12" r="4" fill="var(--gold)"/></svg>`,
+  exercise: `<svg viewBox="0 0 48 48"><circle cx="24" cy="10" r="4" fill="var(--gold)"/><path d="M24 15 V26 M24 26 L14 20 M24 26 L34 20 M24 26 L18 40 M24 26 L32 38" stroke="var(--red)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+  eye: `<svg viewBox="0 0 48 48"><path d="M4 24 Q24 8 44 24 Q24 40 4 24 Z" fill="none" stroke="var(--red)" stroke-width="2.6"/><circle cx="24" cy="24" r="6" fill="var(--gold)"/></svg>`,
+  football: `<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="var(--red)" stroke-width="2.6"/><path d="M24 14 L30 20 L27 28 L21 28 L18 20 Z" fill="var(--gold)"/></svg>`,
+  chair: `<svg viewBox="0 0 48 48"><path d="M12 6 V26 M12 26 H36 M36 6 V40 M12 26 V40 M12 40 V44 M36 40 V44" stroke="var(--red)" stroke-width="2.8" fill="none" stroke-linecap="round"/></svg>`,
+  cat: `<svg viewBox="0 0 48 48"><path d="M14 20 L10 8 L20 16 Z M34 20 L38 8 L28 16 Z" fill="var(--gold)"/><circle cx="24" cy="26" r="14" fill="none" stroke="var(--red)" stroke-width="2.6"/><circle cx="19" cy="25" r="1.6" fill="var(--red)"/><circle cx="29" cy="25" r="1.6" fill="var(--red)"/><path d="M24 29 L21 33 M24 29 L27 33" stroke="var(--red)" stroke-width="1.8" stroke-linecap="round"/></svg>`
+};
+const W1 = [
+  {word:'旅游', py:'lǚyóu', icon:'travel', lbl:'du lịch'},
+  {word:'运动', py:'yùndòng', icon:'exercise', lbl:'thể dục'},
+  {word:'眼睛', py:'yǎnjing', icon:'eye', lbl:'mắt'},
+  {word:'足球', py:'zúqiú', icon:'football', lbl:'bóng đá'},
+  {word:'椅子', py:'yǐzi', icon:'chair', lbl:'ghế'},
+  {word:'猫', py:'māo', icon:'cat', lbl:'con mèo'},
+];
+const w1pairs = W1.map(w=>({
+  leftHTML: `${w.word}<span class="py">${w.py}</span>`,
+  rightHTML: `${ICONS[w.icon]}<div class="lbl">${w.lbl}</div>`
+}));
+(function initW1(){
+  const leftEl=document.getElementById('w1-words'), rightEl=document.getElementById('w1-icons'), statusEl=document.getElementById('w1-status');
+  buildMatch(w1pairs, leftEl, rightEl, statusEl, 'word-chip', 'icon-card');
+})();
+
+/* ============ 2. Khởi động 2: months ============ */
+const MONTHS = [
+  {cn:'三月', py:'sān yuè', vn:'tháng ba', best:false, note:'Mùa xuân ở Bắc Kinh — se lạnh, nhiều gió, cây cối bắt đầu xanh trở lại quanh Di Hoà Viên.', icon:`<svg viewBox="0 0 100 60"><path d="M0 50 Q30 20 50 45 T100 50 V60 H0 Z" fill="var(--jade-tint)"/><circle cx="70" cy="18" r="10" fill="var(--gold-tint)"/></svg>`},
+  {cn:'六月', py:'liù yuè', vn:'tháng sáu', best:false, note:'Đầu hè — trời ấm, có phần oi nóng, hoa nở rực rỡ quanh Thiên An Môn.', icon:`<svg viewBox="0 0 100 60"><rect x="0" y="40" width="100" height="20" fill="var(--red-tint)"/><circle cx="30" cy="20" r="8" fill="var(--gold)"/><circle cx="55" cy="15" r="6" fill="var(--red)"/><circle cx="75" cy="22" r="7" fill="var(--gold)"/></svg>`},
+  {cn:'九月', py:'jiǔ yuè', vn:'tháng chín', best:true, note:'Mùa thu — theo bài học: "九月的北京天气不冷也不热" (thời tiết không lạnh cũng không nóng). Lá cây chuyển vàng, đây là thời điểm lý tưởng nhất để du lịch.', icon:`<svg viewBox="0 0 100 60"><rect x="46" y="10" width="8" height="45" fill="var(--ink-soft)"/><circle cx="30" cy="20" r="10" fill="var(--gold)"/><circle cx="70" cy="15" r="8" fill="var(--red)"/><circle cx="55" cy="30" r="9" fill="var(--gold)"/></svg>`},
+  {cn:'十二月', py:"shí'èr yuè", vn:'tháng mười hai', best:false, note:'Giữa đông — lạnh, đôi khi có tuyết phủ trên mái ngói Cố Cung.', icon:`<svg viewBox="0 0 100 60"><rect x="0" y="0" width="100" height="60" fill="var(--paper-2)"/><circle cx="25" cy="20" r="2" fill="#fff" stroke="var(--gold)"/><circle cx="50" cy="35" r="2" fill="#fff" stroke="var(--gold)"/><circle cx="75" cy="18" r="2" fill="#fff" stroke="var(--gold)"/><circle cx="40" cy="10" r="2" fill="#fff" stroke="var(--gold)"/></svg>`},
+];
+const monthsEl = document.getElementById('months');
+MONTHS.forEach(m=>{
+  const el = document.createElement('div');
+  el.className='month-card'+(m.best?' best':'');
+  el.innerHTML = `${m.icon}<span class="cn">${m.cn}</span><span class="py">${m.py}</span><div class="vn">${m.vn}</div><div class="note">${m.note}</div>`;
+  el.onclick=()=>{
+    el.classList.toggle('open');
+    document.getElementById('monthsAnswer').style.display='block';
+  };
+  monthsEl.appendChild(el);
+});
+
+/* ============ 3. Dialogues ============ */
+const DIALOGUES = [
+  {place:'在学校 · Ở trường', audio:'01-1', audioSrc:'audio-1.mp3', lines:[
+    {who:'A', cn:'我要去北京旅游，你觉得什么时候去最好？', py:'Wǒ yào qù Běijīng lǚyóu, nǐ juéde shénme shíhou qù zuì hǎo?', vn:'Mình sẽ đi Bắc Kinh để du lịch, theo bạn thì đi vào lúc nào là tốt nhất?'},
+    {who:'B', cn:'九月去北京旅游最好。', py:'Jiǔ yuè qù Běijīng lǚyóu zuì hǎo.', vn:'Nếu đi Bắc Kinh để du lịch thì tốt nhất là đi vào tháng chín.'},
+    {who:'A', cn:'为什么？', py:'Wèi shénme?', vn:'Tại sao vậy?'},
+    {who:'B', cn:'九月的北京天气不冷也不热。', py:'Jiǔ yuè de Běijīng tiānqì bù lěng yě bú rè.', vn:'Vì vào tháng chín, thời tiết ở Bắc Kinh không lạnh cũng không nóng.'},
+  ], vocab:[
+    ['旅游','lǚyóu','đgt.','du lịch'],['觉得','juéde','đgt.','cho rằng, nghĩ rằng'],
+    ['最','zuì','phó.','nhất'],['为什么','wèi shénme','','tại sao'],['也','yě','phó.','cũng'],
+  ]},
+  {place:'看照片 · Xem ảnh', audio:'01-2', audioSrc:'audio-2.mp3', lines:[
+    {who:'A', cn:'你喜欢什么运动？', py:'Nǐ xǐhuan shénme yùndòng?', vn:'Bạn thích môn thể thao nào?'},
+    {who:'B', cn:'我最喜欢踢足球。', py:'Wǒ zuì xǐhuan tī zúqiú.', vn:'Mình thích đá bóng nhất.'},
+    {who:'A', cn:'下午我们一起去踢足球吧。', py:'Xiàwǔ wǒmen yìqǐ qù tī zúqiú ba.', vn:'Vậy buổi chiều chúng ta cùng đi đá bóng nhé.'},
+    {who:'B', cn:'好啊！', py:'Hǎo a!', vn:'Được đấy!'},
+  ], vocab:[
+    ['运动','yùndòng','dt./đgt.','môn thể thao; tập thể dục/thể thao'],
+    ['踢足球','tī zúqiú','','đá bóng'],['一起','yìqǐ','phó.','cùng'],
+  ]},
+  {place:'在家里 · Ở nhà', audio:'01-3', audioSrc:'audio-3.mp3', lines:[
+    {who:'A', cn:'我们要不要买几个新的椅子？', py:'Wǒmen yào bu yào mǎi jǐ ge xīn de yǐzi?', vn:'Chúng ta có cần mua mấy chiếc ghế dựa mới không?'},
+    {who:'B', cn:'好啊。什么时候去买？', py:'Hǎo a. Shénme shíhou qù mǎi?', vn:'Được thôi. Khi nào đi mua?'},
+    {who:'A', cn:'明天下午怎么样？你明天几点能回来？', py:'Míngtiān xiàwǔ zěnmeyàng? Nǐ míngtiān jǐ diǎn néng huílai?', vn:'Chiều mai được không? Ngày mai anh có thể về lúc mấy giờ?'},
+    {who:'B', cn:'三点多。', py:'Sān diǎn duō.', vn:'Hơn 3 giờ.'},
+  ], vocab:[
+    ['要','yào','tđt.','muốn, cần'],['新','xīn','tt.','mới'],
+  ]},
+  {place:'在家里 · Ở nhà', audio:'01-4', audioSrc:'audio-4.mp3', lines:[
+    {who:'A', cn:'桌子下面有个猫。', py:'Zhuōzi xiàmiàn yǒu ge māo.', vn:'Ở dưới bàn có con mèo kìa.'},
+    {who:'B', cn:'那是我的猫，它叫花花。', py:'Nà shì wǒ de māo, tā jiào Huāhua.', vn:'Đó là con mèo của mình, nó tên là Hoa Hoa.'},
+    {who:'A', cn:'它很漂亮。', py:'Tā hěn piàoliang.', vn:'Con mèo này đẹp quá.'},
+    {who:'B', cn:'是啊，我觉得它的眼睛最漂亮。', py:'Shì a, wǒ juéde tā de yǎnjing zuì piàoliang.', vn:'Đúng vậy, mình nghĩ đôi mắt của nó đẹp nhất.'},
+    {who:'A', cn:'它多大了？', py:'Tā duō dà le?', vn:'Nó được bao nhiêu tuổi rồi?'},
+    {who:'B', cn:'六个多月。', py:'Liù ge duō yuè.', vn:'Hơn 6 tháng tuổi.'},
+  ], vocab:[
+    ['它','tā','đt.','nó'],['眼睛','yǎnjing','dt.','mắt'],
+  ], proper:[['花花','Huāhua','Hoa Hoa (tên con mèo)']]},
+];
+const dlgTabsEl = document.getElementById('dlgTabs');
+const dlgPanelsEl = document.getElementById('dlgPanels');
+DIALOGUES.forEach((d,i)=>{
+  const t = document.createElement('div');
+  t.className='dlg-tab'+(i===0?' active':'');
+  t.textContent = '会话 '+(i+1);
+  t.onclick=()=>showDlg(i);
+  dlgTabsEl.appendChild(t);
+
+  const p = document.createElement('div');
+  p.className='dlg-panel'+(i===0?' active':'');
+  p.id='dlg-'+i;
+  let linesHTML = d.lines.map(l=>`
+    <div class="line ${l.who==='B'?'b':''}">
+      <div class="who">${l.who}</div>
+      <div class="txt">
+        <div class="cn">${l.cn}</div>
+        <div class="py">${l.py}</div>
+        <div class="vn">${l.vn}</div>
+      </div>
+    </div>`).join('');
+  let vocabHTML = d.vocab.map(v=>`
+    <div class="vocab-row"><span class="cn">${v[0]}</span><span class="py">${v[1]}</span><span class="pos">${v[2]}</span><span class="vn">${v[3]}</span></div>`).join('');
+  let properHTML = d.proper ? `<div class="vocab-list"><div class="h">专有名词 · Danh từ riêng</div>${d.proper.map(v=>`<div class="vocab-row"><span class="cn">${v[0]}</span><span class="py">${v[1]}</span><span class="pos"></span><span class="vn">${v[2]}</span></div>`).join('')}</div>` : '';
+  p.innerHTML = `
+    <div class="dlg-head">
+      <div class="place">${d.place}</div>
+      <div class="track-tag">🎧 ${d.audio}</div>
+    </div>
+    <audio class="dlg-audio" controls preload="none" src="${d.audioSrc}"></audio>
+    ${linesHTML}
+    <div class="vocab-list"><div class="h">生词 · Từ mới</div>${vocabHTML}</div>
+    ${properHTML}
+  `;
+  dlgPanelsEl.appendChild(p);
+});
+function showDlg(i){
+  document.querySelectorAll('.dlg-tab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.dlg-panel').forEach((p,idx)=>p.classList.toggle('active', idx===i));
+}
+
+/* ============ 5 & 9: vocab matching (12 words) ============ */
+const VOCAB12 = [
+  ['旅游','lǚyóu','du lịch'],
+  ['觉得','juéde','cho rằng, nghĩ rằng'],
+  ['最','zuì','nhất'],
+  ['为什么','wèi shénme','tại sao'],
+  ['也','yě','cũng'],
+  ['运动','yùndòng','môn thể thao / thể dục'],
+  ['踢足球','tī zúqiú','đá bóng'],
+  ['一起','yìqǐ','cùng'],
+  ['要','yào','muốn, cần'],
+  ['新','xīn','mới'],
+  ['它','tā','nó'],
+  ['眼睛','yǎnjing','mắt'],
+];
+function vocabPairs(){
+  return VOCAB12.map(v=>({
+    leftHTML:`${v[0]}<span class="py">${v[1]}</span>`,
+    rightHTML:v[2]
+  }));
+}
+function initVocabMatch(){
+  buildMatch(vocabPairs(), document.getElementById('vocabLeft'), document.getElementById('vocabRight'), document.getElementById('vocabStatus'), 'match-item', 'match-item');
+}
+function resetVocabMatch(){ initVocabMatch(); }
+initVocabMatch();
+
+function initFinalMatch(){
+  buildMatch(vocabPairs(), document.getElementById('finalLeft'), document.getElementById('finalRight'), document.getElementById('finalStatus'), 'match-item', 'match-item');
+}
+function resetFinalMatch(){ initFinalMatch(); }
+initFinalMatch();
+
+/* ============ Vocab game tabs (match / quiz / memory) ============ */
+document.querySelectorAll('#vocabGameTabs .dlg-tab').forEach(tab=>{
+  tab.onclick=()=>{
+    document.querySelectorAll('#vocabGameTabs .dlg-tab').forEach(t=>t.classList.toggle('active', t===tab));
+    const g = tab.dataset.g;
+    document.querySelectorAll('.vg-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('vg-'+g).classList.add('active');
+    if(g==='quiz' && !vqStarted){ vqStarted=true; vqRestart(); }
+    if(g==='memory' && !memStarted){ memStarted=true; initMemory(); }
+  };
+});
+
+/* ---- Vocab multiple-choice quiz ---- */
+let vqStarted=false, vqOrder=[], vqIdx=0, vqScore=0, vqLocked=false;
+function vqRestart(){
+  vqOrder = shuffle(VOCAB12.map((_,i)=>i));
+  vqIdx=0; vqScore=0; vqLocked=false;
+  document.getElementById('vqEnd').style.display='none';
+  document.getElementById('vqTotal').textContent = VOCAB12.length;
+  vqRender();
+}
+function vqRender(){
+  vqLocked=false;
+  document.getElementById('vqNextBtn').style.display='none';
+  document.getElementById('vqFeedback').textContent='';
+  document.getElementById('vqFeedback').className='gg-feedback';
+  const i = vqOrder[vqIdx];
+  const item = VOCAB12[i];
+  document.getElementById('vqIdx').textContent = vqIdx+1;
+  document.getElementById('vqScore').textContent = vqScore;
+  document.getElementById('vqBarFill').style.width = Math.round((vqIdx)/VOCAB12.length*100)+'%';
+  document.getElementById('vqWord').innerHTML = item[0];
+  document.getElementById('vqPy').textContent = item[1];
+  // build 4 options: correct + 3 distractors
+  let pool = VOCAB12.map((v,idx)=>idx).filter(idx=>idx!==i);
+  pool = shuffle(pool).slice(0,3);
+  let opts = shuffle([i, ...pool]);
+  const optWrap = document.getElementById('vqOptions');
+  optWrap.innerHTML='';
+  opts.forEach(oi=>{
+    const b = document.createElement('div');
+    b.className='gg-opt';
+    b.textContent = VOCAB12[oi][2];
+    b.style.fontFamily = "var(--sans-vn)";
+    b.style.fontSize = '15px';
+    b.onclick=()=>{
+      if(vqLocked) return;
+      vqLocked=true;
+      document.querySelectorAll('#vqOptions .gg-opt').forEach(o=>o.classList.add('disabled'));
+      const fb = document.getElementById('vqFeedback');
+      if(oi===i){
+        b.classList.add('correct'); vqScore++;
+        fb.textContent='✓ Chính xác!'; fb.className='gg-feedback ok-t';
+      } else {
+        b.classList.add('wrong');
+        optWrap.querySelectorAll('.gg-opt').forEach(o=>{ if(o.textContent===VOCAB12[i][2]) o.classList.add('correct'); });
+        fb.textContent='✗ Đáp án đúng: '+VOCAB12[i][2]; fb.className='gg-feedback bad-t';
+      }
+      document.getElementById('vqScore').textContent = vqScore;
+      document.getElementById('vqNextBtn').style.display='inline-block';
+    };
+    optWrap.appendChild(b);
+  });
+}
+function vqNext(){
+  vqIdx++;
+  if(vqIdx>=vqOrder.length){
+    document.getElementById('vqBarFill').style.width='100%';
+    document.getElementById('vqOptions').innerHTML='';
+    document.getElementById('vqWord').innerHTML='';
+    document.getElementById('vqPy').textContent='';
+    document.getElementById('vqFeedback').textContent='';
+    document.getElementById('vqNextBtn').style.display='none';
+    const pct = Math.round(vqScore/vqOrder.length*100);
+    document.getElementById('vqEnd').style.display='block';
+    document.getElementById('vqEndTitle').textContent = pct===100 ? '🎉 Xuất sắc!' : (pct>=70?'👏 Khá tốt!':'💪 Cố gắng thêm nhé!');
+    document.getElementById('vqEndSub').textContent = `Bạn trả lời đúng ${vqScore}/${vqOrder.length} câu (${pct}%).`;
+    return;
+  }
+  vqRender();
+}
+
+/* ---- Memory flip game ---- */
+let memStarted=false, memState={};
+function initMemory(){
+  const grid = document.getElementById('memoryGrid');
+  grid.innerHTML='';
+  let cards = [];
+  VOCAB12.forEach((v,i)=>{
+    cards.push({pairId:i, type:'cn', text:v[0]});
+    cards.push({pairId:i, type:'vn', text:v[2]});
+  });
+  cards = shuffle(cards);
+  memState = {flipped:[], matched:0, moves:0, lock:false};
+  document.getElementById('memMoves').textContent='0';
+  document.getElementById('memFound').textContent='0';
+  cards.forEach((c, idx)=>{
+    const el = document.createElement('div');
+    el.className='memory-card';
+    el.dataset.idx=idx; el.dataset.pair=c.pairId;
+    el.innerHTML = `
+      <div class="inner">
+        <div class="face back">?</div>
+        <div class="face front ${c.type==='cn'?'cn':''}">${c.text}</div>
+      </div>`;
+    el.onclick=()=>flipMemCard(el, c);
+    grid.appendChild(el);
+  });
+}
+function flipMemCard(el, c){
+  if(memState.lock || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+  el.classList.add('flipped');
+  memState.flipped.push({el, c});
+  if(memState.flipped.length===2){
+    memState.moves++;
+    document.getElementById('memMoves').textContent = memState.moves;
+    memState.lock=true;
+    const [a,b] = memState.flipped;
+    if(a.c.pairId===b.c.pairId && a.c.type!==b.c.type){
+      setTimeout(()=>{
+        a.el.classList.add('matched'); b.el.classList.add('matched');
+        memState.matched++;
+        document.getElementById('memFound').textContent = memState.matched;
+        memState.flipped=[]; memState.lock=false;
+      }, 350);
+    } else {
+      setTimeout(()=>{
+        a.el.classList.remove('flipped'); b.el.classList.remove('flipped');
+        memState.flipped=[]; memState.lock=false;
+      }, 800);
+    }
+  }
+}
+
+/* ============ Grammar review game (s4g) ============ */
+const GRAMMAR_QUIZ = [
+  {before:'我', blank:'要', after:'去北京旅游，你觉得什么时候去最好？', vn:'Tôi muốn đi Bắc Kinh du lịch, theo bạn thì đi lúc nào tốt nhất?', options:['要','最','也','几']},
+  {before:'我', blank:'最', after:'喜欢踢足球。', vn:'Tôi thích đá bóng nhất.', options:['最','要','几','多']},
+  {before:'车上有', blank:'几', after:'个人。', vn:'Trên xe có mấy người.', options:['几','多','最','也']},
+  {before:'你不去，我', blank:'也', after:'不去。', vn:'Bạn không đi, tôi cũng không đi.', options:['也','最','要','几']},
+  {before:'我的猫三岁', blank:'多', after:'了。', vn:'Mèo của tôi hơn ba tuổi rồi.', options:['多','几','也','最']},
+  {before:'我们', blank:'要', after:'不要买几个新的椅子？', vn:'Chúng ta có cần mua mấy chiếc ghế mới không?', options:['要','最','也','多']},
+  {before:'它的眼睛', blank:'最', after:'漂亮。', vn:'Đôi mắt của nó đẹp nhất.', options:['最','要','几','也']},
+  {before:'我们要不要买', blank:'几', after:'个新的椅子？', vn:'Chúng ta có cần mua mấy chiếc ghế mới không?', options:['几','多','要','最']},
+  {before:'九月的北京天气不冷', blank:'也', after:'不热。', vn:'Tháng chín thời tiết Bắc Kinh không lạnh cũng không nóng.', options:['也','最','要','几']},
+  {before:'二十', blank:'多', after:'块钱。', vn:'Hơn hai mươi đồng.', options:['多','几','最','也']},
+];
+let ggOrder=[], ggIdx=0, ggScore=0, ggLocked=false;
+function ggInit(){
+  ggOrder = shuffle(GRAMMAR_QUIZ.map((_,i)=>i));
+  ggIdx=0; ggScore=0;
+  document.getElementById('ggTotal').textContent = GRAMMAR_QUIZ.length;
+  document.getElementById('ggEnd').style.display='none';
+  ggRender();
+}
+function ggRender(){
+  ggLocked=false;
+  document.getElementById('ggNextBtn').style.display='none';
+  document.getElementById('ggFeedback').textContent='';
+  document.getElementById('ggFeedback').className='gg-feedback';
+  const q = GRAMMAR_QUIZ[ggOrder[ggIdx]];
+  document.getElementById('ggIdx').textContent = ggIdx+1;
+  document.getElementById('ggScore').textContent = ggScore;
+  document.getElementById('ggBarFill').style.width = Math.round(ggIdx/GRAMMAR_QUIZ.length*100)+'%';
+  document.getElementById('ggSentence').innerHTML = `${q.before}<span class="blank">＿＿</span>${q.after}`;
+  document.getElementById('ggVn').textContent = q.vn;
+  const optWrap = document.getElementById('ggOptions');
+  optWrap.innerHTML='';
+  const opts = shuffle(q.options);
+  opts.forEach(opt=>{
+    const b = document.createElement('div');
+    b.className='gg-opt';
+    b.textContent = opt;
+    b.onclick=()=>{
+      if(ggLocked) return;
+      ggLocked=true;
+      document.querySelectorAll('#ggOptions .gg-opt').forEach(o=>o.classList.add('disabled'));
+      const fb = document.getElementById('ggFeedback');
+      if(opt===q.blank){
+        b.classList.add('correct'); ggScore++;
+        fb.textContent='✓ Chính xác!'; fb.className='gg-feedback ok-t';
+      } else {
+        b.classList.add('wrong');
+        optWrap.querySelectorAll('.gg-opt').forEach(o=>{ if(o.textContent===q.blank) o.classList.add('correct'); });
+        fb.textContent='✗ Đáp án đúng: '+q.blank; fb.className='gg-feedback bad-t';
+      }
+      document.getElementById('ggScore').textContent = ggScore;
+      document.getElementById('ggNextBtn').style.display='inline-block';
+    };
+    optWrap.appendChild(b);
+  });
+}
+function ggNext(){
+  ggIdx++;
+  if(ggIdx>=ggOrder.length){
+    document.getElementById('ggBarFill').style.width='100%';
+    document.getElementById('ggSentence').innerHTML='';
+    document.getElementById('ggVn').textContent='';
+    document.getElementById('ggOptions').innerHTML='';
+    document.getElementById('ggFeedback').textContent='';
+    document.getElementById('ggNextBtn').style.display='none';
+    const pct = Math.round(ggScore/ggOrder.length*100);
+    document.getElementById('ggEnd').style.display='block';
+    document.getElementById('ggEndTitle').textContent = pct===100 ? '🎉 Xuất sắc!' : (pct>=70?'👏 Khá tốt!':'💪 Cố gắng thêm nhé!');
+    document.getElementById('ggEndSub').textContent = `Bạn trả lời đúng ${ggScore}/${ggOrder.length} câu (${pct}%).`;
+    return;
+  }
+  ggRender();
+}
+function ggRestart(){ ggInit(); }
+ggInit();
+
+/* ============ 6. QA ============ */
+const QA = [
+  {q:'什么时候去北京旅游最好？为什么？', py:'Shénme shíhou qù Běijīng lǚyóu zuì hǎo? Wèi shénme?', a:'九月去北京旅游最好，因为九月的北京天气不冷也不热。', vn:'Đi Bắc Kinh du lịch vào tháng chín là tốt nhất, vì tháng chín thời tiết Bắc Kinh không lạnh cũng không nóng.'},
+  {q:'他们下午要做什么？', py:'Tāmen xiàwǔ yào zuò shénme?', a:'他们下午要一起去踢足球。', vn:'Buổi chiều họ cùng nhau đi đá bóng.'},
+  {q:'他们想什么时候去买椅子？', py:'Tāmen xiǎng shénme shíhou qù mǎi yǐzi?', a:'他们想明天下午去买椅子。', vn:'Họ muốn chiều mai đi mua ghế.'},
+  {q:'花花在哪儿？', py:'Huāhua zài nǎr?', a:'花花在桌子下面。', vn:'Hoa Hoa (con mèo) ở dưới bàn.'},
+  {q:'花花多大了？', py:'Huāhua duō dà le?', a:'花花六个多月了。', vn:'Hoa Hoa hơn 6 tháng tuổi rồi.'},
+];
+const qaList = document.getElementById('qaList');
+QA.forEach((item,i)=>{
+  const el = document.createElement('div');
+  el.className='qa';
+  el.innerHTML = `
+    <div class="q"><div class="num">${i+1}</div><div>${item.q}<div style="font-style:italic; font-weight:400; color:var(--gold); font-size:13.5px; margin-top:2px;">${item.py}</div></div></div>
+    <div class="a"><div class="a-in"><span class="cn">${item.a}</span>${item.vn}</div></div>
+  `;
+  el.querySelector('.q').onclick=()=>el.classList.toggle('open');
+  qaList.appendChild(el);
+});
+
+/* ============ 6. Fill in blank ============ */
+const FIB = [
+  {before:'我要去买', after:'个新杯子。', vn:'Tôi muốn đi mua ___ chiếc cốc mới.', answers:['几']},
+  {before:'你', after:'买衣服，去那个商店吧。', vn:'Bạn ___ mua quần áo, đi cửa hàng đó đi.', answers:['要']},
+  {before:'我的猫三岁', after:'了，你的猫多大了？', vn:'Mèo của tôi hơn 3 tuổi rồi, mèo của bạn bao nhiêu tuổi rồi?', answers:['多']},
+  {before:'我不想学习，我想和朋友去', after:'。', vn:'Tôi không muốn học, tôi muốn cùng bạn đi ___ (đá bóng).', answers:['踢足球','踢球']},
+];
+const fibList = document.getElementById('fibList');
+FIB.forEach((f,i)=>{
+  const el = document.createElement('div');
+  el.className='fib';
+  el.innerHTML = `
+    <div class="prompt">${f.before}<input type="text" data-idx="${i}" maxlength="4">${f.after}</div>
+    <div class="vn">${f.vn}</div>
+    <div class="fb" id="fb-${i}"></div>
+  `;
+  fibList.appendChild(el);
+});
+function checkAllFib(){
+  FIB.forEach((f,i)=>{
+    const input = document.querySelector(`input[data-idx="${i}"]`);
+    const fb = document.getElementById('fb-'+i);
+    const val = input.value.trim();
+    const ok = f.answers.includes(val);
+    input.classList.remove('ok','bad');
+    input.classList.add(ok?'ok':'bad');
+    fb.classList.add('show');
+    fb.className = 'fb show '+(ok?'ok-t':'bad-t');
+    fb.textContent = ok ? '✓ Chính xác!' : '✗ Đáp án đúng: '+f.answers[0];
+  });
+}
+
+/* ============ 7. Phonetics ============ */
+const PHON1 = [['bīngxiāng','冰箱'],['bāngmáng','帮忙'],['dǎrǎo','打扰'],['gāoxìng','高兴'],['lǚyóu','旅游'],['kěnéng','可能'],['kāishǐ','开始'],['kǎoshì','考试']];
+const PHON2 = [['dōngxi','东西'],['chuānghu','窗户'],['luóbo','萝卜'],['shíhou','时候'],['zhěntou','枕头'],['nǐmen','你们'],['gàosu','告诉'],['gùshi','故事']];
+function fillPhon(id, data, secondStress){
+  const el = document.getElementById(id);
+  data.forEach(([py,cn])=>{
+    const chars = cn.split('');
+    const styled = secondStress
+      ? chars[0]+`<span class="stress">${chars[1]}</span>`
+      : `<span class="stress">${chars[0]}</span>`+chars[1];
+    const d = document.createElement('div');
+    d.className='phon-item';
+    d.innerHTML = `<span class="cn">${styled}</span><span class="py">${py}</span>`;
+    el.appendChild(d);
+  });
+}
+fillPhon('phon1', PHON1, true);
+fillPhon('phon2', PHON2, false);
+
+/* ============ Vận dụng: add row ============ */
+function addGroupRow(){
+  const t = document.getElementById('groupTable');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable></td><td contenteditable></td><td contenteditable></td>';
+  t.appendChild(tr);
+}
+</script>
+</body>
+</html>
