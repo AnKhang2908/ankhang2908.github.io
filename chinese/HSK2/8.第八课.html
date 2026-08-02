@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Từ Vựng Sinh Động - Bộ Từ Vựng Tiếp Theo 4</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;600;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Hanzi Writer SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Nunito', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        .school-grid {
+            background-size: 30px 30px;
+            background-image: linear-gradient(to right, rgba(226, 116, 116, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(226, 116, 116, 0.05) 1px, transparent 1px);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #fffef2;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 30px 50px;
+            margin-bottom: 30px;
+            transition: all 0.5s ease;
+            border: 4px solid #fecdd3;
+        }
+
+        body.presentation-mode {
+            background-color: #0f172a;
+            padding: 0;
+            justify-content: center;
+        }
+
+        body.presentation-mode .slide-container {
+            display: none;
+            margin-bottom: 0;
+            border: none;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(1);
+        }
+
+        body.presentation-mode .slide-container.active-slide {
+            display: flex;
+        }
+
+        .nav-hud {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 10px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+            border: 2px solid #e2e8f0;
+        }
+
+        .hud-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #475569;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .hud-btn:hover {
+            background-color: #f1f5f9;
+            color: #e11d48;
+        }
+
+        .hud-btn.active {
+            background-color: #e11d48;
+            color: white;
+        }
+
+        .slide-counter {
+            font-weight: 800;
+            color: #1e293b;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .slide-title {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 32px;
+            color: #be123c; 
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 3px dashed #fca5a5;
+            padding-bottom: 8px;
+        }
+
+        .slide-title span.pinyin {
+            font-size: 22px;
+            color: #64748b;
+            font-weight: normal;
+        }
+
+        .slide-title span.translation {
+            font-size: 24px;
+            color: #2563eb; 
+            font-weight: bold;
+        }
+
+        .content-area {
+            display: flex;
+            flex-grow: 1;
+            width: 100%;
+            height: calc(100% - 65px);
+            gap: 30px;
+        }
+
+        .table-side {
+            flex: 0 0 58%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .presentation-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 3px solid #f87171;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            background-color: white;
+        }
+
+        .presentation-table th {
+            background-color: #ef4444;
+            color: white;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom: 3px solid #dc2626;
+        }
+
+        .presentation-table td {
+            padding: 20px 14px;
+            font-size: 22px;
+            color: #334155;
+            font-weight: 700;
+            border-bottom: 1px solid #fee2e2;
+            text-align: center;
+        }
+
+        .presentation-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .presentation-table tr:nth-child(even) td {
+            background-color: #fffbeb; 
+        }
+
+        .chinese-char {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 46px;
+            color: #1e293b;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .pinyin-text {
+            color: #2563eb;
+            font-size: 24px;
+        }
+
+        .type-badge {
+            display: inline-block;
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 17px;
+        }
+
+        .vietnamese-text {
+            color: #059669;
+            font-weight: 800;
+            font-size: 22px;
+        }
+
+        .visual-writing-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .grids-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            max-width: 540px;
+            z-index: 10;
+        }
+
+        .mizige-box {
+            position: relative;
+            width: 165px;
+            height: 165px;
+            border: 3px solid #ef4444;
+            border-radius: 16px;
+            background-color: white;
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.12);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mizige-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            stroke: #fca5a5;
+            stroke-dasharray: 2, 2;
+            stroke-width: 1;
+        }
+
+        .hanzi-anim-target {
+            width: 155px;
+            height: 155px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .mizige-label {
+            position: absolute;
+            bottom: 4px;
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 800;
+            z-index: 10;
+            background: rgba(255,255,255,0.92);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        /* Cover layout styles */
+        .cover-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .kids-cover-svg {
+            width: 720px;
+            height: auto;
+            margin-bottom: -15px;
+            z-index: 10;
+        }
+
+        .cover-card {
+            width: 950px;
+            background: white;
+            border: 5px solid #854d0e; 
+            border-radius: 35px;
+            padding: 30px 30px;
+            box-shadow: 0 15px 40px rgba(133, 77, 14, 0.15);
+            position: relative;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        .dashed-accent {
+            position: absolute;
+            inset: 8px;
+            border: 3px dashed #fca5a5;
+            border-radius: 28px;
+            pointer-events: none;
+        }
+
+        .cover-main-title {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 58px;
+            font-weight: 900;
+            color: #dc2626;
+            margin-top: 10px;
+            text-shadow: 2px 2px 0px #fee2e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .cover-pinyin {
+            font-family: 'Nunito', sans-serif;
+            font-size: 28px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .cover-viet-title {
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: 3px;
+            margin-top: 4px;
+        }
+
+        .cover-source-label {
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 800;
+            color: #475569;
+            background: #f8fafc;
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 12px;
+            line-height: 1.6;
+        }
+
+        .rainbow-bg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at -20% 120%, rgba(254, 205, 211, 0.15) 0%, rgba(239, 246, 255, 0.05) 50%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .fade-in-content {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="school-grid">
+
+    <!-- SLIDE 1: TRANG BÌA -->
+    <div class="slide-container" id="slide1">
+        <div class="rainbow-bg"></div>
+        <div class="cover-layout">
+            <svg class="kids-cover-svg" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(60, 30)">
+                    <circle cx="60" cy="70" r="45" fill="#FFE0B2" stroke="#4E2312" stroke-width="3"></circle>
+                    <path d="M10,70 Q60,10 110,70 Q60,25 10,70" fill="#FFD54F" stroke="#4E2312" stroke-width="3"></path>
+                    <circle cx="5" cy="70" r="10" fill="#E53935"></circle>
+                    <circle cx="115" cy="70" r="10" fill="#E53935"></circle>
+                    <circle cx="42" cy="65" r="5" fill="#4E2312"></circle>
+                    <circle cx="78" cy="65" r="5" fill="#4E2312"></circle>
+                    <path d="M50,85 Q60,98 70,85" fill="none" stroke="#E53935" stroke-width="4" stroke-linecap="round"></path>
+                </g>
+                <g transform="translate(180, 15)">
+                    <circle cx="65" cy="75" r="50" fill="#FFE0B2" stroke="#4E2312" stroke-width="3"></circle>
+                    <path d="M10,70 C10,15 120,15 120,70 C110,50 90,40 65,40 C40,40 20,50 10,70" fill="#8D6E63" stroke="#4E2312" stroke-width="3"></path>
+                    <ellipse cx="45" cy="68" rx="5" ry="6" fill="#4E2312"></ellipse>
+                    <ellipse cx="85" cy="68" rx="5" ry="6" fill="#4E2312"></ellipse>
+                    <path d="M45,90 Q65,108 85,90" fill="none" stroke="#E53935" stroke-width="4" stroke-linecap="round"></path>
+                </g>
+                <g transform="translate(320, 25)">
+                    <circle cx="60" cy="70" r="45" fill="#FFE0B2" stroke="#4E2312" stroke-width="3"></circle>
+                    <path d="M10,70 Q60,15 110,70 Q60,35 10,70" fill="#FFCC80" stroke="#4E2312" stroke-width="3"></path>
+                    <circle cx="42" cy="65" r="5" fill="#4E2312"></circle>
+                    <circle cx="78" cy="65" r="5" fill="#4E2312"></circle>
+                    <path d="M48,83 Q60,95 72,83" fill="none" stroke="#E53935" stroke-width="4" stroke-linecap="round"></path>
+                </g>
+                <g transform="translate(460, 45)">
+                    <circle cx="35" cy="55" r="26" fill="#FFB74D" stroke="#4E2312" stroke-width="3"></circle>
+                    <polygon points="35,56 32,52 38,52" fill="#E53935"></polygon>
+                    <circle cx="23" cy="48" r="4" fill="#4E2312"></circle>
+                    <circle cx="47" cy="48" r="4" fill="#4E2312"></circle>
+                </g>
+            </svg>
+
+            <div class="cover-card">
+                <div class="dashed-accent"></div>
+                <h1 class="cover-main-title">
+                    生词 <span class="cover-pinyin">– Shēngcí</span>
+                </h1>
+                <p class="cover-viet-title">TỪ VỰNG TIẾNG TRUNG</p>
+                <span class="cover-source-label">Các từ: <strong>再，让，告诉，等，找，事情，服务员，白，黑，贵</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: 再 & 让 -->
+    <div class="slide-container" id="slide2">
+        <div class="rainbow-bg"></div>
+        <h2 class="slide-title">
+            <span>Từ mới 1 &amp; 2</span>
+            <span class="pinyin">– Zài &amp; Ràng</span>
+            <span class="translation">TÁI - NHƯỢNG</span>
+        </h2>
+        <div class="content-area">
+            <div class="table-side">
+                <table class="presentation-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">STT</th>
+                            <th style="width: 25%;">Tiếng Trung</th>
+                            <th style="width: 20%;">Phiên Âm</th>
+                            <th style="width: 15%;">Từ loại</th>
+                            <th style="width: 15%;">Hán Việt</th>
+                            <th style="width: 15%;">Nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="chinese-char">再</td>
+                            <td class="pinyin-text">zài</td>
+                            <td><span class="type-badge">副</span></td>
+                            <td>tái</td>
+                            <td class="vietnamese-text">lại, nữa, tiếp tục</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="chinese-char">让</td>
+                            <td class="pinyin-text">ràng</td>
+                            <td><span class="type-badge">动</span></td>
+                            <td>nhượng</td>
+                            <td class="vietnamese-text">cho phép, bảo, nhường</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="visual-writing-side">
+                <div class="grids-container">
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="再"></div>
+                        <span class="mizige-label">再 - zài</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="让"></div>
+                        <span class="mizige-label">让 - ràng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: 告诉 & 等 -->
+    <div class="slide-container" id="slide3">
+        <div class="rainbow-bg"></div>
+        <h2 class="slide-title">
+            <span>Từ mới 3 &amp; 4</span>
+            <span class="pinyin">– Gàosu &amp; Děng</span>
+            <span class="translation">CÁO TỐ - ĐẲNG</span>
+        </h2>
+        <div class="content-area">
+            <div class="table-side">
+                <table class="presentation-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">STT</th>
+                            <th style="width: 25%;">Tiếng Trung</th>
+                            <th style="width: 20%;">Phiên Âm</th>
+                            <th style="width: 15%;">Từ loại</th>
+                            <th style="width: 15%;">Hán Việt</th>
+                            <th style="width: 15%;">Nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3</td>
+                            <td class="chinese-char">告诉</td>
+                            <td class="pinyin-text">gàosu</td>
+                            <td><span class="type-badge">动</span></td>
+                            <td>cáo tố</td>
+                            <td class="vietnamese-text">nói cho biết, bảo</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="chinese-char">等</td>
+                            <td class="pinyin-text">děng</td>
+                            <td><span class="type-badge">动</span></td>
+                            <td>đẳng</td>
+                            <td class="vietnamese-text">chờ, đợi</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="visual-writing-side">
+                <div class="grids-container">
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="告"></div>
+                        <span class="mizige-label">告 - gào</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="诉"></div>
+                        <span class="mizige-label">诉 - su</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="等"></div>
+                        <span class="mizige-label">等 - děng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: 找 & 事情 -->
+    <div class="slide-container" id="slide4">
+        <div class="rainbow-bg"></div>
+        <h2 class="slide-title">
+            <span>Từ mới 5 &amp; 6</span>
+            <span class="pinyin">– Zhǎo &amp; Shìqing</span>
+            <span class="translation">TRẢO - SỰ TÌNH</span>
+        </h2>
+        <div class="content-area">
+            <div class="table-side">
+                <table class="presentation-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">STT</th>
+                            <th style="width: 25%;">Tiếng Trung</th>
+                            <th style="width: 20%;">Phiên Âm</th>
+                            <th style="width: 15%;">Từ loại</th>
+                            <th style="width: 15%;">Hán Việt</th>
+                            <th style="width: 15%;">Nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td class="chinese-char">找</td>
+                            <td class="pinyin-text">zhǎo</td>
+                            <td><span class="type-badge">动</span></td>
+                            <td>trảo</td>
+                            <td class="vietnamese-text">tìm, kiếm, thối tiền thừa</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="chinese-char">事情</td>
+                            <td class="pinyin-text">shìqing</td>
+                            <td><span class="type-badge">名</span></td>
+                            <td>sự tình</td>
+                            <td class="vietnamese-text">sự việc, công việc</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="visual-writing-side">
+                <div class="grids-container">
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="找"></div>
+                        <span class="mizige-label">找 - zhǎo</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="事"></div>
+                        <span class="mizige-label">事 - shì</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="情"></div>
+                        <span class="mizige-label">情 - qing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: 服务员 -->
+    <div class="slide-container" id="slide5">
+        <div class="rainbow-bg"></div>
+        <h2 class="slide-title">
+            <span>Từ mới 7</span>
+            <span class="pinyin">– Fúwùyuán</span>
+            <span class="translation">PHỤC VỤ VIÊN</span>
+        </h2>
+        <div class="content-area">
+            <div class="table-side">
+                <table class="presentation-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">STT</th>
+                            <th style="width: 25%;">Tiếng Trung</th>
+                            <th style="width: 20%;">Phiên Âm</th>
+                            <th style="width: 15%;">Từ loại</th>
+                            <th style="width: 15%;">Hán Việt</th>
+                            <th style="width: 15%;">Nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>7</td>
+                            <td class="chinese-char">服务员</td>
+                            <td class="pinyin-text">fúwùyuán</td>
+                            <td><span class="type-badge">名</span></td>
+                            <td>phục vụ viên</td>
+                            <td class="vietnamese-text">nhân viên phục vụ, bồi bàn</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="visual-writing-side">
+                <div class="grids-container">
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="服"></div>
+                        <span class="mizige-label">服 - fú</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="务"></div>
+                        <span class="mizige-label">务 - wù</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="员"></div>
+                        <span class="mizige-label">员 - yuán</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: 白, 黑 & 贵 -->
+    <div class="slide-container" id="slide6">
+        <div class="rainbow-bg"></div>
+        <h2 class="slide-title">
+            <span>Từ mới 8, 9 &amp; 10</span>
+            <span class="pinyin">– Bái, Hēi &amp; Guì</span>
+            <span class="translation">BẠCH - HẮC - QUÝ</span>
+        </h2>
+        <div class="content-area">
+            <div class="table-side">
+                <table class="presentation-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">STT</th>
+                            <th style="width: 25%;">Tiếng Trung</th>
+                            <th style="width: 20%;">Phiên Âm</th>
+                            <th style="width: 15%;">Từ loại</th>
+                            <th style="width: 15%;">Hán Việt</th>
+                            <th style="width: 15%;">Nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>8</td>
+                            <td class="chinese-char">白</td>
+                            <td class="pinyin-text">bái</td>
+                            <td><span class="type-badge">形</span></td>
+                            <td>bạch</td>
+                            <td class="vietnamese-text">trắng</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td class="chinese-char">黑</td>
+                            <td class="pinyin-text">hēi</td>
+                            <td><span class="type-badge">形</span></td>
+                            <td>hắc</td>
+                            <td class="vietnamese-text">đen</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td class="chinese-char">贵</td>
+                            <td class="pinyin-text">guì</td>
+                            <td><span class="type-badge">形</span></td>
+                            <td>quý</td>
+                            <td class="vietnamese-text">đắt, quý</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="visual-writing-side">
+                <div class="grids-container">
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="白"></div>
+                        <span class="mizige-label">白 - bái</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="黑"></div>
+                        <span class="mizige-label">黑 - hēi</span>
+                    </div>
+                    <div class="mizige-box">
+                        <svg class="mizige-bg" viewBox="0 0 100 100"><line x1="0" y1="0" x2="100" y2="100"></line><line x1="100" y1="0" x2="0" y2="100"></line><line x1="50" y1="0" x2="50" y2="100"></line><line x1="0" y1="50" x2="100" y2="50"></line></svg>
+                        <div class="hanzi-anim-target" data-char="贵"></div>
+                        <span class="mizige-label">贵 - guì</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- THANH ĐIỀU KHIỂN HUD -->
+    <div class="nav-hud">
+        <button class="hud-btn active" id="btn-mode-scroll" onclick="setMode('scroll')">
+            <i class="fa-solid fa-scroll"></i> Cuộn trang
+        </button>
+        <button class="hud-btn" id="btn-mode-presentation" onclick="setMode('presentation')">
+            <i class="fa-solid fa-play"></i> Trình chiếu
+        </button>
+        <div class="slide-counter" id="lbl-slide-counter" style="display: none;">
+            Slide 1 / 6
+        </div>
+        <button class="hud-btn" id="btn-prev-slide" onclick="changeSlide(-1)" style="display: none;">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button class="hud-btn" id="btn-next-slide" onclick="changeSlide(1)" style="display: none;">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script>
+        let currentSlideIdx = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        let appMode = 'scroll';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Khởi tạo animation vẽ nét chữ Hán cho tất cả các từ
+            document.querySelectorAll(".hanzi-anim-target").forEach(el => {
+                const char = el.getAttribute("data-char");
+                if (!char) return;
+                
+                const writer = HanziWriter.create(el, char, {
+                    width: 155,
+                    height: 155,
+                    padding: 5,
+                    strokeColor: '#e11d48',
+                    outlineColor: '#ffe4e6',
+                    showOutline: true,
+                    delayBetweenLoops: 1000
+                });
+
+                function startLoopAnimation() {
+                    writer.animateCharacter({
+                        onComplete: () => {
+                            setTimeout(startLoopAnimation, 1200);
+                        }
+                    });
+                }
+                startLoopAnimation();
+            });
+
+            setMode('scroll');
+        });
+
+        function setMode(mode) {
+            appMode = mode;
+            const hudScroll = document.getElementById('btn-mode-scroll');
+            const hudPres = document.getElementById('btn-mode-presentation');
+            const hudCounter = document.getElementById('lbl-slide-counter');
+            const btnPrev = document.getElementById('btn-prev-slide');
+            const btnNext = document.getElementById('btn-next-slide');
+
+            if (mode === 'scroll') {
+                document.body.classList.remove('presentation-mode');
+                hudScroll.classList.add('active');
+                hudPres.classList.remove('active');
+                
+                hudCounter.style.display = 'none';
+                btnPrev.style.display = 'none';
+                btnNext.style.display = 'none';
+
+                slides.forEach(slide => {
+                    slide.style.display = 'flex';
+                    slide.classList.remove('active-slide');
+                });
+            } else {
+                document.body.classList.add('presentation-mode');
+                hudScroll.classList.remove('active');
+                hudPres.classList.add('active');
+
+                hudCounter.style.display = 'block';
+                btnPrev.style.display = 'flex';
+                btnNext.style.display = 'flex';
+
+                currentSlideIdx = 0;
+                updateSlideView();
+            }
+        }
+
+        function changeSlide(direction) {
+            if (appMode !== 'presentation') return;
+            const targetIdx = currentSlideIdx + direction;
+            if (targetIdx >= 0 && targetIdx < slides.length) {
+                currentSlideIdx = targetIdx;
+                updateSlideView();
+            }
+        }
+
+        function updateSlideView() {
+            slides.forEach((slide, idx) => {
+                if (idx === currentSlideIdx) {
+                    slide.style.display = 'flex';
+                    slide.classList.add('active-slide');
+                    slide.classList.add('fade-in-content');
+                    setTimeout(() => slide.classList.remove('fade-in-content'), 450);
+                } else {
+                    slide.style.display = 'none';
+                    slide.classList.remove('active-slide');
+                }
+            });
+
+            document.getElementById('lbl-slide-counter').innerText = `Slide ${currentSlideIdx + 1} / ${slides.length}`;
+        }
+
+        // Điều khiển bằng phím mũi tên / phím cách khi ở chế độ Trình chiếu
+        document.addEventListener('keydown', (e) => {
+            if (appMode !== 'presentation') return;
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') {
+                changeSlide(-1);
+            }
+        });
+    </script>
+
+</body>
+</html>
