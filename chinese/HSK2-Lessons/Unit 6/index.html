@@ -1469,17 +1469,18 @@ QA.forEach((item,i)=>{
 
 /* ============ 6. Fill in blank ============ */
 const FIB = [
-  {before:'这儿的衣服', after:'都很漂亮。', vn:'Quần áo ở đây ___ (chiếc nào cũng) đẹp.', answers:['件件']},
-  {before:'女孩儿们', after:'都很高兴。', vn:'Các cô gái ___ (ai nấy) đều rất vui.', answers:['个个']},
-  {before:'因为天气很冷，所以我', after:'穿了很多衣服。', vn:'Vì trời rất lạnh nên tôi ___ (đã) mặc nhiều quần áo.', answers:['所以','因为']},
+  {before:'这儿的衣服', after:'。', hint:'件件', vn:'Quần áo ở đây ___ (chiếc nào cũng đẹp — dùng: 件件).', answers:['件件都很漂亮','件件都很漂亮。']},
+  {before:'女孩儿们', after:'。', hint:'个个', vn:'Các cô gái ___ (ai nấy đều rất vui — dùng: 个个).', answers:['个个都很高兴','个个都很高兴。']},
+  {before:'因为天气很冷，所以我', after:'。', vn:'Vì trời rất lạnh nên tôi ___ (đã mặc nhiều quần áo).', answers:['穿了很多衣服','穿了很多衣服。']},
   {before:'因为', after:'，所以我们在家吃晚饭。', vn:'Vì ___ (trời mưa) nên chúng tôi ăn tối ở nhà.', answers:['下雨了','下雨','天气不好','昨天下雨了']},
 ];
 const fibList = document.getElementById('fibList');
 FIB.forEach((f,i)=>{
   const el = document.createElement('div');
   el.className='fib';
+  const hintTag = f.hint ? `<span style="color:var(--gold); font-weight:700; margin-left:10px;">（${f.hint}）</span>` : '';
   el.innerHTML = `
-    <div class="prompt">${f.before}<input type="text" data-idx="${i}" maxlength="6">${f.after}</div>
+    <div class="prompt">${f.before}<input type="text" data-idx="${i}" maxlength="8">${f.after}${hintTag}</div>
     <div class="vn">${f.vn}</div>
     <div class="fb" id="fb-${i}"></div>
   `;
